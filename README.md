@@ -66,3 +66,5 @@ The server again generates a key pair and the exchange keys similar to how it ha
 | **Authi.Server.Test** | Tests covering server code, APIs. |
 | **Authi.BrowserExtension** | Browser extension, separate manifests for Chrome and Firefox due to API differences. |
 | **Authi.Wasm** | WASM wrapper for client code so it can be used from browser extensions. |
+| **Authi.BrowserPack** | Creates packages for browser extensions. |
+| **Authi.Localizer** | Creates a .NET wrapper for a JS based localization file. |
