@@ -43,8 +43,14 @@ namespace Authi.App.WinUI.UI
 
         private async void OnQrCodeDetected(string code)
         {
-            await DialogPresenter.Current.HideDialogAsync();
-            ViewModel?.QrScanned(code);
+            if (ViewModel == null)
+            {
+                return;
+            }
+            if (ViewModel.QrScanned(code))
+            {
+                await DialogPresenter.Current.HideDialogAsync();
+            }
         }
     }
 }

@@ -13,6 +13,7 @@ public partial class CredentialEditorView : IAdaptiveView
     private ICredentialEditorViewModel ViewModel => BindingContext as ICredentialEditorViewModel;
 
     private readonly IReadOnlyCollection<Label> _entryLabels;
+    private readonly IDictionary<object, Label> _labelForEntry;
 
     public CredentialEditorView()
     {
@@ -22,8 +23,15 @@ public partial class CredentialEditorView : IAdaptiveView
         _entryLabels =
         [
             TitleLabel,
-            SecretLabel
+            SecretLabel,
+            SubtitleLabel
         ];
+        _labelForEntry = new Dictionary<object, Label>()
+        {
+            { TitleEntry, TitleLabel  },
+            { SecretEntry, SecretLabel },
+            { SubtitleEntry, SubtitleLabel }
+        };
     }
 
     public void SetCompactSize(bool isCompact)
@@ -60,13 +68,9 @@ public partial class CredentialEditorView : IAdaptiveView
         ViewModel?.Save();
     }
 
-    private void OnFocusedTitle(object sender, FocusEventArgs e) => SetLabelFocusedState(TitleLabel);
+    private void OnFocusedEntry(object sender, FocusEventArgs e) => SetLabelFocusedState(_labelForEntry[sender]);
 
-    private void OnUnfocusedTitle(object sender, FocusEventArgs e) => SetLabelUnfocusedState(TitleLabel);
-
-    private void OnFocusedSecret(object sender, FocusEventArgs e) => SetLabelFocusedState(SecretLabel);
-
-    private void OnUnfocusedSecret(object sender, FocusEventArgs e) => SetLabelUnfocusedState(SecretLabel);
+    private void OnUnfocusedEntry(object sender, FocusEventArgs e) => SetLabelUnfocusedState(_labelForEntry[sender]);
 
     private static void SetLabelFocusedState(Label label)
     {
@@ -91,7 +95,13 @@ public partial class CredentialEditorView : IAdaptiveView
 
     private void OnQrCodeDetected(string code)
     {
-        DialogPresenter.Current.HideDialog();
-        ViewModel?.QrScanned(code);
+        if (ViewModel == null)
+        {
+            return;
+        }
+        if (ViewModel.QrScanned(code))
+        {
+            DialogPresenter.Current.HideDialog();
+        }
     }
 }

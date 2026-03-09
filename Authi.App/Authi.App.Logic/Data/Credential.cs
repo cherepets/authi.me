@@ -9,6 +9,7 @@ namespace Authi.App.Logic.Data
         public ObjectId? LocalId { get; set; }
         public Guid? CloudId { get; set; }
         public string? Title { get; set; }
+        public string? Subtitle { get; set; }
         public string? Secret { get; set; }
         public long? Timestamp { get; set; }
 
@@ -19,6 +20,7 @@ namespace Authi.App.Logic.Data
                 // Do not check LocalId as it's optional
                 if (CloudId != credential.CloudId) return false;
                 if (Title != credential.Title) return false;
+                if (Subtitle != credential.Subtitle) return false;
                 if (Secret != credential.Secret) return false;
                 if (Timestamp != credential.Timestamp) return false;
                 return true;

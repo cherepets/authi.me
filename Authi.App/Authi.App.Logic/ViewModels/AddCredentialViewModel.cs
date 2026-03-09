@@ -7,7 +7,7 @@ namespace Authi.App.Logic.ViewModels
 {
     public class AddCredentialViewModel : CredentialEditorViewModelBase, ICredentialEditorViewModel, IClosableViewModel
     {
-        public override string PageTitle => L10n.Credential.EditPageTitle;
+        public override string PageTitle => L10n.Credential.AddPageTitle;
 
         private readonly ObservableCollection<CredentialViewModel> _credentials;
 

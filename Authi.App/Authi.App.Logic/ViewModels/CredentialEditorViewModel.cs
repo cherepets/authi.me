@@ -1,7 +1,6 @@
 ﻿using Authi.App.Logic.Data;
 using Authi.Common.Client;
 using Authi.Common.Extensions;
-using System;
 using System.ComponentModel;
 
 namespace Authi.App.Logic.ViewModels
@@ -10,9 +9,10 @@ namespace Authi.App.Logic.ViewModels
     {
         string PageTitle { get; }
         string Title { get; set; }
+        string Subtitle { get; set; }
         string Secret { get; set; }
         bool CanSave { get; }
-        void QrScanned(string code);
+        bool QrScanned(string code);
         void Save();
         void Close();
     }
@@ -22,6 +22,16 @@ namespace Authi.App.Logic.ViewModels
         public abstract string PageTitle { get; }
 
         public string Title
+        {
+            get => Get<string>() ?? string.Empty;
+            set
+            {
+                Set(value);
+                OnPropertyChanged(nameof(CanSave));
+            }
+        }
+
+        public string Subtitle
         {
             get => Get<string>() ?? string.Empty;
             set
@@ -53,19 +63,23 @@ namespace Authi.App.Logic.ViewModels
 
         public abstract void Save();
 
-        public void QrScanned(string code)
+        public bool QrScanned(string code)
         {
-            try
+            if (OtpauthUri.TryParse(code, out var uri))
             {
-                var uri = new OtpauthUri(code);
-
                 Title = uri.Issuer;
                 Secret = uri.Secret;
+                if (uri.Account != null)
+                {
+                    Subtitle = uri.Account;
+                }
+                else
+                {
+                    Subtitle = string.Empty;
+                }
+                return true;
             }
-            catch (Exception exception)
-            {
-                Services.Logger.Write(exception);
-            }
+            return false;
         }
 
         public void Close()
