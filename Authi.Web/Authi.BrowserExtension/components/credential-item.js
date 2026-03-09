@@ -7,18 +7,19 @@ export class CredentialItem extends HTMLElement {
     #copyAnimationCtx;
 
     #title;
+    #subtitle;
     #secret;
     #onClick;
 
     #totp;
 
-    static async createAsync(title, secret, onClick) {
-        const instance = new CredentialItem(title, secret, onClick, true);
+    static async createAsync(title, subtitle, secret, onClick) {
+        const instance = new CredentialItem(title, subtitle, secret, onClick, true);
         await instance.loadTemplateAsync();
         return instance;
     }
 
-    constructor(title, secret, onClick, usedCreateAsync) {
+    constructor(title, subtitle, secret, onClick, usedCreateAsync) {
         if (!usedCreateAsync) {
             throw new Error('CredentialItem is supposed to be created using createAsync() function');
         }
@@ -26,6 +27,7 @@ export class CredentialItem extends HTMLElement {
         super();
 
         this.#title = title;
+        this.#subtitle = subtitle;
         this.#secret = secret;
         this.#onClick = onClick;
     }
@@ -36,13 +38,17 @@ export class CredentialItem extends HTMLElement {
 
         const rootElement = this.querySelector('#credentialItemRoot');
         const titleSpan = this.querySelector('#credentialItemTitle');
+        const subtitleSpan = this.querySelector('#credentialItemSubtitle');
 
         rootElement.addEventListener('pointerdown', event => this.onPointerDown(event));
         rootElement.addEventListener('pointerout', () => this.endInteraction());
         rootElement.addEventListener('pointerup', () => this.endInteraction());
         rootElement.addEventListener('click', event => this.onClick(event));
 
-        titleSpan.innerHTML = this.#title;
+        titleSpan.innerText = this.#title;
+        if (this.#subtitle) {
+            subtitleSpan.innerText = this.#subtitle;
+        }
     }
 
     async connectedCallback() {

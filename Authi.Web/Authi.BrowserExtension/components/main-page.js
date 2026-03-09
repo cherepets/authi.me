@@ -155,7 +155,7 @@ export class MainPage extends HTMLElement {
         credentialsView.innerHTML = '';
 
         for (const record of credentials) {
-            const item = await CredentialItem.createAsync(record.title, record.secret, totp => this.onCredentialItemClicked(totp));
+            const item = await CredentialItem.createAsync(record.title, record.subtitle, record.secret, totp => this.onCredentialItemClicked(totp));
             const li = document.createElement('li');
             li.appendChild(item);
             credentialsView.appendChild(li);
