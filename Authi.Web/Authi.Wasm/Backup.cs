@@ -15,22 +15,13 @@ public partial class backup
         var result = content
             .Split('\n')
             .Select(item => item.Trim())
-            .Select(item =>
-            {
-                try
-                {
-                    return new OtpauthUri(item);
-                }
-                catch
-                {
-                    return null;
-                }
-            })
+            .Select(item => OtpauthUri.TryParse(item, out var uri) ? uri : null)
             .Where(uri => uri != null)
             .Select(uri => uri!)
             .Select(uri => new CredentialDto
             {
                 Title = uri.Issuer,
+                Subtitle = uri.Account,
                 Secret = uri.Secret,
                 CloudId = Guid.Empty,
                 Timestamp = 0

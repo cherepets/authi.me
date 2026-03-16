@@ -1,5 +1,4 @@
 ﻿using Authi.App.Logic.Data;
-using Authi.App.Logic.Extensions;
 using Authi.Common.Extensions;
 using System;
 
@@ -13,6 +12,12 @@ namespace Authi.App.Logic.ViewModels
             set => Set(value);
         }
 
+        public string? Subtitle
+        {
+            get => Get<string>();
+            set => Set(value);
+        }
+
         public string Secret
         {
             get => Get<string>() ?? string.Empty;
@@ -21,7 +26,7 @@ namespace Authi.App.Logic.ViewModels
 
         public string? Totp
         {
-            get => Get<string>() ?? string.Empty;
+            get => Get<string>();
             internal set
             {
                 Set(value);

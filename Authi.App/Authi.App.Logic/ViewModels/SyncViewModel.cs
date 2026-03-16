@@ -216,7 +216,7 @@ namespace Authi.App.Logic.ViewModels
 
         private void OnExportInitiated(object? sender, EventArgs e)
         {
-            var backup = string.Join("\r\n", _credentials.Select(x => new OtpauthUri(x.Title, x.Secret)));
+            var backup = string.Join("\r\n", _credentials.Select(x => new OtpauthUri(x.Title, x.Secret, x.Subtitle)));
             Services.Messenger.BackupExportComplete.Publish(this, backup);
         }
 
@@ -228,20 +228,18 @@ namespace Authi.App.Logic.ViewModels
             {
                 try
                 {
-                    var uri = new OtpauthUri(item);
-                    if (string.IsNullOrEmpty(uri.Issuer) &&
-                        string.IsNullOrEmpty(uri.Secret))
+                    if (OtpauthUri.TryParse(item, out var uri))
                     {
-                        continue;
+                        var dto = new Credential
+                        {
+                            Title = uri.Issuer,
+                            Subtitle = uri.Account,
+                            Secret = uri.Secret
+                        };
+                        await Services.LocalCredentialStorage.InsertAsync(dto);
+                        _credentials.Add(new CredentialViewModel(dto));
+                        count++;
                     }
-                    var dto = new Credential
-                    {
-                        Title = uri.Issuer,
-                        Secret = uri.Secret
-                    };
-                    await Services.LocalCredentialStorage.InsertAsync(dto);
-                    _credentials.Add(new CredentialViewModel(dto));
-                    count++;
                 }
                 catch (Exception exception)
                 {

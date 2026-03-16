@@ -3,7 +3,11 @@
   "Credential.AddPageTitle": "Add new code",
   "Credential.EditPageTitle": "Edit code",
   "Credential.Title": "Title",
+  "Credential.TitlePlaceholder": "App name",
   "Credential.Secret": "Secret",
+  "Credential.SecretPlaceholder": "0000000000000000",
+  "Credential.Subtitle": "Username",
+  "Credential.SubtitlePlaceholder": "(optional)",
 
   "Generic.AppName": "Authi",
   "Generic.Cancel": "Cancel",

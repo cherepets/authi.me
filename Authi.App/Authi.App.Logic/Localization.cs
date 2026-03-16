@@ -8,7 +8,11 @@ namespace Authi.App.Logic.Localization
         public const string AddPageTitle = "Add new code";
         public const string EditPageTitle = "Edit code";
         public const string Secret = "Secret";
+        public const string SecretPlaceholder = "0000000000000000";
+        public const string Subtitle = "Username";
+        public const string SubtitlePlaceholder = "(optional)";
         public const string Title = "Title";
+        public const string TitlePlaceholder = "App name";
     }
     public static class Generic
     {

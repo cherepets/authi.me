@@ -256,6 +256,7 @@ dialog p {
     background-color: var(--background1);
     border: 1px solid var(--background3);
     margin: 16px 8px;
+    height: 56px;
     border-radius: 8px;
     cursor: pointer;
     transition: 0.2s;
@@ -271,19 +272,40 @@ dialog p {
         box-shadow: 0px 0px 32px var(--accent);
     }
 
+#credentialItemTextContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+    flex: 1;
+    margin: 0px 12px;
+}
+
 #credentialItemTitle {
     font-weight: 500;
     font-size: 18px;
     color: var(--foreground);
-    margin: 12px;
-    padding: 2px 0px 2px 0px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#credentialItemSubtitle {
+    font-weight: 200;
+    font-size: 14px;
+    color: var(--foreground);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 #credentialItemTotp {
     font-family: Major;
     font-size: 24px;
     color: var(--foreground);
-    margin: 12px;
+    margin: 12px 12px 12px 0px;
+    flex-shrink: 0;
+    align-self: center;
 }
 
 #mainPageCopyNotification {

@@ -8,5 +8,6 @@ namespace Authi.Common.Client
         public required string Title { get; init; }
         public required string Secret { get; init; }
         public required long Timestamp { get; init; }
+        public string? Subtitle { get; init; }
     }
 }
