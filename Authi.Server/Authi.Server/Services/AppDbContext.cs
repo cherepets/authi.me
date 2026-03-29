@@ -5,19 +5,22 @@ using Authi.Server.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace Authi.Server.Services
 {
     [Service]
     internal interface IAppDbContext
     {
-        TEntity? Find<TEntity>(Guid id) where TEntity : class;
-        TEntity[] Find<TEntity>(Func<TEntity, bool> predicate) where TEntity : class;
-        void Insert<TEntity>(TEntity entity) where TEntity : class;
-        void Update<TEntity>(TEntity entity) where TEntity : class;
-        void Delete<TEntity>(TEntity entity) where TEntity : class;
-        void Delete<TEntity>(TEntity[] entities) where TEntity : class;
+        Task<TEntity?> FindAsync<TEntity>(Guid id) where TEntity : class;
+        Task<IReadOnlyCollection<TEntity>> FindAsync<TEntity>(Expression<Func<TEntity, bool>> predicate) where TEntity : class;
+        Task InsertAsync<TEntity>(TEntity entity) where TEntity : class;
+        Task UpdateAsync<TEntity>(TEntity entity) where TEntity : class;
+        Task DeleteAsync<TEntity>(TEntity entity) where TEntity : class;
+        Task CleanUpAsync();
     }
 
     internal class AppDbContext : DbContext, IAppDbContext
@@ -27,38 +30,53 @@ namespace Authi.Server.Services
             Database.EnsureCreated();
         }
 
-        public TEntity? Find<TEntity>(Guid id) where TEntity : class
+        public async Task<TEntity?> FindAsync<TEntity>(Guid id) where TEntity : class
         {
-            return Set<TEntity>().Find(id);
+            return await Set<TEntity>().FindAsync(id);
         }
 
-        public TEntity[] Find<TEntity>(Func<TEntity, bool> predicate) where TEntity : class
+        public async Task<IReadOnlyCollection<TEntity>> FindAsync<TEntity>(Expression<Func<TEntity, bool>> predicate) where TEntity : class
         {
-            return Set<TEntity>().Where(predicate).ToArray();
+            return await Set<TEntity>().Where(predicate).ToListAsync();
         }
 
-        public void Insert<TEntity>(TEntity entity) where TEntity : class
+        public async Task InsertAsync<TEntity>(TEntity entity) where TEntity : class
         {
             Set<TEntity>().Add(entity);
-            SaveChanges();
+            await SaveChangesAsync();
         }
 
-        public new void Update<TEntity>(TEntity entity) where TEntity : class
+        public async Task UpdateAsync<TEntity>(TEntity entity) where TEntity : class
         {
             Set<TEntity>().Update(entity);
-            SaveChanges();
+            await SaveChangesAsync();
         }
 
-        public void Delete<TEntity>(TEntity entity) where TEntity : class
+        public async Task DeleteAsync<TEntity>(TEntity entity) where TEntity : class
         {
             Set<TEntity>().Remove(entity);
-            SaveChanges();
+            await SaveChangesAsync();
         }
 
-        public void Delete<TEntity>(TEntity[] entities) where TEntity : class
+        public async Task CleanUpAsync()
         {
-            Set<TEntity>().RemoveRange(entities);
-            SaveChanges();
+            var clock = ServiceProvider.Current.Get<IClock>();
+            var syncTimeStamp = clock.UniversalTime.AddDays(-1).ToUnixTimeMilliseconds();
+            var dataTimeStamp = clock.UniversalTime.AddDays(-365).ToUnixTimeMilliseconds();
+
+            var clientSet = Set<Client>();
+            var syncSet = Set<Sync>();
+            var dataSet = Set<Data>();
+
+            await clientSet
+                .Where(c => dataSet.Any(d => d.DataId == c.DataId && d.LastAccessedAt < dataTimeStamp))
+                .ExecuteDeleteAsync();
+            await syncSet
+                .Where(x => x.CreatedAt < syncTimeStamp)
+                .ExecuteDeleteAsync();
+            await dataSet
+                .Where(x => x.LastAccessedAt < dataTimeStamp)
+                .ExecuteDeleteAsync();
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

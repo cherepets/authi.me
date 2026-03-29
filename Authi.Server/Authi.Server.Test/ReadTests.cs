@@ -5,6 +5,7 @@ using Authi.Common.Test.Mocks;
 using Authi.Server.ApiVersions;
 using Authi.Server.Models;
 using System;
+using System.Threading.Tasks;
 
 namespace Authi.Server.Test
 {
@@ -12,7 +13,7 @@ namespace Authi.Server.Test
     public class ReadTests : ServerTestsBase
     {
         [TestMethod]
-        public void ReadHappyTest()
+        public async Task ReadHappyTest()
         {
             var api = new ApiV1();
 
@@ -51,8 +52,8 @@ namespace Authi.Server.Test
                 }
             };
 
-            DataRepository.Create(dbData);
-            ClientRepository.Create(dbClient);
+            await DataRepository.CreateAsync(dbData);
+            await ClientRepository.CreateAsync(dbClient);
 
             var requestPayload = new ReadRequest.Payload
             {
@@ -69,7 +70,7 @@ namespace Authi.Server.Test
             };
 
             // Call API
-            var response = api.OnRead(request);
+            var response = await api.OnRead(request);
 
             Assert.IsNull(response.Error);
             Assert.IsNotNull(response.Result);
@@ -91,7 +92,7 @@ namespace Authi.Server.Test
         }
 
         [TestMethod]
-        public void ReadHasNoChangesTest()
+        public async Task ReadHasNoChangesTest()
         {
             var api = new ApiV1();
 
@@ -130,8 +131,8 @@ namespace Authi.Server.Test
                 }
             };
 
-            DataRepository.Create(dbData);
-            ClientRepository.Create(dbClient);
+            await DataRepository.CreateAsync(dbData);
+            await ClientRepository.CreateAsync(dbClient);
 
             var requestPayload = new ReadRequest.Payload
             {
@@ -148,7 +149,7 @@ namespace Authi.Server.Test
             };
 
             // Call API
-            var response = api.OnRead(request);
+            var response = await api.OnRead(request);
 
             Assert.IsNull(response.Error);
             Assert.IsNotNull(response.Result);
@@ -170,7 +171,7 @@ namespace Authi.Server.Test
         }
 
         [TestMethod]
-        public void ReadCantFindClientTest()
+        public async Task ReadCantFindClientTest()
         {
             var api = new ApiV1();
 
@@ -199,7 +200,7 @@ namespace Authi.Server.Test
             };
 
             // Don't create client
-            DataRepository.Create(dbData);
+            await DataRepository.CreateAsync(dbData);
 
             var requestPayload = new ReadRequest.Payload
             {
@@ -216,7 +217,7 @@ namespace Authi.Server.Test
             };
 
             // Call API
-            var response = api.OnRead(request);
+            var response = await api.OnRead(request);
 
             Assert.IsNull(response.Result);
             Assert.IsNotNull(response.Error);
@@ -225,7 +226,7 @@ namespace Authi.Server.Test
         }
 
         [TestMethod]
-        public void ReadCantDecryptPayloadTest()
+        public async Task ReadCantDecryptPayloadTest()
         {
             var api = new ApiV1();
 
@@ -264,8 +265,8 @@ namespace Authi.Server.Test
                 }
             };
 
-            DataRepository.Create(dbData);
-            ClientRepository.Create(dbClient);
+            await DataRepository.CreateAsync(dbData);
+            await ClientRepository.CreateAsync(dbClient);
 
             var requestPayload = new ReadRequest.Payload
             {
@@ -284,7 +285,7 @@ namespace Authi.Server.Test
             };
 
             // Call API
-            var response = api.OnRead(request);
+            var response = await api.OnRead(request);
 
             Assert.IsNull(response.Result);
             Assert.IsNotNull(response.Error);
@@ -293,7 +294,7 @@ namespace Authi.Server.Test
         }
 
         [TestMethod]
-        public void ReadCantVerifyClockTest()
+        public async Task ReadCantVerifyClockTest()
         {
             var api = new ApiV1();
 
@@ -332,8 +333,8 @@ namespace Authi.Server.Test
                 }
             };
 
-            DataRepository.Create(dbData);
-            ClientRepository.Create(dbClient);
+            await DataRepository.CreateAsync(dbData);
+            await ClientRepository.CreateAsync(dbClient);
 
             var requestPayload = new ReadRequest.Payload
             {
@@ -353,7 +354,7 @@ namespace Authi.Server.Test
             clock.UniversalTime = DateTimeOffset.FromUnixTimeSeconds(31);
 
             // Call API
-            var response = api.OnRead(request);
+            var response = await api.OnRead(request);
 
             Assert.IsNull(response.Result);
             Assert.IsNotNull(response.Error);

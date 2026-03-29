@@ -3,12 +3,13 @@ using Authi.Common.Extensions;
 using Authi.Common.Services;
 using Authi.Server.Models;
 using System;
+using System.Threading.Tasks;
 
 namespace Authi.Server.ApiVersions
 {
     public partial class ApiV1 : ApiVersionBase
     {
-        public OptionalResponse<InitResponse> OnInit(InitRequest request)
+        public async Task<OptionalResponse<InitResponse>> OnInit(InitRequest request)
         {
             AesKey aesKey;
             try
@@ -62,7 +63,7 @@ namespace Authi.Server.ApiVersions
 
             try
             {
-                Services.DataRepository.Create(data);
+                await Services.DataRepository.CreateAsync(data);
             }
             catch
             {
@@ -71,7 +72,7 @@ namespace Authi.Server.ApiVersions
 
             try
             {
-                Services.ClientRepository.Create(client);
+                await Services.ClientRepository.CreateAsync(client);
             }
             catch
             {

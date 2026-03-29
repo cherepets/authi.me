@@ -1,38 +1,33 @@
 ﻿using Authi.Common.Services;
 using Authi.Server.Models;
 using System;
+using System.Threading.Tasks;
 
 namespace Authi.Server.Services
 {
     [Service]
-    internal interface IClientRepository
-    {
-        void Create(Client client);
-        void Delete(Client client);
-        Client? Read(Guid id);
-        void Update(Client client);
-    }
+    internal interface IClientRepository : IRepository<Client> { }
 
     internal class ClientRepository : ServiceBase, IClientRepository
     {
-        public void Create(Client client)
+        public Task CreateAsync(Client client)
         {
-            Services.AppDbContext.Insert(client);
+            return Services.AppDbContext.InsertAsync(client);
         }
 
-        public Client? Read(Guid id)
+        public Task<Client?> ReadAsync(Guid id)
         {
-            return Services.AppDbContext.Find<Client>(id);
+            return Services.AppDbContext.FindAsync<Client>(id);
         }
 
-        public void Update(Client client)
+        public Task UpdateAsync(Client client)
         {
-            Services.AppDbContext.Update(client);
+            return Services.AppDbContext.UpdateAsync(client);
         }
 
-        public void Delete(Client client)
+        public Task DeleteAsync(Client client)
         {
-            Services.AppDbContext.Delete(client);
+            return Services.AppDbContext.DeleteAsync(client);
         }
     }
 }

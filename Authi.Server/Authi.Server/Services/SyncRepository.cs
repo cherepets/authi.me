@@ -1,38 +1,33 @@
 ﻿using Authi.Common.Services;
 using Authi.Server.Models;
 using System;
+using System.Threading.Tasks;
 
 namespace Authi.Server.Services
 {
     [Service]
-    internal interface ISyncRepository
-    {
-        void Create(Sync sync);
-        void Delete(Sync sync);
-        Sync? Read(Guid id);
-        void Update(Sync sync);
-    }
+    internal interface ISyncRepository : IRepository<Sync> { }
 
     internal class SyncRepository : ServiceBase, ISyncRepository
     {
-        public void Create(Sync sync)
+        public Task CreateAsync(Sync sync)
         {
-            Services.AppDbContext.Insert(sync);
+            return Services.AppDbContext.InsertAsync(sync);
         }
 
-        public Sync? Read(Guid id)
+        public Task<Sync?> ReadAsync(Guid id)
         {
-            return Services.AppDbContext.Find<Sync>(id);
+            return Services.AppDbContext.FindAsync<Sync>(id);
         }
 
-        public void Update(Sync sync)
+        public Task UpdateAsync(Sync sync)
         {
-            Services.AppDbContext.Update(sync);
+            return Services.AppDbContext.UpdateAsync(sync);
         }
 
-        public void Delete(Sync sync)
+        public Task DeleteAsync(Sync sync)
         {
-            Services.AppDbContext.Delete(sync);
+            return Services.AppDbContext.DeleteAsync(sync);
         }
     }
 }

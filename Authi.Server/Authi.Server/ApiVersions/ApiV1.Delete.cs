@@ -1,13 +1,14 @@
 ﻿using Authi.Common.Dto;
 using Authi.Common.Extensions;
+using System.Threading.Tasks;
 
 namespace Authi.Server.ApiVersions
 {
     public partial class ApiV1 : ApiVersionBase
     {
-        public OptionalResponse<DeleteResponse> OnDelete(DeleteRequest request)
+        public async Task<OptionalResponse<DeleteResponse>> OnDelete(DeleteRequest request)
         {
-            var client = Services.ClientRepository.Read(request.ClientId);
+            var client = await Services.ClientRepository.ReadAsync(request.ClientId);
             if (client == null)
             {
                 return new ErrorResponse<DeleteResponse>(ErrorMessages.CantFindClient);
@@ -31,7 +32,7 @@ namespace Authi.Server.ApiVersions
                 return error;
             }
 
-            var data = Services.DataRepository.Read(client.DataId);
+            var data = await Services.DataRepository.ReadAsync(client.DataId);
             if (data == null)
             {
                 return new ErrorResponse<DeleteResponse>(ErrorMessages.CantFindData);
@@ -45,8 +46,8 @@ namespace Authi.Server.ApiVersions
                 responsePayload.ToJson().ToUtfBytes(),
                 keyPair);
 
-            Services.ClientRepository.Delete(client);
-            Services.DataRepository.Delete(data);
+            await Services.ClientRepository.DeleteAsync(client);
+            await Services.DataRepository.DeleteAsync(data);
             return new DeleteResponse
             {
                 Body = responseBody

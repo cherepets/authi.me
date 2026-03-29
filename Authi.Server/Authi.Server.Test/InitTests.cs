@@ -4,6 +4,7 @@ using Authi.Common.Services;
 using Authi.Common.Test.Mocks;
 using Authi.Server.ApiVersions;
 using System;
+using System.Threading.Tasks;
 
 namespace Authi.Server.Test
 {
@@ -11,7 +12,7 @@ namespace Authi.Server.Test
     public class InitTests : ServerTestsBase
     {
         [TestMethod]
-        public void InitHappyTest()
+        public async Task InitHappyTest()
         {
             var api = new ApiV1();
 
@@ -34,7 +35,7 @@ namespace Authi.Server.Test
             };
 
             // Call API
-            var response = api.OnInit(request);
+            var response = await api.OnInit(request);
 
             Assert.IsNull(response.Error);
             Assert.IsNotNull(response.Result);
@@ -51,20 +52,20 @@ namespace Authi.Server.Test
             Assert.AreEqual(255, responsePayload.Timestamp);
             Assert.AreNotEqual(Guid.Empty, responsePayload.ClientId);
 
-            Assert.AreEqual(1, ClientRepository.AsDictionary().Count);
-            Assert.AreEqual(1, DataRepository.AsDictionary().Count);
+            Assert.HasCount(1, ClientRepository.AsDictionary());
+            Assert.HasCount(1, DataRepository.AsDictionary());
 
-            var clientRecord = ClientRepository.Read(responsePayload.ClientId);
+            var clientRecord = await ClientRepository.ReadAsync(responsePayload.ClientId);
             Assert.IsNotNull(clientRecord);
 
-            var dataRecord = DataRepository.Read(clientRecord.DataId);
+            var dataRecord = await DataRepository.ReadAsync(clientRecord.DataId);
             Assert.IsNotNull(dataRecord);
 
             Assert.AreEqual(clientRecord.DataId, dataRecord.DataId);
         }
 
         [TestMethod]
-        public void InitCantParseClientPublicKeyTest()
+        public async Task InitCantParseClientPublicKeyTest()
         {
             var api = new ApiV1();
 
@@ -85,7 +86,7 @@ namespace Authi.Server.Test
             };
 
             // Call API
-            var response = api.OnInit(request);
+            var response = await api.OnInit(request);
 
             Assert.IsNull(response.Result);
             Assert.IsNotNull(response.Error);
@@ -94,7 +95,7 @@ namespace Authi.Server.Test
         }
 
         [TestMethod]
-        public void InitCantDecryptPayloadTest()
+        public async Task InitCantDecryptPayloadTest()
         {
             var api = new ApiV1();
 
@@ -115,7 +116,7 @@ namespace Authi.Server.Test
             };
 
             // Call API
-            var response = api.OnInit(request);
+            var response = await api.OnInit(request);
 
             Assert.IsNull(response.Result);
             Assert.IsNotNull(response.Error);
@@ -124,7 +125,7 @@ namespace Authi.Server.Test
         }
 
         [TestMethod]
-        public void InitCantVerifyClockTest()
+        public async Task InitCantVerifyClockTest()
         {
             var api = new ApiV1();
 
@@ -150,7 +151,7 @@ namespace Authi.Server.Test
             clock.UniversalTime = DateTimeOffset.FromUnixTimeSeconds(31);
 
             // Call API
-            var response = api.OnInit(request);
+            var response = await api.OnInit(request);
 
             Assert.IsNull(response.Result);
             Assert.IsNotNull(response.Error);
