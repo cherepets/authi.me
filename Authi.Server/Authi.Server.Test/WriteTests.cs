@@ -5,6 +5,7 @@ using Authi.Common.Test.Mocks;
 using Authi.Server.ApiVersions;
 using Authi.Server.Models;
 using System;
+using System.Threading.Tasks;
 
 namespace Authi.Server.Test
 {
@@ -12,7 +13,7 @@ namespace Authi.Server.Test
     public class WriteTests : ServerTestsBase
     {
         [TestMethod]
-        public void WriteHappyTest()
+        public async Task WriteHappyTest()
         {
             var api = new ApiV1();
 
@@ -49,8 +50,8 @@ namespace Authi.Server.Test
                 }
             };
 
-            DataRepository.Create(dbData);
-            ClientRepository.Create(dbClient);
+            await DataRepository.CreateAsync(dbData);
+            await ClientRepository.CreateAsync(dbClient);
 
             var requestMessage = "message";
 
@@ -69,7 +70,7 @@ namespace Authi.Server.Test
             };
 
             // Call API
-            var response = api.OnWrite(request);
+            var response = await api.OnWrite(request);
 
             Assert.IsNull(response.Error);
             Assert.IsNotNull(response.Result);
@@ -88,7 +89,7 @@ namespace Authi.Server.Test
         }
 
         [TestMethod]
-        public void WriteCantFindClientTest()
+        public async Task WriteCantFindClientTest()
         {
             var api = new ApiV1();
 
@@ -115,7 +116,7 @@ namespace Authi.Server.Test
             };
 
             // Don't create client
-            DataRepository.Create(dbData);
+            await DataRepository.CreateAsync(dbData);
 
             var requestMessage = "message";
 
@@ -134,7 +135,7 @@ namespace Authi.Server.Test
             };
 
             // Call API
-            var response = api.OnWrite(request);
+            var response = await api.OnWrite(request);
 
             Assert.IsNull(response.Result);
             Assert.IsNotNull(response.Error);
@@ -143,7 +144,7 @@ namespace Authi.Server.Test
         }
 
         [TestMethod]
-        public void WriteCantDecryptPayloadTest()
+        public async Task WriteCantDecryptPayloadTest()
         {
             var api = new ApiV1();
 
@@ -180,8 +181,8 @@ namespace Authi.Server.Test
                 }
             };
 
-            DataRepository.Create(dbData);
-            ClientRepository.Create(dbClient);
+            await DataRepository.CreateAsync(dbData);
+            await ClientRepository.CreateAsync(dbClient);
 
             var requestMessage = "message";
 
@@ -201,7 +202,7 @@ namespace Authi.Server.Test
             };
 
             // Call API
-            var response = api.OnWrite(request);
+            var response = await api.OnWrite(request);
 
             Assert.IsNull(response.Result);
             Assert.IsNotNull(response.Error);
@@ -210,7 +211,7 @@ namespace Authi.Server.Test
         }
 
         [TestMethod]
-        public void WriteCantVerifyClockTest()
+        public async Task WriteCantVerifyClockTest()
         {
             var api = new ApiV1();
 
@@ -247,8 +248,8 @@ namespace Authi.Server.Test
                 }
             };
 
-            DataRepository.Create(dbData);
-            ClientRepository.Create(dbClient);
+            await DataRepository.CreateAsync(dbData);
+            await ClientRepository.CreateAsync(dbClient);
 
             var requestMessage = "message";
 
@@ -270,7 +271,7 @@ namespace Authi.Server.Test
             clock.UniversalTime = DateTimeOffset.FromUnixTimeSeconds(31);
 
             // Call API
-            var response = api.OnWrite(request);
+            var response = await api.OnWrite(request);
 
             Assert.IsNull(response.Result);
             Assert.IsNotNull(response.Error);

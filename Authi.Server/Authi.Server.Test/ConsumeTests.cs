@@ -5,6 +5,7 @@ using Authi.Common.Test.Mocks;
 using Authi.Server.ApiVersions;
 using Authi.Server.Models;
 using System;
+using System.Threading.Tasks;
 
 namespace Authi.Server.Test
 {
@@ -12,7 +13,7 @@ namespace Authi.Server.Test
     public class ConsumeTests : ServerTestsBase
     {
         [TestMethod]
-        public void ConsumeHappyTest()
+        public async Task ConsumeHappyTest()
         {
             var api = new ApiV1();
 
@@ -55,8 +56,8 @@ namespace Authi.Server.Test
                 }
             };
 
-            DataRepository.Create(dbData);
-            SyncRepository.Create(dbSync);
+            await DataRepository.CreateAsync(dbData);
+            await SyncRepository.CreateAsync(dbSync);
 
             var requestPayload = new ConsumeRequest.Payload
             {
@@ -73,7 +74,7 @@ namespace Authi.Server.Test
             };
 
             // Call API
-            var response = api.OnConsume(request);
+            var response = await api.OnConsume(request);
 
             Assert.IsNull(response.Error);
             Assert.IsNotNull(response.Result);
@@ -87,21 +88,21 @@ namespace Authi.Server.Test
             Assert.AreEqual(255, responsePayload.Timestamp);
             Assert.AreNotEqual(Guid.Empty, responsePayload.ClientId);
 
-            Assert.AreEqual(1, ClientRepository.AsDictionary().Count);
-            Assert.AreEqual(1, DataRepository.AsDictionary().Count);
-            Assert.AreEqual(0, SyncRepository.AsDictionary().Count);
+            Assert.HasCount(1, ClientRepository.AsDictionary());
+            Assert.HasCount(1, DataRepository.AsDictionary());
+            Assert.IsEmpty(SyncRepository.AsDictionary());
 
-            var clientRecord = ClientRepository.Read(responsePayload.ClientId);
+            var clientRecord = await ClientRepository.ReadAsync(responsePayload.ClientId);
             Assert.IsNotNull(clientRecord);
 
-            var dataRecord = DataRepository.Read(clientRecord.DataId);
+            var dataRecord = await DataRepository.ReadAsync(clientRecord.DataId);
             Assert.IsNotNull(dataRecord);
 
             Assert.AreEqual(clientRecord.DataId, dataRecord.DataId);
         }
 
         [TestMethod]
-        public void ConsumeSyncExpiredTest()
+        public async Task ConsumeSyncExpiredTest()
         {
             var api = new ApiV1();
 
@@ -144,8 +145,8 @@ namespace Authi.Server.Test
                 }
             };
 
-            DataRepository.Create(dbData);
-            SyncRepository.Create(dbSync);
+            await DataRepository.CreateAsync(dbData);
+            await SyncRepository.CreateAsync(dbSync);
 
             var requestPayload = new ConsumeRequest.Payload
             {
@@ -162,7 +163,7 @@ namespace Authi.Server.Test
             };
 
             // Call API
-            var response = api.OnConsume(request);
+            var response = await api.OnConsume(request);
 
             Assert.IsNull(response.Result);
             Assert.IsNotNull(response.Error);
@@ -171,7 +172,7 @@ namespace Authi.Server.Test
         }
 
         [TestMethod]
-        public void ConsumeCantFindSyncTest()
+        public async Task ConsumeCantFindSyncTest()
         {
             var api = new ApiV1();
 
@@ -203,7 +204,7 @@ namespace Authi.Server.Test
             };
 
             // Don't create sync
-            DataRepository.Create(dbData);
+            await DataRepository.CreateAsync(dbData);
 
             var requestPayload = new ConsumeRequest.Payload
             {
@@ -220,7 +221,7 @@ namespace Authi.Server.Test
             };
 
             // Call API
-            var response = api.OnConsume(request);
+            var response = await api.OnConsume(request);
 
             Assert.IsNull(response.Result);
             Assert.IsNotNull(response.Error);
@@ -229,7 +230,7 @@ namespace Authi.Server.Test
         }
 
         [TestMethod]
-        public void ConsumeCantDecryptPayloadTest()
+        public async Task ConsumeCantDecryptPayloadTest()
         {
             var api = new ApiV1();
 
@@ -272,8 +273,8 @@ namespace Authi.Server.Test
                 }
             };
 
-            DataRepository.Create(dbData);
-            SyncRepository.Create(dbSync);
+            await DataRepository.CreateAsync(dbData);
+            await SyncRepository.CreateAsync(dbSync);
 
             var requestPayload = new ConsumeRequest.Payload
             {
@@ -292,7 +293,7 @@ namespace Authi.Server.Test
             };
 
             // Call API
-            var response = api.OnConsume(request);
+            var response = await api.OnConsume(request);
 
             Assert.IsNull(response.Result);
             Assert.IsNotNull(response.Error);
@@ -301,7 +302,7 @@ namespace Authi.Server.Test
         }
 
         [TestMethod]
-        public void ConsumeCantVerifyClockTest()
+        public async Task ConsumeCantVerifyClockTest()
         {
             var api = new ApiV1();
 
@@ -344,8 +345,8 @@ namespace Authi.Server.Test
                 }
             };
 
-            DataRepository.Create(dbData);
-            SyncRepository.Create(dbSync);
+            await DataRepository.CreateAsync(dbData);
+            await SyncRepository.CreateAsync(dbSync);
 
             var requestPayload = new ConsumeRequest.Payload
             {
@@ -365,7 +366,7 @@ namespace Authi.Server.Test
             clock.UniversalTime = DateTimeOffset.FromUnixTimeSeconds(31);
 
             // Call API
-            var response = api.OnConsume(request);
+            var response = await api.OnConsume(request);
 
             Assert.IsNull(response.Result);
             Assert.IsNotNull(response.Error);

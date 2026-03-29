@@ -5,6 +5,7 @@ using Authi.Common.Test.Mocks;
 using Authi.Server.ApiVersions;
 using Authi.Server.Models;
 using System;
+using System.Threading.Tasks;
 
 namespace Authi.Server.Test
 {
@@ -12,7 +13,7 @@ namespace Authi.Server.Test
     public class DeleteTests : ServerTestsBase
     {
         [TestMethod]
-        public void DeleteHappyTest()
+        public async Task DeleteHappyTest()
         {
             var api = new ApiV1();
 
@@ -48,8 +49,8 @@ namespace Authi.Server.Test
                 }
             };
 
-            DataRepository.Create(dbData);
-            ClientRepository.Create(dbClient);
+            await DataRepository.CreateAsync(dbData);
+            await ClientRepository.CreateAsync(dbClient);
 
             var requestPayload = new DeleteRequest.Payload
             {
@@ -65,7 +66,7 @@ namespace Authi.Server.Test
             };
 
             // Call API
-            var response = api.OnDelete(request);
+            var response = await api.OnDelete(request);
 
             Assert.IsNull(response.Error);
             Assert.IsNotNull(response.Result);
@@ -78,12 +79,12 @@ namespace Authi.Server.Test
             Assert.IsNotNull(responsePayload);
             Assert.AreEqual(255, responsePayload.Timestamp);
 
-            Assert.AreEqual(0, ClientRepository.AsDictionary().Count);
-            Assert.AreEqual(0, DataRepository.AsDictionary().Count);
+            Assert.IsEmpty(ClientRepository.AsDictionary());
+            Assert.IsEmpty(DataRepository.AsDictionary());
         }
 
         [TestMethod]
-        public void DeleteCantFindClientTest()
+        public async Task DeleteCantFindClientTest()
         {
             var api = new ApiV1();
 
@@ -109,7 +110,7 @@ namespace Authi.Server.Test
             };
 
             // Don't create client
-            DataRepository.Create(dbData);
+            await DataRepository.CreateAsync(dbData);
 
             var requestPayload = new DeleteRequest.Payload
             {
@@ -125,7 +126,7 @@ namespace Authi.Server.Test
             };
 
             // Call API
-            var response = api.OnDelete(request);
+            var response = await api.OnDelete(request);
 
             Assert.IsNull(response.Result);
             Assert.IsNotNull(response.Error);
@@ -134,7 +135,7 @@ namespace Authi.Server.Test
         }
 
         [TestMethod]
-        public void DeleteCantDecryptPayloadTest()
+        public async Task DeleteCantDecryptPayloadTest()
         {
             var api = new ApiV1();
 
@@ -171,8 +172,8 @@ namespace Authi.Server.Test
                 }
             };
 
-            DataRepository.Create(dbData);
-            ClientRepository.Create(dbClient);
+            await DataRepository.CreateAsync(dbData);
+            await ClientRepository.CreateAsync(dbClient);
 
             var requestPayload = new DeleteRequest.Payload
             {
@@ -190,7 +191,7 @@ namespace Authi.Server.Test
             };
 
             // Call API
-            var response = api.OnDelete(request);
+            var response = await api.OnDelete(request);
 
             Assert.IsNull(response.Result);
             Assert.IsNotNull(response.Error);
@@ -199,7 +200,7 @@ namespace Authi.Server.Test
         }
 
         [TestMethod]
-        public void DeleteCantVerifyClockTest()
+        public async Task DeleteCantVerifyClockTest()
         {
             var api = new ApiV1();
 
@@ -235,8 +236,8 @@ namespace Authi.Server.Test
                 }
             };
 
-            DataRepository.Create(dbData);
-            ClientRepository.Create(dbClient);
+            await DataRepository.CreateAsync(dbData);
+            await ClientRepository.CreateAsync(dbClient);
 
             var requestPayload = new DeleteRequest.Payload
             {
@@ -255,7 +256,7 @@ namespace Authi.Server.Test
             clock.UniversalTime = DateTimeOffset.FromUnixTimeSeconds(31);
 
             // Call API
-            var response = api.OnDelete(request);
+            var response = await api.OnDelete(request);
 
             Assert.IsNull(response.Result);
             Assert.IsNotNull(response.Error);

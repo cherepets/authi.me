@@ -5,6 +5,7 @@ using Authi.Common.Test.Mocks;
 using Authi.Server.ApiVersions;
 using Authi.Server.Models;
 using System;
+using System.Threading.Tasks;
 
 namespace Authi.Server.Test
 {
@@ -12,7 +13,7 @@ namespace Authi.Server.Test
     public class PublishTests : ServerTestsBase
     {
         [TestMethod]
-        public void PublishHappyTest()
+        public async Task PublishHappyTest()
         {
             var api = new ApiV1();
 
@@ -48,8 +49,8 @@ namespace Authi.Server.Test
                 }
             };
 
-            DataRepository.Create(dbData);
-            ClientRepository.Create(dbClient);
+            await DataRepository.CreateAsync(dbData);
+            await ClientRepository.CreateAsync(dbClient);
 
             var oneTimeKeyPair = Services.Crypto.GenerateX25519KeyPair();
             var requestPayload = new PublishRequest.Payload
@@ -67,7 +68,7 @@ namespace Authi.Server.Test
             };
 
             // Call API
-            var response = api.OnPublish(request);
+            var response = await api.OnPublish(request);
 
             Assert.IsNull(response.Error);
             Assert.IsNotNull(response.Result);
@@ -84,15 +85,15 @@ namespace Authi.Server.Test
             // Make sure doesn't throw
             _ = new X25519PublicKey(responsePayload.ServerPublicKey);
 
-            Assert.AreEqual(1, SyncRepository.AsDictionary().Count);
-            Assert.AreEqual(1, DataRepository.AsDictionary().Count);
+            Assert.HasCount(1, SyncRepository.AsDictionary());
+            Assert.HasCount(1, DataRepository.AsDictionary());
 
-            var syncRecord = SyncRepository.Read(responsePayload.SyncId);
+            var syncRecord = await SyncRepository.ReadAsync(responsePayload.SyncId);
             Assert.IsNotNull(syncRecord);
         }
 
         [TestMethod]
-        public void PublishCantFindClientTest()
+        public async Task PublishCantFindClientTest()
         {
             var api = new ApiV1();
 
@@ -118,7 +119,7 @@ namespace Authi.Server.Test
             };
 
             // Don't create client
-            DataRepository.Create(dbData);
+            await DataRepository.CreateAsync(dbData);
 
             var oneTimeKeyPair = Services.Crypto.GenerateX25519KeyPair();
             var requestPayload = new PublishRequest.Payload
@@ -136,7 +137,7 @@ namespace Authi.Server.Test
             };
 
             // Call API
-            var response = api.OnPublish(request);
+            var response = await api.OnPublish(request);
 
             Assert.IsNull(response.Result);
             Assert.IsNotNull(response.Error);
@@ -145,7 +146,7 @@ namespace Authi.Server.Test
         }
 
         [TestMethod]
-        public void PublishCantDecryptPayloadTest()
+        public async Task PublishCantDecryptPayloadTest()
         {
             var api = new ApiV1();
 
@@ -182,8 +183,8 @@ namespace Authi.Server.Test
                 }
             };
 
-            DataRepository.Create(dbData);
-            ClientRepository.Create(dbClient);
+            await DataRepository.CreateAsync(dbData);
+            await ClientRepository.CreateAsync(dbClient);
 
             var oneTimeKeyPair = Services.Crypto.GenerateX25519KeyPair();
             var requestPayload = new PublishRequest.Payload
@@ -203,7 +204,7 @@ namespace Authi.Server.Test
             };
 
             // Call API
-            var response = api.OnPublish(request);
+            var response = await api.OnPublish(request);
 
             Assert.IsNull(response.Result);
             Assert.IsNotNull(response.Error);
@@ -212,7 +213,7 @@ namespace Authi.Server.Test
         }
 
         [TestMethod]
-        public void PublishCantVerifyClockTest()
+        public async Task PublishCantVerifyClockTest()
         {
             var api = new ApiV1();
 
@@ -248,8 +249,8 @@ namespace Authi.Server.Test
                 }
             };
 
-            DataRepository.Create(dbData);
-            ClientRepository.Create(dbClient);
+            await DataRepository.CreateAsync(dbData);
+            await ClientRepository.CreateAsync(dbClient);
 
             var oneTimeKeyPair = Services.Crypto.GenerateX25519KeyPair();
             var requestPayload = new PublishRequest.Payload
@@ -270,7 +271,7 @@ namespace Authi.Server.Test
             clock.UniversalTime = DateTimeOffset.FromUnixTimeSeconds(31);
 
             // Call API
-            var response = api.OnPublish(request);
+            var response = await api.OnPublish(request);
 
             Assert.IsNull(response.Result);
             Assert.IsNotNull(response.Error);

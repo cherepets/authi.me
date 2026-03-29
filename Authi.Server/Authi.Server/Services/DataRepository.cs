@@ -1,38 +1,33 @@
 ﻿using Authi.Common.Services;
 using Authi.Server.Models;
 using System;
+using System.Threading.Tasks;
 
 namespace Authi.Server.Services
 {
     [Service]
-    internal interface IDataRepository
-    {
-        void Create(Data data);
-        void Delete(Data data);
-        Data? Read(Guid id);
-        void Update(Data data);
-    }
+    internal interface IDataRepository : IRepository<Data> { }
 
     internal class DataRepository : ServiceBase, IDataRepository
     {
-        public void Create(Data data)
+        public Task CreateAsync(Data data)
         {
-            Services.AppDbContext.Insert(data);
+            return Services.AppDbContext.InsertAsync(data);
         }
 
-        public Data? Read(Guid id)
+        public Task<Data?> ReadAsync(Guid id)
         {
-            return Services.AppDbContext.Find<Data>(id);
+            return Services.AppDbContext.FindAsync<Data>(id);
         }
 
-        public void Update(Data data)
+        public Task UpdateAsync(Data data)
         {
-            Services.AppDbContext.Update(data);
+            return Services.AppDbContext.UpdateAsync(data);
         }
 
-        public void Delete(Data data)
+        public Task DeleteAsync(Data data)
         {
-            Services.AppDbContext.Delete(data);
+            return Services.AppDbContext.DeleteAsync(data);
         }
     }
 }

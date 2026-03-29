@@ -1,10 +1,8 @@
 ﻿using Authi.Common.Dto;
-using Authi.Server.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 
 namespace Authi.Server.ApiVersions
 {
@@ -21,21 +19,6 @@ namespace Authi.Server.ApiVersions
             api.MapPost("/delete", OnDelete);
             api.MapPost("/publish", OnPublish);
             api.MapPost("/consume", OnConsume);
-            CleanUp();
-        }
-
-        private void CleanUp()
-        {
-            var syncTimeStamp = Services.Clock.UniversalTime.AddDays(-1).ToUnixTimeMilliseconds();
-            var dataTimeStamp = Services.Clock.UniversalTime.AddDays(-365).ToUnixTimeMilliseconds();
-
-            var outdatedSync = Services.AppDbContext.Find<Sync>(x => x.CreatedAt < syncTimeStamp);
-            var outdatedData = Services.AppDbContext.Find<Data>(x => x.LastAccessedAt < dataTimeStamp);
-            var orphanedUsers = outdatedData.SelectMany(data => Services.AppDbContext.Find<Client>(x => x.DataId == data.DataId)).ToArray();
-
-            Services.AppDbContext.Delete(outdatedSync);
-            Services.AppDbContext.Delete(outdatedData);
-            Services.AppDbContext.Delete(orphanedUsers);
         }
 
         private ErrorResponse<T>? VerifyPayload<T>([NotNull] PayloadBase? payload) where T : class

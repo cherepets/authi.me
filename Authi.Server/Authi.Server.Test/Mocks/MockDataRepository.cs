@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Authi.Server.Services
 {
@@ -9,26 +10,30 @@ namespace Authi.Server.Services
     {
         private Dictionary<Guid, Data> _storage = [];
 
-        public void Create(Data data)
+        public Task CreateAsync(Data data)
         {
             _storage.Add(data.DataId, data);
+            return Task.CompletedTask;
         }
 
-        public Data? Read(Guid id)
+        public Task<Data?> ReadAsync(Guid id)
         {
-            return _storage.TryGetValue(id, out var value)
+            var data = _storage.TryGetValue(id, out var value)
                 ? value
                 : null;
+            return Task.FromResult(data);
         }
 
-        public void Update(Data data)
+        public Task UpdateAsync(Data data)
         {
             _storage[data.DataId] = data;
+            return Task.CompletedTask;
         }
 
-        public void Delete(Data data)
+        public Task DeleteAsync(Data data)
         {
             _storage.Remove(data.DataId);
+            return Task.CompletedTask;
         }
 
         public void Initialize(params Data[] records)

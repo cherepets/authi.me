@@ -3,19 +3,23 @@ using Authi.Server.ApiVersions;
 using Authi.Server.Extensions;
 using Authi.Server.Services;
 using Microsoft.AspNetCore.Builder;
+using System.Threading.Tasks;
 using ServiceProvider = Authi.Common.Services.ServiceProvider;
 
 namespace Authi.Server
 {
     internal class Program
     {
-        private static void Main(string[] args)
+        private static async Task Main(string[] args)
         {
             ServiceLocator.Init(
                 typeof(ServiceLocator).Assembly,    // Authi.Common
                 typeof(Program).Assembly);          // Authi.Server
 
             var healthMonitor = ServiceProvider.Current.Get<IAppHealthMonitor>();
+            var dbContext = ServiceProvider.Current.Get<IAppDbContext>();
+
+            await dbContext.CleanUpAsync();
 
             var builder = WebApplication.CreateBuilder(args);
 
@@ -28,9 +32,9 @@ namespace Authi.Server
                 .OnApplicationStopping(healthMonitor.Flush);
 
             app.MapApiVersion(new ApiV1());
+            app.MapApiVersion(new HealthApi());
 
 #if DEBUG
-            app.MapApiVersion(new HealthApi());
             app.MapApiVersion(new DebugApi());
 #endif
 

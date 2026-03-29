@@ -3,6 +3,7 @@ using Authi.Common.Extensions;
 using Authi.Common.Services;
 using Authi.Server.Models;
 using System;
+using System.Threading.Tasks;
 
 namespace Authi.Server.ApiVersions
 {
@@ -10,14 +11,14 @@ namespace Authi.Server.ApiVersions
     {
         private readonly TimeSpan SyncValidFor = TimeSpan.FromMinutes(3);
 
-        public OptionalResponse<ConsumeResponse> OnConsume(ConsumeRequest request)
+        public async Task<OptionalResponse<ConsumeResponse>> OnConsume(ConsumeRequest request)
         {
-            var sync = Services.SyncRepository.Read(request.SyncId);
+            var sync = await Services.SyncRepository.ReadAsync(request.SyncId);
             if (sync == null)
             {
                 return new ErrorResponse<ConsumeResponse>(ErrorMessages.CantFindSync);
             }
-            Services.SyncRepository.Delete(sync);
+            await Services.SyncRepository.DeleteAsync(sync);
 
             if (!Services.Clock.IsRecent(sync.CreatedAt, SyncValidFor))
             {
@@ -59,7 +60,7 @@ namespace Authi.Server.ApiVersions
 
             try
             {
-                Services.ClientRepository.Create(client);
+                await Services.ClientRepository.CreateAsync(client);
             }
             catch
             {

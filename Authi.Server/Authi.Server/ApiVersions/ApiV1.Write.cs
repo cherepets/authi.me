@@ -1,6 +1,7 @@
 ﻿using Authi.Common.Dto;
 using Authi.Common.Extensions;
 using System;
+using System.Threading.Tasks;
 
 namespace Authi.Server.ApiVersions
 {
@@ -8,9 +9,9 @@ namespace Authi.Server.ApiVersions
     {
         private const int DataLimit = 100000;
 
-        public OptionalResponse<WriteResponse> OnWrite(WriteRequest request)
+        public async Task<OptionalResponse<WriteResponse>> OnWrite(WriteRequest request)
         {
-            var client = Services.ClientRepository.Read(request.ClientId);
+            var client = await Services.ClientRepository.ReadAsync(request.ClientId);
             if (client == null)
             {
                 return new ErrorResponse<WriteResponse>(ErrorMessages.CantFindClient);
@@ -39,7 +40,7 @@ namespace Authi.Server.ApiVersions
                 return new ErrorResponse<WriteResponse>(ErrorMessages.DataExceedsLimit);
             }
 
-            var data = Services.DataRepository.Read(client.DataId);
+            var data = await Services.DataRepository.ReadAsync(client.DataId);
             if (data == null)
             {
                 return new ErrorResponse<WriteResponse>(ErrorMessages.CantFindData);
@@ -50,7 +51,7 @@ namespace Authi.Server.ApiVersions
             data.Binary = requestPayload.Binary;
             data.Version = version;
             data.LastAccessedAt = Services.Clock.Timestamp;
-            Services.DataRepository.Update(data);
+            await Services.DataRepository.UpdateAsync(data);
 
             var responsePayload = new WriteResponse.Payload
             {

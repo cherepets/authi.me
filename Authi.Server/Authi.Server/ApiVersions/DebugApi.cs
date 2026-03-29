@@ -12,33 +12,33 @@ namespace Authi.Server.ApiVersions
         public override void ConfigureRoutes(IEndpointRouteBuilder app)
         {
             var api = app.MapGroup("/debug");
-            api.MapGet("/client/{id}", (Guid id) =>
+            api.MapGet("/client/{id}", async (Guid id) =>
             {
                 try
                 {
-                    return Services.ClientRepository.Read(id);
+                    return await Services.ClientRepository.ReadAsync(id);
                 }
                 catch
                 {
                     return (new { Error = "Can't find client!" }) as object;
                 }
             });
-            api.MapGet("/data/{id}", (Guid id) =>
+            api.MapGet("/data/{id}", async (Guid id) =>
             {
                 try
                 {
-                    return Services.DataRepository.Read(id);
+                    return await Services.DataRepository.ReadAsync(id);
                 }
                 catch
                 {
                     return (new { Error = "Can't find data!" }) as object;
                 }
             });
-            api.MapGet("/sync/{id}", (Guid id) =>
+            api.MapGet("/sync/{id}", async (Guid id) =>
             {
                 try
                 {
-                    return Services.SyncRepository.Read(id);
+                    return await Services.SyncRepository.ReadAsync(id);
                 }
                 catch
                 {
