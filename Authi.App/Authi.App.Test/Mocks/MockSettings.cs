@@ -16,15 +16,15 @@ namespace Authi.App.Test.Mocks
         {
             private T? _value;
 
-            public Task<T?> GetAsync()
+            public ValueTask<T?> GetAsync()
             {
-                return Task.FromResult(_value);
+                return ValueTask.FromResult(_value);
             }
 
-            public Task SetAsync(T? value)
+            public ValueTask SetAsync(T? value)
             {
                 _value = value;
-                return Task.CompletedTask;
+                return ValueTask.CompletedTask;
             }
         }
 
@@ -32,15 +32,15 @@ namespace Authi.App.Test.Mocks
         {
             private T? _value;
 
-            public Task<T?> GetAsync()
+            public ValueTask<T?> GetAsync()
             {
-                return Task.FromResult(_value);
+                return ValueTask.FromResult(_value);
             }
 
-            public Task SetAsync(T? value)
+            public ValueTask SetAsync(T? value)
             {
                 _value = value;
-                return Task.CompletedTask;
+                return ValueTask.CompletedTask;
             }
         }
     }

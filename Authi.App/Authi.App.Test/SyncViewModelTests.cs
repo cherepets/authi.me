@@ -64,10 +64,10 @@ namespace Authi.App.Test
             Assert.AreEqual(SyncStatus.NotSynced, syncVM.Status);
 
             Assert.IsNull(syncVM.SyncError);
-            Assert.AreEqual(1, local.Count);
-            Assert.AreEqual(0, cloud.Count);
-            Assert.AreEqual(1, credentials.Count);
-            Assert.AreEqual(0, removalItems.Count);
+            Assert.HasCount(1, local);
+            Assert.IsEmpty(cloud);
+            Assert.HasCount(1, credentials);
+            Assert.IsEmpty(removalItems);
 
             Assert.AreEqual(Totp1, credentials[0].Totp);
             Assert.AreEqual(Title1, credentials[0].Title);
@@ -106,10 +106,10 @@ namespace Authi.App.Test
 
             Assert.IsInstanceOfType<ApiException>(syncVM.SyncError);
             Assert.AreEqual("Can't Insert", syncVM.SyncError.Message);
-            Assert.AreEqual(1, local.Count);
-            Assert.AreEqual(0, cloud.Count);
-            Assert.AreEqual(1, credentials.Count);
-            Assert.AreEqual(0, removalItems.Count);
+            Assert.HasCount(1, local);
+            Assert.IsEmpty(cloud);
+            Assert.HasCount(1, credentials);
+            Assert.IsEmpty(removalItems);
 
             Assert.AreEqual(Totp1, credentials[0].Totp);
             Assert.AreEqual(Title1, credentials[0].Title);
@@ -156,10 +156,10 @@ namespace Authi.App.Test
 
             Assert.IsInstanceOfType<ApiException>(syncVM.SyncError);
             Assert.AreEqual("Can't Update", syncVM.SyncError.Message);
-            Assert.AreEqual(1, local.Count);
-            Assert.AreEqual(1, cloud.Count);
-            Assert.AreEqual(1, credentials.Count);
-            Assert.AreEqual(0, removalItems.Count);
+            Assert.HasCount(1, local);
+            Assert.HasCount(1, cloud);
+            Assert.HasCount(1, credentials);
+            Assert.IsEmpty(removalItems);
 
             Assert.AreEqual(Totp2, credentials[0].Totp);
             Assert.AreEqual(Title2, credentials[0].Title);
@@ -198,10 +198,10 @@ namespace Authi.App.Test
 
             Assert.IsInstanceOfType<ApiException>(syncVM.SyncError);
             Assert.AreEqual("Can't Delete", syncVM.SyncError.Message);
-            Assert.AreEqual(0, local.Count);
-            Assert.AreEqual(1, cloud.Count);
-            Assert.AreEqual(0, credentials.Count);
-            Assert.AreEqual(1, removalItems.Count);
+            Assert.IsEmpty(local);
+            Assert.HasCount(1, cloud);
+            Assert.IsEmpty(credentials);
+            Assert.HasCount(1, removalItems);
         }
 
         [TestMethod]
@@ -236,10 +236,10 @@ namespace Authi.App.Test
 
             Assert.IsInstanceOfType<ApiException>(syncVM.SyncError);
             Assert.AreEqual("Can't GetAll", syncVM.SyncError.Message);
-            Assert.AreEqual(1, local.Count);
-            Assert.AreEqual(0, cloud.Count);
-            Assert.AreEqual(1, credentials.Count);
-            Assert.AreEqual(0, removalItems.Count);
+            Assert.HasCount(1, local);
+            Assert.IsEmpty(cloud);
+            Assert.HasCount(1, credentials);
+            Assert.IsEmpty(removalItems);
 
             Assert.AreEqual(Totp1, credentials[0].Totp);
             Assert.AreEqual(Title1, credentials[0].Title);
@@ -291,10 +291,10 @@ namespace Authi.App.Test
             Assert.AreEqual(SyncStatus.Synced, syncVM.Status);
 
             Assert.IsNull(syncVM.SyncError);
-            Assert.AreEqual(2, local.Count);
-            Assert.AreEqual(2, cloud.Count);
-            Assert.AreEqual(2, credentials.Count);
-            Assert.AreEqual(0, removalItems.Count);
+            Assert.HasCount(2, local);
+            Assert.HasCount(2, cloud);
+            Assert.HasCount(2, credentials);
+            Assert.IsEmpty(removalItems);
 
             Assert.AreEqual(CloudId1, credentials[0].Model.CloudId);
             Assert.AreEqual(Totp1, credentials[0].Totp);
@@ -357,10 +357,10 @@ namespace Authi.App.Test
             Assert.AreEqual(SyncStatus.Synced, syncVM.Status);
 
             Assert.IsNull(syncVM.SyncError);
-            Assert.AreEqual(2, local.Count);
-            Assert.AreEqual(2, cloud.Count);
-            Assert.AreEqual(2, credentials.Count);
-            Assert.AreEqual(0, removalItems.Count);
+            Assert.HasCount(2, local);
+            Assert.HasCount(2, cloud);
+            Assert.HasCount(2, credentials);
+            Assert.IsEmpty(removalItems);
 
             Assert.AreEqual(CloudId1, credentials[0].Model.CloudId);
             Assert.AreEqual(Totp1, credentials[0].Totp);
@@ -435,10 +435,10 @@ namespace Authi.App.Test
             Assert.AreEqual(SyncStatus.Synced, syncVM.Status);
 
             Assert.IsNull(syncVM.SyncError);
-            Assert.AreEqual(2, local.Count);
-            Assert.AreEqual(2, cloud.Count);
-            Assert.AreEqual(2, credentials.Count);
-            Assert.AreEqual(0, removalItems.Count);
+            Assert.HasCount(2, local);
+            Assert.HasCount(2, cloud);
+            Assert.HasCount(2, credentials);
+            Assert.IsEmpty(removalItems);
 
             Assert.AreEqual(CloudId1, credentials[0].Model.CloudId);
             Assert.AreEqual(Totp2, credentials[0].Totp);
@@ -453,6 +453,79 @@ namespace Authi.App.Test
             Assert.AreEqual(Timestamp2, local.ToArray()[0].Timestamp);
             Assert.AreEqual(Timestamp2, local.ToArray()[1].Timestamp);
             Assert.AreEqual(Timestamp2, cloud.ToArray()[0].Timestamp);
+            Assert.AreEqual(Timestamp2, cloud.ToArray()[1].Timestamp);
+        }
+
+        [TestMethod]
+        public async Task SyncFindsDuplicatesTest()
+        {
+            ConfigureServices(
+                // Missing CloudId
+                localCredentials: [
+                    new Credential
+                    {
+                        LocalId = LocalId1,
+                        Title = Title1,
+                        Secret = Secret1,
+                        Timestamp = Timestamp1
+                    },
+                    new Credential
+                    {
+                        LocalId = LocalId2,
+                        Title = Title2,
+                        Secret = Secret2,
+                        Timestamp = Timestamp2
+                    }],
+                cloudCredentials: [
+                    new Credential
+                    {
+                        CloudId = CloudId1,
+                        Title = Title1,
+                        Secret = Secret1,
+                        Timestamp = Timestamp1
+                    },
+                    new Credential
+                    {
+                        CloudId = CloudId2,
+                        Title = Title2,
+                        Secret = Secret2,
+                        Timestamp = Timestamp2
+                    }],
+                cloudIdsForRemoval: [],
+                isOnline: true);
+
+            var syncVM = new SyncViewModel();
+
+            Assert.AreEqual(SyncStatus.Offline, syncVM.Status);
+
+            await syncVM.InitializeAsync();
+
+            var credentials = syncVM.GetCredentials();
+            var removalItems = await Services.RemovalStorage.GetAllAsync();
+            var local = await Services.LocalCredentialStorage.GetAllAsync();
+            var cloud = await Services.CloudCredentialStorage.GetAllAsync();
+
+            Assert.AreEqual(SyncStatus.Synced, syncVM.Status);
+
+            Assert.IsNull(syncVM.SyncError);
+            Assert.HasCount(2, local);
+            Assert.HasCount(2, cloud);
+            Assert.HasCount(2, credentials);
+            Assert.IsEmpty(removalItems);
+
+            Assert.AreEqual(CloudId1, credentials[0].Model.CloudId);
+            Assert.AreEqual(Totp1, credentials[0].Totp);
+            Assert.AreEqual(Title1, credentials[0].Title);
+            Assert.AreEqual(DisplayTotp1, credentials[0].DisplayTotp);
+
+            Assert.AreEqual(CloudId2, credentials[1].Model.CloudId);
+            Assert.AreEqual(Totp2, credentials[1].Totp);
+            Assert.AreEqual(Title2, credentials[1].Title);
+            Assert.AreEqual(DisplayTotp2, credentials[1].DisplayTotp);
+
+            Assert.AreEqual(Timestamp1, local.ToArray()[0].Timestamp);
+            Assert.AreEqual(Timestamp2, local.ToArray()[1].Timestamp);
+            Assert.AreEqual(Timestamp1, cloud.ToArray()[0].Timestamp);
             Assert.AreEqual(Timestamp2, cloud.ToArray()[1].Timestamp);
         }
 
@@ -494,10 +567,10 @@ namespace Authi.App.Test
             Assert.AreEqual(SyncStatus.Synced, syncVM.Status);
 
             Assert.IsNull(syncVM.SyncError);
-            Assert.AreEqual(0, local.Count);
-            Assert.AreEqual(0, cloud.Count);
-            Assert.AreEqual(0, credentials.Count);
-            Assert.AreEqual(0, removalItems.Count);
+            Assert.IsEmpty(local);
+            Assert.IsEmpty(cloud);
+            Assert.IsEmpty(credentials);
+            Assert.IsEmpty(removalItems);
         }
 
         [TestMethod]
@@ -535,9 +608,9 @@ namespace Authi.App.Test
             var local = await Services.LocalCredentialStorage.GetAllAsync();
 
             Assert.IsNull(syncVM.SyncError);
-            Assert.AreEqual(0, local.Count);
-            Assert.AreEqual(0, credentials.Count);
-            Assert.AreEqual(1, removalItems.Count);
+            Assert.IsEmpty(local);
+            Assert.IsEmpty(credentials);
+            Assert.HasCount(1, removalItems);
         }
 
         private void ConfigureServices(Credential[] localCredentials, Credential[] cloudCredentials, Guid[] cloudIdsForRemoval, bool isOnline, ThrowsOn cloudThrowsOn = ThrowsOn.None)
@@ -545,13 +618,13 @@ namespace Authi.App.Test
             static Removal ToRemoval(Guid cloudId) => new() { CloudId = cloudId };
 
             ServicesMock
-                .Override<ISettings>(new MockSettings().Customize(settings =>
+                .Override<ISettings>(new MockSettings().Customize(async settings =>
                 {
                     var emptyKey = new byte[Crypto.AesKeySize];
-                    settings.ClientId.SetAsync(isOnline ? Guid.NewGuid() : null);
-                    settings.SyncPrivateKey.SetAsync(isOnline ? emptyKey : null);
-                    settings.SyncPublicKey.SetAsync(isOnline ? emptyKey : null);
-                    settings.DataKey.SetAsync(isOnline ? emptyKey : null);
+                    await settings.ClientId.SetAsync(isOnline ? Guid.NewGuid() : null);
+                    await settings.SyncPrivateKey.SetAsync(isOnline ? emptyKey : null);
+                    await settings.SyncPublicKey.SetAsync(isOnline ? emptyKey : null);
+                    await settings.DataKey.SetAsync(isOnline ? emptyKey : null);
                 }))
                 .Override<ITotpGenerator>(new MockTotpGenerator(new Dictionary<string, string>
                 {

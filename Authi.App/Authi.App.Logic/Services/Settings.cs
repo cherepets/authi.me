@@ -42,7 +42,7 @@ namespace Authi.App.Logic.Services
             _key = key;
         }
 
-        public async Task<T?> GetAsync()
+        public async ValueTask<T?> GetAsync()
         {
             if (!_inMemoryStorage.TryGetValue(_key, out byte[]? bytes))
             {
@@ -60,7 +60,7 @@ namespace Authi.App.Logic.Services
             return Services.BinarySerializer.Deserialize<T>(bytes);
         }
 
-        public async Task SetAsync(T? value)
+        public async ValueTask SetAsync(T? value)
         {
             var serialized = Services.BinarySerializer.Serialize(value);
             _inMemoryStorage[_key] = serialized;
@@ -82,7 +82,7 @@ namespace Authi.App.Logic.Services
             _key = key;
         }
 
-        public async Task<T?> GetAsync()
+        public async ValueTask<T?> GetAsync()
         {
             if (!_inMemoryStorage.TryGetValue(_key, out byte[]? bytes))
             {
@@ -100,7 +100,7 @@ namespace Authi.App.Logic.Services
             return Services.BinarySerializer.DeserializeValue<T>(bytes);
         }
 
-        public async Task SetAsync(T? value)
+        public async ValueTask SetAsync(T? value)
         {
             var serialized = Services.BinarySerializer.Serialize(value);
             _inMemoryStorage[_key] = serialized;
@@ -118,13 +118,13 @@ namespace Authi.App.Logic.Services
 
     public interface IAsyncSetting<T> where T : class
     {
-        Task<T?> GetAsync();
-        Task SetAsync(T? value);
+        ValueTask<T?> GetAsync();
+        ValueTask SetAsync(T? value);
     }
 
     public interface IAsyncValueSetting<T> where T : struct
     {
-        Task<T?> GetAsync();
-        Task SetAsync(T? value);
+        ValueTask<T?> GetAsync();
+        ValueTask SetAsync(T? value);
     }
 }

@@ -139,7 +139,6 @@ namespace Authi.App.Logic.ViewModels
         public async Task<byte[]?> GetSyncCodeAsync()
         {
             IsLoading = true;
-            await Task.Delay(2000);
             try
             {
                 var clientId = await Services.Settings.ClientId.GetAsync();

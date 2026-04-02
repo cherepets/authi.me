@@ -129,6 +129,11 @@ namespace Authi.App.Logic.ViewModels
                     {
                         await OnCredentialConflictAsync(localCredential, cloudCredential);
                     }
+                    else if (localCopy.FirstOrDefault(x => x.DataEquals(cloudCredential) && x.CloudId == null) is Credential desyncedCredential)
+                    {
+                        desyncedCredential.CloudId = cloudCredential.CloudId;
+                        await Services.CloudCredentialStorage.UpdateAsync(desyncedCredential);
+                    }
                     else
                     {
                         await OnCredentialIncomingAsync(cloudCredential);

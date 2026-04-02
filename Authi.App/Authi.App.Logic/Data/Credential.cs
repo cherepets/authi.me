@@ -13,17 +13,22 @@ namespace Authi.App.Logic.Data
         public string? Secret { get; set; }
         public long? Timestamp { get; set; }
 
+        public bool DataEquals(Credential credential)
+        {
+            if (Title != credential.Title) return false;
+            if (Subtitle != credential.Subtitle) return false;
+            if (Secret != credential.Secret) return false;
+            if (Timestamp != credential.Timestamp) return false;
+            return true;
+        }
+
         public override bool Equals(object? obj)
         {
             if (obj is Credential credential)
             {
                 // Do not check LocalId as it's optional
                 if (CloudId != credential.CloudId) return false;
-                if (Title != credential.Title) return false;
-                if (Subtitle != credential.Subtitle) return false;
-                if (Secret != credential.Secret) return false;
-                if (Timestamp != credential.Timestamp) return false;
-                return true;
+                return DataEquals(credential);
             }
             return false;
         }
