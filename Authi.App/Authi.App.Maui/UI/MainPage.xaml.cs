@@ -58,9 +58,6 @@ namespace Authi.App.Maui.UI
                 ContentFrame.SetDynamicResource(BackgroundProperty, "Surface2Brush");
             }
 
-            MenuBar.SetCompactSize(isCompact);
-            CredentialsCollection.SetCompactSize(isCompact);
-
             if (_currentView is IAdaptiveView currentView)
             {
                 currentView.SetCompactSize(isCompact);
@@ -143,7 +140,7 @@ namespace Authi.App.Maui.UI
                 ContentFrameGrid.TranslationX = ContentFrame.Width;
                 ContentFrameGrid.TranslationY = 0;
             }
-            await ContentFrameGrid.TranslateTo(0, 0, AnimationLength.DefaultUnsigned, Easing.CubicOut);
+            await ContentFrameGrid.TranslateToAsync(0, 0, AnimationLength.DefaultUnsigned, Easing.CubicOut);
             tcs.SetResult();
         }
 
@@ -158,7 +155,7 @@ namespace Authi.App.Maui.UI
 
             if (_isCompact != true)
             {
-                await ContentFrameGrid.TranslateTo(0, ContentFrame.Height, AnimationLength.DefaultUnsigned, Easing.CubicIn);
+                await ContentFrameGrid.TranslateToAsync(0, ContentFrame.Height, AnimationLength.DefaultUnsigned, Easing.CubicIn);
             }
             else
             {
@@ -166,11 +163,11 @@ namespace Authi.App.Maui.UI
                 CredentialsCollection.Scale = 0.25d;
                 CredentialsCollection.TranslationY = 240;
                 CredentialsCollection.Opacity = 0;
-                _ = MenuBar.FadeTo(1, AnimationLength.DefaultUnsigned, Easing.CubicIn);
-                _ = CredentialsCollection.ScaleTo(1, AnimationLength.DefaultUnsigned, Easing.CubicIn);
-                _ = CredentialsCollection.TranslateTo(0, 0, AnimationLength.DefaultUnsigned, Easing.CubicIn);
-                _ = CredentialsCollection.FadeTo(1, AnimationLength.DefaultUnsigned, Easing.CubicIn);
-                await ContentFrameGrid.TranslateTo(ContentFrame.Width, 0, AnimationLength.DefaultUnsigned, Easing.CubicIn);
+                _ = MenuBar.FadeToAsync(1, AnimationLength.DefaultUnsigned, Easing.CubicIn);
+                _ = CredentialsCollection.ScaleToAsync(1, AnimationLength.DefaultUnsigned, Easing.CubicIn);
+                _ = CredentialsCollection.TranslateToAsync(0, 0, AnimationLength.DefaultUnsigned, Easing.CubicIn);
+                _ = CredentialsCollection.FadeToAsync(1, AnimationLength.DefaultUnsigned, Easing.CubicIn);
+                await ContentFrameGrid.TranslateToAsync(ContentFrame.Width, 0, AnimationLength.DefaultUnsigned, Easing.CubicIn);
             }
             var oldContent = _currentView;
             _currentView = null;
@@ -219,12 +216,12 @@ namespace Authi.App.Maui.UI
             {
                 _isLoaded = true;
                 await ViewModel.InitializeAsync();
-                await this.FadeTo(1, AnimationLength.ShortUnsigned, Easing.CubicIn);
+                await this.FadeToAsync(1, AnimationLength.ShortUnsigned, Easing.CubicIn);
             }
             else
             {
                 ViewModel.Dispose();
-                MauiApp.Current.OpenMainPage();
+                AuthiApp.Current.OpenMainPage();
             }
         }
     }

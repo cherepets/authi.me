@@ -26,7 +26,6 @@ public partial class ContentViewHeader : IAdaptiveView
 
     public void SetCompactSize(bool isCompact)
     {
-        Padding = new Thickness(0, MauiApp.Current.SystemInsets.Top, 0, 0);
         if (isCompact)
         {
             BackButton.IsVisible = true;

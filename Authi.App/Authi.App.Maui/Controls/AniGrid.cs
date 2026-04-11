@@ -47,8 +47,8 @@ namespace Authi.App.Maui.Controls
                         TranslationY = 64;
                         break;
                 }
-                this.TranslateTo(0, 0, AnimationLength.ShortUnsigned, Easing.CubicOut);
-                this.FadeTo(1, AnimationLength.ShortUnsigned, Easing.CubicOut);
+                this.TranslateToAsync(0, 0, AnimationLength.ShortUnsigned, Easing.CubicOut);
+                this.FadeToAsync(1, AnimationLength.ShortUnsigned, Easing.CubicOut);
             }
         }
     }

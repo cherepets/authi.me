@@ -78,8 +78,8 @@ public partial class DialogPresenter
         IsPresenting = true;
         DialogContainer.Scale = 0;
         BackgroundBorder.Opacity = 0;
-        _ = BackgroundBorder.FadeTo(1, AnimationLength.ShortUnsigned, Easing.CubicOut);
-        await DialogContainer.ScaleTo(1, AnimationLength.ShortUnsigned, Easing.CubicOut);
+        _ = BackgroundBorder.FadeToAsync(1, AnimationLength.ShortUnsigned, Easing.CubicOut);
+        await DialogContainer.ScaleToAsync(1, AnimationLength.ShortUnsigned, Easing.CubicOut);
         await _hideDialogRequested.Task;
         IsVisible = false;
         IsPresenting = false;

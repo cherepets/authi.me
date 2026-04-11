@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Authi.App.Maui.UI;
 
-public partial class MenuBarView : IAdaptiveView
+public partial class MenuBarView
 {
     public IMenuBarViewModel ViewModel
     {
@@ -28,10 +28,10 @@ public partial class MenuBarView : IAdaptiveView
     private async void OnLoaded(object sender, EventArgs e)
     {
         await Task.Delay(AnimationLength.Long);
-        await ProgressBar.FadeTo(1, AnimationLength.DefaultUnsigned, Easing.CubicOut);
+        await ProgressBar.FadeToAsync(1, AnimationLength.DefaultUnsigned, Easing.CubicOut);
     }
 
-    private void OnViewModelChanged(IMenuBarViewModel oldViewModel, IMenuBarViewModel newViewModel)
+    private void OnViewModelChanged(IMenuBarViewModel _, IMenuBarViewModel newViewModel)
     {
         BindingContext = newViewModel;
     }
@@ -39,10 +39,5 @@ public partial class MenuBarView : IAdaptiveView
     private void OnSettingsClicked(object sender, EventArgs e)
     {
         _viewModel?.ShowSettings();
-    }
-
-    public void SetCompactSize(bool isCompact)
-    {
-        Padding = new Thickness(0, MauiApp.Current.SystemInsets.Top, 0, 0);
     }
 }

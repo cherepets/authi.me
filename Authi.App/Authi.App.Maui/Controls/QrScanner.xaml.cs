@@ -66,21 +66,21 @@ public partial class QrScanner
         }
         if (CameraPlaceholder.Width > CameraPlaceholder.Height)
         {
-            await CameraPlaceholder.RotateYTo(90, AnimationLength.DefaultUnsigned, Easing.CubicIn);
+            await CameraPlaceholder.RotateYToAsync(90, AnimationLength.DefaultUnsigned, Easing.CubicIn);
             await cameraView.StopCameraAsync();
             CameraPlaceholder.RotationY = -90;
             await cameraView.StartCameraAsync();
             await Task.Delay(AnimationLength.Short);
-            await CameraPlaceholder.RotateYTo(0, AnimationLength.DefaultUnsigned, Easing.CubicOut);
+            await CameraPlaceholder.RotateYToAsync(0, AnimationLength.DefaultUnsigned, Easing.CubicOut);
         }
         else
         {
-            await CameraPlaceholder.RotateXTo(90, AnimationLength.DefaultUnsigned, Easing.CubicIn);
+            await CameraPlaceholder.RotateXToAsync(90, AnimationLength.DefaultUnsigned, Easing.CubicIn);
             await cameraView.StopCameraAsync();
             CameraPlaceholder.RotationX = -90;
             await cameraView.StartCameraAsync();
             await Task.Delay(AnimationLength.Short);
-            await CameraPlaceholder.RotateXTo(0, AnimationLength.DefaultUnsigned, Easing.CubicOut);
+            await CameraPlaceholder.RotateXToAsync(0, AnimationLength.DefaultUnsigned, Easing.CubicOut);
         }
     }
 
@@ -97,8 +97,8 @@ public partial class QrScanner
         if (visibilityChange == true)
         {
             TranslationY = 64;
-            _ = this.TranslateTo(0, 0, AnimationLength.ShortUnsigned, Easing.CubicOut);
-            await this.FadeTo(1, AnimationLength.ShortUnsigned, Easing.CubicOut);
+            _ = this.TranslateToAsync(0, 0, AnimationLength.ShortUnsigned, Easing.CubicOut);
+            await this.FadeToAsync(1, AnimationLength.ShortUnsigned, Easing.CubicOut);
         }
         else if (visibilityChange == false)
         {
