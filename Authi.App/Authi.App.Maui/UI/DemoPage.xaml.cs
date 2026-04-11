@@ -59,7 +59,7 @@ public class DemoColor
     public DemoColor(string name)
     {
         Name = name;
-        Color = MauiApp.Current.GetResource<Color>(name);
+        Color = AuthiApp.Current.GetResource<Color>(name);
         var l = Color.GetLuminosity();
         Foreground = l > 0.5f ? Colors.Black : Colors.White;
     }

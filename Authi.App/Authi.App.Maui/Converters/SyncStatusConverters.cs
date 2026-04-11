@@ -13,11 +13,11 @@ namespace Authi.App.Maui.Converters
             var status = (SyncStatus)value;
             return status switch
             {
-                SyncStatus.NotSynced => MauiApp.Current.GetThemedResource("ColorNeutral"),
-                SyncStatus.Offline => MauiApp.Current.GetThemedResource("ColorOffline"),
-                SyncStatus.Syncing => MauiApp.Current.GetThemedResource("ColorCaution"),
-                SyncStatus.Synced => MauiApp.Current.GetThemedResource("ColorSuccess"),
-                SyncStatus.Error => MauiApp.Current.GetThemedResource("ColorCritical"),
+                SyncStatus.NotSynced => AuthiApp.Current.GetThemedResource("ColorNeutral"),
+                SyncStatus.Offline => AuthiApp.Current.GetThemedResource("ColorOffline"),
+                SyncStatus.Syncing => AuthiApp.Current.GetThemedResource("ColorCaution"),
+                SyncStatus.Synced => AuthiApp.Current.GetThemedResource("ColorSuccess"),
+                SyncStatus.Error => AuthiApp.Current.GetThemedResource("ColorCritical"),
                 _ => throw new ArgumentOutOfRangeException(nameof(value), status.ToString())
             };
         }

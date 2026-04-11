@@ -13,8 +13,8 @@ namespace Authi.App.Maui.Controls
 
         public ProgressBar()
         {
-            _primaryColor = MauiApp.Current.GetResource<Color>("Tertiary").ToSKColor();
-            _secondaryColor = MauiApp.Current.GetResource<Color>("OnTertiary").ToSKColor();
+            _primaryColor = AuthiApp.Current.GetResource<Color>("Tertiary").ToSKColor();
+            _secondaryColor = AuthiApp.Current.GetResource<Color>("OnTertiary").ToSKColor();
         }
 
         protected override void Paint(SKPaintSurfaceEventArgs e, TimeSpan elapsedTime)

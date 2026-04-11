@@ -4,7 +4,7 @@ using System;
 
 namespace Authi.App.Maui.UI;
 
-public partial class CredentialsCollectionView : IAdaptiveView
+public partial class CredentialsCollectionView
 {
     public ICredentialsCollectionViewModel ViewModel
     {
@@ -21,6 +21,8 @@ public partial class CredentialsCollectionView : IAdaptiveView
     public CredentialsCollectionView()
     {
         InitializeComponent();
+        var bottom = AddCredentialsButton.HeightRequest + AddCredentialsButton.Margin.VerticalThickness;
+        ScrollView.Padding = new Thickness(0, 0, 0, bottom);
     }
 
     private void OnAddCredentialsClicked(object sender, EventArgs e)
@@ -31,11 +33,5 @@ public partial class CredentialsCollectionView : IAdaptiveView
     private void OnViewModelChanged(ICredentialsCollectionViewModel oldViewModel, ICredentialsCollectionViewModel newViewModel)
     {
         BindingContext = newViewModel;
-    }
-
-    public void SetCompactSize(bool isCompact)
-    {
-        AddCredentialsButton.Margin = new Thickness(24, 24, 24, 24 + MauiApp.Current.SystemInsets.Bottom);
-        ScrollView.Padding = new Thickness(0, 0, 0, AddCredentialsButton.HeightRequest + AddCredentialsButton.Margin.VerticalThickness);
     }
 }

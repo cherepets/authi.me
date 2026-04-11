@@ -1,3 +1,5 @@
+import { Extension } from '/helpers/extension.js';
+
 export const Theme = {
     applySystemTheme(element) {
         this.applyTheme(element, this.getSystemTheme());
@@ -11,9 +13,8 @@ export const Theme = {
             element.appendChild(link);
         }
 
-        let extension = chrome ?? browser;
-        if (extension) {
-            let action = extension.action;
+        if (Extension.isInstalled) {
+            let action = Extension.api.action;
             if (action) {
                 action.setIcon({ path: "icons/icon_" + theme + ".png" });
             }

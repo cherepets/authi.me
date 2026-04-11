@@ -1,0 +1,4 @@
+﻿<linker>
+	<assembly fullname="Microsoft.Maui.Controls" preserve="all" />
+	<assembly fullname="Authi.App.Maui" preserve="all" />
+</linker>

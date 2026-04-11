@@ -27,7 +27,7 @@ namespace Authi
                 {
                     if (handler.PlatformView.Background is RippleDrawable ripple)
                     {
-                        var rippleColor = MauiApp.Current.GetResource<Color>("Semitransparent1").ToAndroid();
+                        var rippleColor = AuthiApp.Current.GetResource<Color>("Semitransparent1").ToAndroid();
                         ripple.SetColor(ColorStateList.ValueOf(rippleColor));
                     }
                 });
@@ -53,7 +53,7 @@ namespace Authi
                     var desiredVerticalPaddingPx = (int)(desiredVerticalPadding * density);
                     handler.PlatformView.SetPadding(desiredHorizontalPaddingPx, desiredVerticalPaddingPx, desiredHorizontalPaddingPx, desiredVerticalPaddingPx);
 
-                    handler.PlatformView.TextCursorDrawable.SetTint(MauiApp.Current.GetResource<Color>("Primary").ToAndroid());
+                    handler.PlatformView.TextCursorDrawable.SetTint(AuthiApp.Current.GetResource<Color>("Primary").ToAndroid());
 
                     handler.PlatformView.FocusChange += (sender, e) =>
                     {
@@ -70,13 +70,13 @@ namespace Authi
 
                     void OnFocus()
                     {
-                        shape.Paint.Color = MauiApp.Current.GetResource<Color>("Primary").ToAndroid();
+                        shape.Paint.Color = AuthiApp.Current.GetResource<Color>("Primary").ToAndroid();
                         shape.Paint.StrokeWidth = 8;
                     }
 
                     void OnUnfocus()
                     {
-                        shape.Paint.Color = MauiApp.Current.GetResource<Color>("OnSurface").ToAndroid();
+                        shape.Paint.Color = AuthiApp.Current.GetResource<Color>("OnSurface").ToAndroid();
                         shape.Paint.StrokeWidth = 2;
                     }
                 });
@@ -102,14 +102,14 @@ namespace Authi
                     trackDrawable.SetCornerRadius(trackHeightPx / 2f);
 
                     var trackColor = view.IsOn
-                        ? MauiApp.Current.GetResource<Color>("Primary").ToAndroid()
-                        : MauiApp.Current.GetResource<Color>("Semitransparent").ToAndroid();
+                        ? AuthiApp.Current.GetResource<Color>("Primary").ToAndroid()
+                        : AuthiApp.Current.GetResource<Color>("Semitransparent").ToAndroid();
 
                     trackDrawable.SetColor(trackColor);
 
                     if (!view.IsOn)
                     {
-                        var outlineColor = MauiApp.Current.GetResource<Color>("Primary").ToAndroid();
+                        var outlineColor = AuthiApp.Current.GetResource<Color>("Primary").ToAndroid();
                         trackDrawable.SetStroke(outlinePx, outlineColor);
                     }
 
@@ -117,8 +117,8 @@ namespace Authi
                     innerThumbDrawable.SetShape(ShapeType.Oval);
 
                     var thumbColor = view.IsOn
-                        ? MauiApp.Current.GetResource<Color>("OnPrimary").ToAndroid()
-                        : MauiApp.Current.GetResource<Color>("Primary").ToAndroid();
+                        ? AuthiApp.Current.GetResource<Color>("OnPrimary").ToAndroid()
+                        : AuthiApp.Current.GetResource<Color>("Primary").ToAndroid();
 
                     innerThumbDrawable.SetColor(thumbColor);
 

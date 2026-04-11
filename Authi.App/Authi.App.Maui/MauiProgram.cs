@@ -10,23 +10,22 @@ namespace Authi.App.Maui
 {
     public static class MauiProgram
     {
-        public static Microsoft.Maui.Hosting.MauiApp CreateMauiApp()
+        public static MauiApp CreateMauiApp()
         {
             AppContext.SetSwitch("System.Reflection.NullabilityInfoContext.IsSupported", true);
-            var builder = Microsoft.Maui.Hosting.MauiApp.CreateBuilder();
-            builder
+            return MauiApp.CreateBuilder()
                 .UseMaterialColors()
-                .UseMauiApp<MauiApp>()
+                .UseMauiApp<AuthiApp>()
                 .UseMauiCommunityToolkit()
                 .UseSkiaSharp()
                 .UseMauiCameraView()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("MajorMonoDisplay.ttf", "MajorMonoDisplay");
-                    fonts.AddFont("NotoSans.ttf", "DefaultFont");
                     fonts.AddFont("MaterialSymbols.ttf", "IconFont");
-                });
-            return builder.Build();
+                    fonts.AddFont("NotoSans.ttf", "DefaultFont");
+                })
+                .Build();
         }
     }
 }
