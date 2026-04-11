@@ -7,7 +7,7 @@
 Authi is a modern two-factor authentication (2FA) app that generates secure TOTP (Time-based One-Time Password) codes and syncs them across your devices through the cloud – no accounts required.
 
 
-<img width="1399" height="892" alt="image" src="https://cherepets.me/images/authi_screenshot.png" />
+<img width="1399" height="892" alt="image" src="https://cherepets.me/images/authi_screenshot.webp" />
 
 ## Sync design
 
