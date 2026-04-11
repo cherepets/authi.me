@@ -70,7 +70,7 @@ export class SettingsPage extends HTMLElement {
                 ${Localization.get('Settings.GetAppLinkTitle')}
             </a>`;
 
-        this.updateVisualState();
+        await this.updateVisualState();
     }
 
     async connectedCallback() {
@@ -78,8 +78,8 @@ export class SettingsPage extends HTMLElement {
         await Animator.fadeInAsync(this.querySelector('#settingsPageContent'), ms, 60);
     }
 
-    updateVisualState() {
-        const settings = Settings.load();
+    async updateVisualState() {
+        const settings = await Settings.getAsync();
         const syncToggle = this.querySelector('#settingsPageCloudSyncToggle');
         const cloudSyncCopyButton = this.querySelector('#settingsPageCloudSyncPasteButton');
         const cloudSyncCopyButtonLabel = this.querySelector('#settingsPageCloudSyncPasteButtonLabel');
@@ -112,9 +112,9 @@ export class SettingsPage extends HTMLElement {
                 message: Localization.get('Settings.CloudSyncConfirmDisable'),
                 primaryButtonText: Localization.get('Generic.Yes'),
                 cancelButtonText: Localization.get('Generic.No'),
-                onPrimary: () => {
-                    Settings.save({});
-                    this.updateVisualState();
+                onPrimary: async () => {
+                    await Settings.setAsync(null);
+                    await this.updateVisualState();
                 },
                 onCancel: () => {
                     this.querySelector('#settingsPageCloudSyncToggle').checked = true;
@@ -146,9 +146,9 @@ export class SettingsPage extends HTMLElement {
                 const resultJson = await wasm.apiClient.consume(syncCode);
                 const result = resultJson.fromJson();
 
-                Cache.save([]);
+                await Cache.setAsync([]);
 
-                Settings.save({
+                await Settings.setAsync({
                     clientId: result.clientId,
                     dataKey: result.dataKey.bytes,
                     syncPrivateKey: result.syncKeyPair.private.bytes,
@@ -161,7 +161,7 @@ export class SettingsPage extends HTMLElement {
                     cancelButtonText: Localization.get('Generic.Close')
                 });
 
-                this.updateVisualState();
+                await this.updateVisualState();
             }
             catch (error) {
                 DialogManager.showDialog({
@@ -193,9 +193,9 @@ export class SettingsPage extends HTMLElement {
                     const resultJson = await wasm.backup.parse(text);
                     const result = resultJson.fromJson();
 
-                    Cache.save(result);
+                    await Cache.setAsync(result);
 
-                    Settings.save({ isOffline: true });
+                    await Settings.setAsync({ isOffline: true });
 
                     DialogManager.showDialog({
                         title: Localization.get('Generic.Success'),
@@ -204,7 +204,7 @@ export class SettingsPage extends HTMLElement {
                     });
                 }
 
-                this.updateVisualState();
+                await this.updateVisualState();
             }
             catch (error) {
                 DialogManager.showDialog({

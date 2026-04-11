@@ -1,11 +1,11 @@
-﻿export const Cache = {
-    save(value) {
-        const json = JSON.stringify(value);
-        localStorage.setItem('cache', json);
+﻿import { Storage } from '/helpers/storage.js';
+
+export const Cache = {
+    async getAsync() {
+        return await Storage.getAsync('cache', null);
     },
 
-    load() {
-        const value = localStorage.getItem('cache');
-        return JSON.parse(value);
+    async setAsync(value) {
+        await Storage.setAsync('cache', value);
     }
 }

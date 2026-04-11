@@ -43,7 +43,7 @@ export class MainPage extends HTMLElement {
     }
 
     async connectedCallback() {
-        const settings = Settings.load();
+        const settings = await Settings.getAsync();
 
         if (!settings ||
             (
@@ -62,7 +62,7 @@ export class MainPage extends HTMLElement {
         const credentialsView = this.querySelector('#mainPageCredentialsView');
 
         try {
-            var cache = Cache.load();
+            var cache = await Cache.getAsync();
             if (cache) {
                 await this.renderCredentialsAsync(cache, credentialsView);
             }
@@ -78,10 +78,10 @@ export class MainPage extends HTMLElement {
                 const result = resultJson.fromJson();
 
                 if (result.hasChanges) {
-                    Cache.save(result.credentials);
+                    await Cache.setAsync(result.credentials);
 
                     settings.version = result.version;
-                    Settings.save(settings);
+                    await Settings.setAsync(settings);
 
                     await this.renderCredentialsAsync(result.credentials, credentialsView);
                 }

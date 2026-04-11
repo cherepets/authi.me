@@ -1,11 +1,11 @@
-﻿export const Settings = {
-    save(value) {
-        const json = JSON.stringify(value);
-        localStorage.setItem('settings', json);
+﻿import { Storage } from '/helpers/storage.js';
+
+export const Settings = {
+    async getAsync() {
+        return await Storage.getAsync('settings', null);
     },
 
-    load() {
-        const value = localStorage.getItem('settings');
-        return JSON.parse(value);
+    async setAsync(value) {
+        await Storage.setAsync('settings', value);
     }
 }
