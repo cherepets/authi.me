@@ -65,18 +65,11 @@ namespace Authi.App.Logic.ViewModels
 
         public bool QrScanned(string code)
         {
-            if (OtpauthUri.TryParse(code, out var uri))
+            if (OtpauthUri.TryParse(code, out var otpauth))
             {
-                Title = uri.Issuer;
-                Secret = uri.Secret;
-                if (uri.Account != null)
-                {
-                    Subtitle = uri.Account;
-                }
-                else
-                {
-                    Subtitle = string.Empty;
-                }
+                Title = otpauth.Issuer;
+                Secret = otpauth.Secret;
+                Subtitle = otpauth.Account ?? string.Empty;
                 return true;
             }
             return false;

@@ -233,13 +233,13 @@ namespace Authi.App.Logic.ViewModels
             {
                 try
                 {
-                    if (OtpauthUri.TryParse(item, out var uri))
+                    if (OtpauthUri.TryParse(item, out var otpauth))
                     {
                         var dto = new Credential
                         {
-                            Title = uri.Issuer,
-                            Subtitle = uri.Account,
-                            Secret = uri.Secret
+                            Title = otpauth.Issuer,
+                            Subtitle = otpauth.Account,
+                            Secret = otpauth.Secret
                         };
                         await Services.LocalCredentialStorage.InsertAsync(dto);
                         _credentials.Add(new CredentialViewModel(dto));

@@ -19,6 +19,11 @@ namespace Authi.Common.Client
             try
             {
                 uri = new Uri(uriString);
+                if (uri.Scheme != "otpauth")
+                {
+                    otpauth = null;
+                    return false;
+                }
                 queryParams = HttpUtility.ParseQueryString(uri.Query);
             }
             catch
