@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Package
+  xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+  xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+  xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest"
+  xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
+  IgnorableNamespaces="uap rescap">
+
+	<Identity Name="5864cherepets.Authi" Publisher="CN=3D126052-B82F-49A4-9FBC-A221882D2A9E" Version="1.0.9.0" />
+
+	<mp:PhoneIdentity PhoneProductId="385c80da-5320-4ed2-9667-8279a460cfde" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+
+	<Properties>
+		<DisplayName>Authi</DisplayName>
+		<PublisherDisplayName>cherepets</PublisherDisplayName>
+		<Logo>$placeholder$.png</Logo>
+	</Properties>
+
+	<Dependencies>
+		<TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.17763.0" MaxVersionTested="10.0.19041.0" />
+		<TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.17763.0" MaxVersionTested="10.0.19041.0" />
+	</Dependencies>
+
+	<Resources>
+		<Resource Language="x-generate" />
+	</Resources>
+
+	<Applications>
+		<Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="windows.partialTrustApplication">
+			<uap:VisualElements
+			  DisplayName="Authi"
+			  Description="$placeholder$"
+			  Square150x150Logo="$placeholder$.png"
+			  Square44x44Logo="$placeholder$.png"
+			  BackgroundColor="transparent">
+				<uap:DefaultTile Square71x71Logo="$placeholder$.png" Wide310x150Logo="$placeholder$.png" Square310x310Logo="$placeholder$.png" />
+			</uap:VisualElements>
+			<Extensions>
+				<uap:Extension Category="windows.fileSavePicker">
+					<uap:FileSavePicker>
+						<uap:SupportedFileTypes>
+							<uap:SupportsAnyFileType/>
+						</uap:SupportedFileTypes>
+					</uap:FileSavePicker>
+				</uap:Extension>
+				<uap:Extension Category="windows.fileOpenPicker">
+					<uap:FileOpenPicker>
+						<uap:SupportedFileTypes>
+							<uap:SupportsAnyFileType/>
+						</uap:SupportedFileTypes>
+					</uap:FileOpenPicker>
+				</uap:Extension>
+			</Extensions>
+		</Application>
+	</Applications>
+
+	<Capabilities>
+		<Capability Name="internetClient"/>
+		<DeviceCapability Name="webcam"/>
+		<DeviceCapability Name="microphone"/>
+	</Capabilities>
+
+</Package>

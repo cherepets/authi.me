@@ -1,7 +1,6 @@
 using Authi.App.Logic.ViewModels;
 using Authi.App.WinUI.Controls;
 using Microsoft.UI.Xaml;
-using System;
 using L10n = Authi.App.Logic.Localization;
 
 namespace Authi.App.WinUI.UI

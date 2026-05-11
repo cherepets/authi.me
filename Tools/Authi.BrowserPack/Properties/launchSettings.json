@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Authi.BrowserPack": {
+      "commandName": "Project",
+      "commandLineArgs": "D:\\Personal\\Authi\\Authi.Web\\Authi.BrowserExtension\\"
+    }
+  }
+}

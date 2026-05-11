@@ -16,6 +16,7 @@ namespace Authi.App.Logic.Services
         Channel<string> BackupExportComplete { get; }
         Channel<string> BackupImportInitiate { get; }
         Channel BackupImportComplete { get; }
+        Channel<string> DeeplinkActivated { get; }
     }
 
     public class Messenger : ServiceBase, IMessenger
@@ -29,6 +30,7 @@ namespace Authi.App.Logic.Services
         public Channel<string> BackupExportComplete { get; } = new();
         public Channel<string> BackupImportInitiate { get; } = new();
         public Channel BackupImportComplete { get; } = new();
+        public Channel<string> DeeplinkActivated { get; } = new();
     }
 
     public class Channel

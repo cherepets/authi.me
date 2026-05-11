@@ -6,5 +6,6 @@
 		<Nullable>enable</Nullable>
 		<ProduceReferenceAssembly>False</ProduceReferenceAssembly>
 		<BaseOutputPath>bin</BaseOutputPath>
+		<Platforms>AnyCPU;x64;x86;ARM64</Platforms>
 	</PropertyGroup>
 </Project>

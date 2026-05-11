@@ -15,7 +15,7 @@ public partial class backup
         var result = content
             .Split('\n')
             .Select(item => item.Trim())
-            .Select(item => OtpauthUri.TryParse(item, out var uri) ? uri : null)
+            .Select(item => OtpauthUri.TryParse(item, out var otpauth) ? otpauth : null)
             .Where(uri => uri != null)
             .Select(uri => uri!)
             .Select(uri => new CredentialDto

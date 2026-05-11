@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Authi.Common.Client;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
@@ -41,6 +42,7 @@ namespace Authi.App.Logic.ViewModels
             Services.Messenger.NavigationPush.Subscribe += OnNavigationPushed;
             Services.Messenger.NavigationPop.Subscribe += OnNavigationPopped;
             Services.Messenger.DeleteCredential.Subscribe += OnDeleteCredentialRequested;
+            Services.Messenger.DeeplinkActivated.Subscribe += OnDeeplinkActivated;
         }
 
         public async Task InitializeAsync()
@@ -122,6 +124,19 @@ namespace Authi.App.Logic.ViewModels
         private async void OnDeleteCredentialRequested(object? sender, CredentialViewModel credentialViewModel)
         {
             await SyncViewModel.DeleteAsync(credentialViewModel);
+        }
+
+        private void OnDeeplinkActivated(object? sender, string e)
+        {
+            if (OtpauthUri.TryParse(e, out var otpauth))
+            {
+                ShowContent(new AddCredentialViewModel(Credentials)
+                {
+                    Title = otpauth.Issuer,
+                    Secret = otpauth.Secret,
+                    Subtitle = otpauth.Account ?? string.Empty,
+                });
+            }
         }
 
         private void ShowContent(ViewModelBase viewModel)

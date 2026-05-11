@@ -3,8 +3,9 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="using:Authi.App.Maui.Controls"
-    x:DataType="local:ContentViewHeader">
-    <Grid Padding="0,0,0,12">
+    x:DataType="local:ContentViewHeader"
+    SafeAreaEdges="None, Container, Container, None">
+    <Grid Padding="0,0,0,12" SafeAreaEdges="None, Container, Container, None">
         <Grid.GestureRecognizers>
             <TapGestureRecognizer />
         </Grid.GestureRecognizers>
