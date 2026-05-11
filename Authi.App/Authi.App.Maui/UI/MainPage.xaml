@@ -10,10 +10,11 @@
     Background="{DynamicResource SurfaceBrush}"
     Loaded="OnLoaded"
     Opacity="0"
+    SafeAreaEdges="None"
     Shell.NavBarIsVisible="False"
     SizeChanged="OnSizeChanged">
-    <Grid>
-        <Grid x:Name="Root">
+    <Grid SafeAreaEdges="None">
+        <Grid x:Name="Root" SafeAreaEdges="None">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition x:Name="MainGridFirstColumn" />
                 <ColumnDefinition x:Name="MainGridSecondColumn" />
@@ -30,8 +31,9 @@
             <Border
                 x:Name="ContentFrame"
                 Grid.RowSpan="2"
+                SafeAreaEdges="None"
                 StrokeThickness="0">
-                <Grid x:Name="ContentFrameGrid" />
+                <Grid x:Name="ContentFrameGrid" SafeAreaEdges="None" />
             </Border>
         </Grid>
         <controls:DialogPresenter

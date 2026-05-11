@@ -9,6 +9,7 @@ using MaterialColorUtilities.Maui;
 using Microsoft.Maui;
 using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls;
+using System.Threading.Tasks;
 
 namespace Authi.App.Maui
 {
@@ -19,6 +20,7 @@ namespace Authi.App.Maui
         object GetResource(string key);
         T GetThemedResource<T>(string key);
         object GetThemedResource(string key);
+        void HandleDeeplink(string deeplink);
         void OpenMainPage();
     }
 
@@ -76,6 +78,11 @@ namespace Authi.App.Maui
         protected override void OnResume()
         {
             ServiceProvider.Current.Get<IMessenger>().SyncNow.Publish(this);
+        }
+
+        public void HandleDeeplink(string deeplink)
+        {
+            ServiceProvider.Current.Get<IMessenger>().DeeplinkActivated.Publish(this, deeplink);
         }
     }
 }

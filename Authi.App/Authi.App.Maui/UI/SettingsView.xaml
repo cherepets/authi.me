@@ -5,8 +5,9 @@
     xmlns:controls="using:Authi.App.Maui.Controls"
     xmlns:l10n="clr-namespace:Authi.App.Logic.Localization;assembly=Authi.App.Logic"
     xmlns:viewModels="clr-namespace:Authi.App.Logic.ViewModels;assembly=Authi.App.Logic"
-    x:DataType="viewModels:SettingsViewModel">
-    <Grid>
+    x:DataType="viewModels:SettingsViewModel"
+    SafeAreaEdges="None">
+    <Grid SafeAreaEdges="None">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition />
@@ -17,7 +18,11 @@
             Title="{x:Static l10n:Settings.PageTitle}"
             Close="OnClose" />
 
-        <ScrollView Grid.Row="1" IsEnabled="{Binding IsLoading, Converter={StaticResource Inverse}}">
+        <ScrollView
+            Grid.Row="1"
+            Padding="0,0,0,24"
+            IsEnabled="{Binding IsLoading, Converter={StaticResource Inverse}}"
+            SafeAreaEdges="None, None, Container, None">
             <VerticalStackLayout Margin="24,8,24,24">
 
                 <!--  Backup  -->
