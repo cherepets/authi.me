@@ -5,10 +5,12 @@ using Authi.App.WinUI.UI;
 using Authi.Common.Services;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Media;
-using System;
-using System.Runtime.InteropServices;
+using Microsoft.Windows.AppLifecycle;
+using System.Threading.Tasks;
+using Windows.ApplicationModel.Activation;
 using WinUIEx;
 using L10n = Authi.App.Logic.Localization;
+using LaunchActivatedEventArgs = Microsoft.UI.Xaml.LaunchActivatedEventArgs;
 
 namespace Authi.App.WinUI
 {
@@ -19,13 +21,17 @@ namespace Authi.App.WinUI
         public WindowEx MainWindow => _mainWindow!;
         private WindowEx? _mainWindow;
 
-        public App()
+        private readonly TaskCompletionSource _launchTcs;
+
+        public App(AppActivationArguments args)
         {
             ServiceLocator.Init(
                 typeof(ServiceLocator).Assembly,    // Authi.Common
                 typeof(Config).Assembly,            // Authi.App.Logic
                 typeof(App).Assembly);              // Authi.App
             InitializeComponent();
+            _launchTcs = new TaskCompletionSource();
+            OnAppActivated(null, args);
         }
 
         public T GetResource<T>(string key) => (T)GetResource(key);
@@ -36,9 +42,20 @@ namespace Authi.App.WinUI
         {
             get
             {
-                var foregroundWindowHandle = GetForegroundWindow();
+                var foregroundWindowHandle = Win32.Interop.User32.GetForegroundWindow();
                 var currentWindowHandle = WinRT.Interop.WindowNative.GetWindowHandle(MainWindow);
                 return foregroundWindowHandle == currentWindowHandle;
+            }
+        }
+
+        public async void OnAppActivated(object? sender, AppActivationArguments args)
+        {
+            await _launchTcs.Task;
+            if (args.Kind == ExtendedActivationKind.Protocol && args.Data is ProtocolActivatedEventArgs protocolArgs)
+            {
+                _mainWindow?.DispatcherQueue.TryEnqueue(() =>
+                    ServiceProvider.Current.Get<IMessenger>().DeeplinkActivated.Publish(this, protocolArgs.Uri.AbsoluteUri));
+
             }
         }
 
@@ -55,19 +72,17 @@ namespace Authi.App.WinUI
                 SystemBackdrop = new MicaBackdrop(),
                 Title = L10n.Generic.AppName
             }.WithIcon("ms-appx:///Assets/AppIcon.ico");
-            _mainWindow.Activated += OnActivated;
+            _mainWindow.Activated += OnWindowActivated;
             _mainWindow.Activate();
+            _launchTcs.SetResult();
         }
 
-        private void OnActivated(object sender, WindowActivatedEventArgs args)
+        private void OnWindowActivated(object sender, WindowActivatedEventArgs args)
         {
             if (args.WindowActivationState != WindowActivationState.Deactivated)
             {
                 ServiceProvider.Current.Get<IMessenger>().SyncNow.Publish(this);
             }
         }
-
-        [DllImport("user32.dll")]
-        private static extern IntPtr GetForegroundWindow();
     }
 }

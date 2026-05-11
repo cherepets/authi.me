@@ -1,5 +1,4 @@
 ﻿using Microsoft.UI.Dispatching;
-using Microsoft.UI.Xaml.Controls;
 using SharpHook;
 using SharpHook.Data;
 

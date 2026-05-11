@@ -18,6 +18,7 @@
 		<SDKIdentifier>Windows</SDKIdentifier>
 		<AppxPackage>true</AppxPackage>
 		<AppxBundle>Always</AppxBundle>
+		<DefineConstants>$(DefineConstants);DISABLE_XAML_GENERATED_MAIN</DefineConstants>
 	</PropertyGroup>
 	<ItemGroup>
 		<None Remove="Assets\AppIcon.ico" />
@@ -295,7 +296,7 @@
 		<GenerateTestArtifacts>True</GenerateTestArtifacts>
 		<AppxBundle>Always</AppxBundle>
 		<PlatformTarget>AnyCPU</PlatformTarget>
-		<AppxBundlePlatforms>x64</AppxBundlePlatforms>
+		<AppxBundlePlatforms>x86|x64|arm64</AppxBundlePlatforms>
 		<HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
 	</PropertyGroup>
 </Project>
