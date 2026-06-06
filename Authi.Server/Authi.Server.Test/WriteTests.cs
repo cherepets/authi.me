@@ -3,7 +3,7 @@ using Authi.Common.Extensions;
 using Authi.Common.Services;
 using Authi.Common.Test.Mocks;
 using Authi.Server.ApiVersions;
-using Authi.Server.Models;
+using Authi.Server.Database.Models;
 using System;
 using System.Threading.Tasks;
 

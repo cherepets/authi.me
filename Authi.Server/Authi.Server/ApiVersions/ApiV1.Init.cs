@@ -1,7 +1,7 @@
 ﻿using Authi.Common.Dto;
 using Authi.Common.Extensions;
 using Authi.Common.Services;
-using Authi.Server.Models;
+using Authi.Server.Database.Models;
 using System;
 using System.Threading.Tasks;
 
@@ -11,6 +11,8 @@ namespace Authi.Server.ApiVersions
     {
         public async Task<OptionalResponse<InitResponse>> OnInit(InitRequest request)
         {
+            using var db = Services.Database.CreateScope();
+
             AesKey aesKey;
             try
             {
@@ -63,7 +65,7 @@ namespace Authi.Server.ApiVersions
 
             try
             {
-                await Services.DataRepository.CreateAsync(data);
+                await db.Data.CreateAsync(data);
             }
             catch
             {
@@ -72,7 +74,7 @@ namespace Authi.Server.ApiVersions
 
             try
             {
-                await Services.ClientRepository.CreateAsync(client);
+                await db.Client.CreateAsync(client);
             }
             catch
             {

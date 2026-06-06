@@ -1,7 +1,7 @@
 ﻿using Authi.Common.Dto;
 using Authi.Common.Extensions;
 using Authi.Common.Services;
-using Authi.Server.Models;
+using Authi.Server.Database.Models;
 using System;
 using System.Threading.Tasks;
 
@@ -11,7 +11,9 @@ namespace Authi.Server.ApiVersions
     {
         public async Task<OptionalResponse<PublishResponse>> OnPublish(PublishRequest request)
         {
-            var client = await Services.ClientRepository.ReadAsync(request.ClientId);
+            using var db = Services.Database.CreateScope();
+
+            var client = await db.Client.ReadAsync(request.ClientId);
             if (client == null)
             {
                 return new ErrorResponse<PublishResponse>(ErrorMessages.CantFindClient);
@@ -58,7 +60,7 @@ namespace Authi.Server.ApiVersions
                     Public = oneTimeClientPublicKey.ToString()
                 }
             };
-            await Services.SyncRepository.CreateAsync(sync);
+            await db.Sync.CreateAsync(sync);
 
             var responsePayload = new PublishResponse.Payload
             {

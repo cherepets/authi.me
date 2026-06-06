@@ -1,7 +1,7 @@
 ﻿using Authi.Common.Dto;
 using Authi.Common.Extensions;
 using Authi.Common.Services;
-using Authi.Server.Models;
+using Authi.Server.Database.Models;
 using System;
 using System.Threading.Tasks;
 
@@ -13,12 +13,14 @@ namespace Authi.Server.ApiVersions
 
         public async Task<OptionalResponse<ConsumeResponse>> OnConsume(ConsumeRequest request)
         {
-            var sync = await Services.SyncRepository.ReadAsync(request.SyncId);
+            using var db = Services.Database.CreateScope();
+
+            var sync = await db.Sync.ReadAsync(request.SyncId);
             if (sync == null)
             {
                 return new ErrorResponse<ConsumeResponse>(ErrorMessages.CantFindSync);
             }
-            await Services.SyncRepository.DeleteAsync(sync);
+            await db.Sync.DeleteAsync(sync);
 
             if (!Services.Clock.IsRecent(sync.CreatedAt, SyncValidFor))
             {
@@ -60,7 +62,7 @@ namespace Authi.Server.ApiVersions
 
             try
             {
-                await Services.ClientRepository.CreateAsync(client);
+                await db.Client.CreateAsync(client);
             }
             catch
             {

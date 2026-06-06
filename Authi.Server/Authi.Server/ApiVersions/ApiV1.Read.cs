@@ -8,8 +8,10 @@ namespace Authi.Server.ApiVersions
     public partial class ApiV1 : ApiVersionBase
     {
         public async Task<OptionalResponse<ReadResponse>> OnRead(ReadRequest request)
-        {
-            var client = await Services.ClientRepository.ReadAsync(request.ClientId);
+		{
+			using var db = Services.Database.CreateScope();
+
+			var client = await db.Client.ReadAsync(request.ClientId);
             if (client == null)
             {
                 return new ErrorResponse<ReadResponse>(ErrorMessages.CantFindClient);
@@ -33,7 +35,7 @@ namespace Authi.Server.ApiVersions
                 return error;
             }
 
-            var data = await Services.DataRepository.ReadAsync(client.DataId);
+            var data = await db.Data.ReadAsync(client.DataId);
             if (data == null)
             {
                 return new ErrorResponse<ReadResponse>(ErrorMessages.CantFindData);
@@ -44,7 +46,7 @@ namespace Authi.Server.ApiVersions
             }
 
             data.LastAccessedAt = Services.Clock.Timestamp;
-            await Services.DataRepository.UpdateAsync(data);
+            await db.Data.UpdateAsync(data);
 
             var hasChanges = data.Version != requestPayload.Version;
 

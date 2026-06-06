@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Authi.Server.Services
+namespace Authi.Server.Database.Repositories
 {
     internal interface IRepository<T> where T : class
     {

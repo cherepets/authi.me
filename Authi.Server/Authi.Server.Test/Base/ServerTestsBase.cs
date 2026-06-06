@@ -1,6 +1,8 @@
 ﻿using Authi.Common.Services;
 using Authi.Common.Test;
+using Authi.Server.Database;
 using Authi.Server.Services;
+using Authi.Server.Test.Mocks;
 
 namespace Authi.Server.Test
 {
@@ -16,13 +18,12 @@ namespace Authi.Server.Test
                 typeof(ServiceLocator).Assembly,    // Authi.Common
                 typeof(Program).Assembly);          // Authi.Server
 
-            ClientRepository.Initialize();
-            DataRepository.Initialize();
-            SyncRepository.Initialize();
-
-            ServicesMock.Override<IClientRepository>(ClientRepository);
-            ServicesMock.Override<IDataRepository>(DataRepository);
-            ServicesMock.Override<ISyncRepository>(SyncRepository);
+            ServicesMock.Override<IDatabase>(
+                new MockDatabase(
+                    new MockDatabaseScope(
+                        ClientRepository,
+                        DataRepository,
+                        SyncRepository)));
         }
 
         protected static (X25519KeyPair, X25519KeyPair) ExchangePublicKeys(X25519KeyPair clientKeyPair, X25519KeyPair serverKeyPair)

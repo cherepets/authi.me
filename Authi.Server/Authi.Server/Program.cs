@@ -1,5 +1,6 @@
 using Authi.Common.Services;
 using Authi.Server.ApiVersions;
+using Authi.Server.Database;
 using Authi.Server.Extensions;
 using Authi.Server.Services;
 using Microsoft.AspNetCore.Builder;
@@ -17,9 +18,10 @@ namespace Authi.Server
                 typeof(Program).Assembly);          // Authi.Server
 
             var healthMonitor = ServiceProvider.Current.Get<IAppHealthMonitor>();
-            var dbContext = ServiceProvider.Current.Get<IAppDbContext>();
-
-            await dbContext.CleanUpAsync();
+            using (var db = ServiceProvider.Current.Get<IDatabase>().CreateScope())
+            {
+                await db.CleanUpAsync();
+            }
 
             var builder = WebApplication.CreateBuilder(args);
 

@@ -1,14 +1,14 @@
-﻿using Authi.Server.Models;
+﻿using Authi.Server.Database.Models;
+using Authi.Server.Database.Repositories;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Authi.Server.Services
 {
     public class MockDataRepository : IDataRepository
     {
-        private Dictionary<Guid, Data> _storage = [];
+        private readonly Dictionary<Guid, Data> _storage = [];
 
         public Task CreateAsync(Data data)
         {
@@ -34,11 +34,6 @@ namespace Authi.Server.Services
         {
             _storage.Remove(data.DataId);
             return Task.CompletedTask;
-        }
-
-        public void Initialize(params Data[] records)
-        {
-            _storage = records.ToDictionary(x => x.DataId);
         }
 
         public Dictionary<Guid, Data> AsDictionary()

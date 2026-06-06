@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Authi.Server.Models
+namespace Authi.Server.Database.Models
 {
     public class Client
     {

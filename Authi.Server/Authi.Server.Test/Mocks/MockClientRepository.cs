@@ -1,19 +1,20 @@
 ﻿using Authi.Common.Services;
-using Authi.Server.Models;
+using Authi.Server.Database;
+using Authi.Server.Database.Models;
+using Authi.Server.Database.Repositories;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Authi.Server.Services
 {
     public class MockClientRepository : IClientRepository
     {
-        private Dictionary<Guid, Client> _storage = [];
+        private readonly Dictionary<Guid, Client> _storage = [];
 
         public Task CreateAsync(Client client)
         {
-            if (ServiceProvider.Current.Get<IDataRepository>().ReadAsync(client.DataId) is null)
+            if (ServiceProvider.Current.Get<IDatabase>().CreateScope().Data.ReadAsync(client.DataId) is null)
             {
                 throw new Exception($"Data with id {client.DataId} not found.");
             }
@@ -40,11 +41,6 @@ namespace Authi.Server.Services
         {
             _storage.Remove(client.ClientId);
             return Task.CompletedTask;
-        }
-
-        public void Initialize(params Client[] records)
-        {
-            _storage = records.ToDictionary(x => x.ClientId);
         }
 
         public Dictionary<Guid, Client> AsDictionary()

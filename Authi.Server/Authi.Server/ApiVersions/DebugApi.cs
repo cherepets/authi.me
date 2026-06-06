@@ -1,6 +1,6 @@
 ﻿#if DEBUG
 
-using Authi.Server.Models;
+using Authi.Server.Database.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using System;
@@ -16,7 +16,8 @@ namespace Authi.Server.ApiVersions
             {
                 try
                 {
-                    return await Services.ClientRepository.ReadAsync(id);
+                    using var db = Services.Database.CreateScope();
+                    return await db.Client.ReadAsync(id);
                 }
                 catch
                 {
@@ -27,7 +28,8 @@ namespace Authi.Server.ApiVersions
             {
                 try
                 {
-                    return await Services.DataRepository.ReadAsync(id);
+                    using var db = Services.Database.CreateScope();
+                    return await db.Data.ReadAsync(id);
                 }
                 catch
                 {
@@ -38,7 +40,8 @@ namespace Authi.Server.ApiVersions
             {
                 try
                 {
-                    return await Services.SyncRepository.ReadAsync(id);
+                    using var db = Services.Database.CreateScope();
+                    return await db.Sync.ReadAsync(id);
                 }
                 catch
                 {

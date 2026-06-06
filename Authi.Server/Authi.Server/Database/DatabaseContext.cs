@@ -1,7 +1,8 @@
 ﻿using Authi.Common.Extensions;
 using Authi.Common.Services;
+using Authi.Server.Database.Models;
 using Authi.Server.Extensions;
-using Authi.Server.Models;
+using Authi.Server.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System;
@@ -10,26 +11,10 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace Authi.Server.Services
+namespace Authi.Server.Database
 {
-    [Service]
-    internal interface IAppDbContext
+    internal class DatabaseContext : DbContext
     {
-        Task<TEntity?> FindAsync<TEntity>(Guid id) where TEntity : class;
-        Task<IReadOnlyCollection<TEntity>> FindAsync<TEntity>(Expression<Func<TEntity, bool>> predicate) where TEntity : class;
-        Task InsertAsync<TEntity>(TEntity entity) where TEntity : class;
-        Task UpdateAsync<TEntity>(TEntity entity) where TEntity : class;
-        Task DeleteAsync<TEntity>(TEntity entity) where TEntity : class;
-        Task CleanUpAsync();
-    }
-
-    internal class AppDbContext : DbContext, IAppDbContext
-    {
-        public AppDbContext()
-        {
-            Database.EnsureCreated();
-        }
-
         public async Task<TEntity?> FindAsync<TEntity>(Guid id) where TEntity : class
         {
             return await Set<TEntity>().FindAsync(id);

@@ -11,7 +11,9 @@ namespace Authi.Server.ApiVersions
 
         public async Task<OptionalResponse<WriteResponse>> OnWrite(WriteRequest request)
         {
-            var client = await Services.ClientRepository.ReadAsync(request.ClientId);
+            using var db = Services.Database.CreateScope();
+
+            var client = await db.Client.ReadAsync(request.ClientId);
             if (client == null)
             {
                 return new ErrorResponse<WriteResponse>(ErrorMessages.CantFindClient);
@@ -40,7 +42,7 @@ namespace Authi.Server.ApiVersions
                 return new ErrorResponse<WriteResponse>(ErrorMessages.DataExceedsLimit);
             }
 
-            var data = await Services.DataRepository.ReadAsync(client.DataId);
+            var data = await db.Data.ReadAsync(client.DataId);
             if (data == null)
             {
                 return new ErrorResponse<WriteResponse>(ErrorMessages.CantFindData);
@@ -51,7 +53,7 @@ namespace Authi.Server.ApiVersions
             data.Binary = requestPayload.Binary;
             data.Version = version;
             data.LastAccessedAt = Services.Clock.Timestamp;
-            await Services.DataRepository.UpdateAsync(data);
+            await db.Data.UpdateAsync(data);
 
             var responsePayload = new WriteResponse.Payload
             {
