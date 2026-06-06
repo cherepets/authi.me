@@ -68,3 +68,17 @@ The server again generates a key pair and the exchange keys similar to how it ha
 | **Authi.Wasm** | WASM wrapper for client code so it can be used from browser extensions. |
 | **Authi.BrowserPack** | Creates packages for browser extensions. |
 | **Authi.Localizer** | Creates a .NET wrapper for a JS based localization file. |
+
+## Built with
+* [BouncyCastle.Cryptography](https://github.com/bcgit/bc-csharp) - The Bouncy Castle Cryptography Library For .NET.
+* [Camera.MAUI](https://github.com/hjam40/Camera.MAUI) - A Camera View control and a Barcode Endode/Decode control for .NET MAUI.
+* [CommunityToolkit.Maui](https://github.com/CommunityToolkit/Maui) - .NET MAUI Community Toolkit.
+* [LiteDB](https://github.com/litedb-org/LiteDB) - A .NET NoSQL Document Store in a single data file.
+* [MaterialColorUtilities.Maui](https://github.com/albi005/MaterialColorUtilities) - C# implementation of Google's Material color utilities.
+* [Otp.NET](https://github.com/kspearrin/Otp.NET) - An implementation TOTP RFC 6238 and HOTP RFC 4226 in C#.
+* [Pomelo.EntityFrameworkCore.MySql](https://github.com/PomeloFoundation/Pomelo.EntityFrameworkCore.MySql) - Entity Framework Core provider for MySQL compatible databases.
+* [SharpHook](https://github.com/TolikPylypchuk/SharpHook) - Global keyboard and mouse hook, event simulation, and text entry simulation for .NET.
+* [SkiaSharp](https://github.com/mono/SkiaSharp) - SkiaSharp for .NET MAUI is a set of views that can be used to draw on the screen.
+* [WinUI.SingleInstanced](https://github.com/cherepets/WinUI.SingleInstanced) - Zero-setup single instancing for WinUI 3 applications.
+* [WinUIEx](https://github.com/dotMorten/WinUIEx) - A set of extension methods and classes to fill some gaps in WinUI 3, mostly around windowing.
+* [ZXing.Net](https://github.com/micjahn/ZXing.Net/) - ZXing.Net Bindings for Windows Compatibility Pack.
