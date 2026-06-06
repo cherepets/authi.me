@@ -23,7 +23,7 @@ namespace Authi.App.WinUI
 
         private readonly TaskCompletionSource _launchTcs;
 
-        public App(AppActivationArguments args)
+        public App()
         {
             ServiceLocator.Init(
                 typeof(ServiceLocator).Assembly,    // Authi.Common
@@ -31,7 +31,7 @@ namespace Authi.App.WinUI
                 typeof(App).Assembly);              // Authi.App
             InitializeComponent();
             _launchTcs = new TaskCompletionSource();
-            OnAppActivated(null, args);
+            Program.Activated += OnAppActivated;
         }
 
         public T GetResource<T>(string key) => (T)GetResource(key);
