@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Authi | Configuration</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            background: white;
+            color: black;
+            margin: 0;
+            padding: 2rem;
+        }
+
+        input, textarea {
+            width: 100%;
+            box-sizing: border-box;
+            background: white;
+            border: 1px solid black;
+            color: black;
+            font: inherit;
+            padding: 0.75rem;
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        button {
+            width: 100%;
+            padding: 0.75rem;
+            background: black;
+            border: 1px solid black;
+            color: white;
+            cursor: pointer;
+            font: inherit;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 480px;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>Configuration</h1>
+
+        <form id="config-form">
+            <div class="form-group">
+                <label for="connection-string">Database connection string</label><br>
+                <textarea id="connection-string" required autofocus>{{CONNECTION_STRING}}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="admin-login">Admin login</label><br>
+                <input type="text" id="admin-login" autocomplete="username" required>
+            </div>
+
+            <div class="form-group">
+                <label for="admin-password">Admin password</label><br>
+                <input type="password" id="admin-password" autocomplete="new-password" required>
+            </div>
+
+            <div class="form-group">
+                <label for="totp-secret">TOTP secret</label><br>
+                <input type="text" id="totp-secret" value="{{TOTP_SECRET}}" required>
+            </div>
+
+            <button type="submit" id="submit-button">Save</button>
+        </form>
+    </div>
+
+    <script>
+        const form = document.getElementById('config-form');
+        const button = document.getElementById('submit-button');
+        const totpSecret = document.getElementById('totp-secret');
+
+        if (!totpSecret.value) {
+            const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+            const bytes = crypto.getRandomValues(new Uint8Array(32));
+            totpSecret.value = Array.from(bytes, value => alphabet[value % alphabet.length]).join('');
+        }
+
+        form.onsubmit = async (event) => {
+            event.preventDefault();
+            button.disabled = true;
+
+            const response = await fetch('/config', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    connectionString: document.getElementById('connection-string').value,
+                    login: document.getElementById('admin-login').value,
+                    password: document.getElementById('admin-password').value,
+                    totpSecret: document.getElementById('totp-secret').value
+                })
+            }).catch(() => null);
+
+            if (!response || !response.ok) {
+                const error = response ? await response.text() : null;
+                alert(error || 'Unknown error.');
+                button.disabled = false;
+                return;
+            }
+
+            alert('Configuration saved.');
+            window.location.reload();
+        };
+    </script>
+</body>
+</html>

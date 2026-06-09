@@ -7,7 +7,7 @@ namespace Authi.Server.ApiVersions
 {
     public partial class ApiV1 : ApiVersionBase
     {
-        private const int DataLimit = 100000;
+        private const int DataLimit = 32768;
 
         public async Task<OptionalResponse<WriteResponse>> OnWrite(WriteRequest request)
         {

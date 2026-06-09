@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
 	<PropertyGroup>
 		<TargetFramework>net10.0</TargetFramework>
@@ -40,8 +40,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <EmbeddedResource Include="Resources\health-login.html" />
-	  <EmbeddedResource Include="Resources\health-dashboard.html" />
+	  <EmbeddedResource Include="Web\html\config.html" />
+	  <EmbeddedResource Include="Web\html\dashboard.html" />
+	  <EmbeddedResource Include="Web\html\login.html" />
+	  <EmbeddedResource Include="Web\html\health.html" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -49,6 +51,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <PackageReference Include="Otp.NET" Version="1.4.1" />
 	  <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0" />
 	</ItemGroup>
 

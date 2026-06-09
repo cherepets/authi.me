@@ -8,6 +8,7 @@ namespace Authi.Server.Services
         IServiceProvider ServiceProvider { get; }
 
         public IAppHealthMonitor AppHealthMonitor => ServiceProvider.Get<IAppHealthMonitor>();
+        public IConfiguration Configuration => ServiceProvider.Get<IConfiguration>();
         public IClock Clock => ServiceProvider.Get<IClock>();
         public ICrypto Crypto => ServiceProvider.Get<ICrypto>();
         public IDatabase Database => ServiceProvider.Get<IDatabase>();

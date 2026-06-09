@@ -1,0 +1,158 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Authi | Health</title>
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            background: white;
+            color: black;
+            margin: 0;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+        }
+
+        .health-table {
+            border: 1px solid black;
+        }
+
+        .header {
+            display: grid;
+            grid-template-columns: 200px 200px 1fr 40px;
+            font-weight: 600;
+            border-bottom: 1px solid black;
+        }
+
+        .header > div {
+            padding: 1rem;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Health</h1>
+        <div class="health-table">
+            <div class="header">
+                <div>Date</div>
+                <div>Type</div>
+                <div>Message</div>
+                <div></div>
+            </div>
+            <div id="table-body"></div>
+        </div>
+    </div>
+
+    <template id="event-row-template">
+        <style>
+            :host {
+                display: block;
+                border-top: 1px solid black;
+            }
+
+            .row-container {
+                cursor: pointer;
+            }
+
+            .summary {
+                display: grid;
+                grid-template-columns: 200px 200px 1fr 40px;
+                align-items: center;
+            }
+
+            .summary > div {
+                padding: 1rem;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+            .chevron {
+                display: inline-block;
+                border: solid black;
+                border-width: 0 2px 2px 0;
+                padding: 0.25rem;
+                transform: rotate(45deg);
+            }
+
+            :host(.expanded) .chevron {
+                transform: rotate(-135deg);
+            }
+
+            .details {
+                display: none;
+                padding: 0 1rem 1rem;
+            }
+
+            :host(.expanded) .details {
+                display: block;
+            }
+
+            .stack {
+                margin: 0;
+                padding: 1rem;
+                background: black;
+                color: white;
+                overflow-x: auto;
+                font-family: monospace;
+                white-space: pre-wrap;
+                word-break: break-all;
+            }
+        </style>
+        <div class="row-container">
+            <div class="summary">
+                <div class="date"></div>
+                <div class="type"></div>
+                <div class="msg-text"></div>
+                <div style="text-align:center"><i class="chevron"></i></div>
+            </div>
+            <div class="details">
+                <pre class="stack"></pre>
+            </div>
+        </div>
+    </template>
+
+    <script>
+        customElements.define('app-health-row', class extends HTMLElement {
+            constructor() {
+                super();
+                this.attachShadow({ mode: 'open' });
+                const template = document.getElementById('event-row-template').content;
+                this.shadowRoot.appendChild(template.cloneNode(true));
+            }
+
+            connectedCallback() {
+                const data = JSON.parse(this.getAttribute('data'));
+                const root = this.shadowRoot;
+
+                root.querySelector('.date').textContent = new Date(data.dateTimeOffset).toLocaleString();
+                root.querySelector('.type').textContent = data.exceptionType;
+                root.querySelector('.msg-text').textContent = data.message;
+                root.querySelector('.stack').textContent = data.stackTrace || 'No additional details available.';
+
+                root.querySelector('.row-container').onclick = () => this.classList.toggle('expanded');
+            }
+        });
+
+        const rawData = {{DATA}};
+        const body = document.getElementById('table-body');
+
+        if (!rawData || rawData.length === 0) {
+            body.innerHTML = '<div class="empty">No events recorded.</div>';
+        } else {
+            rawData.forEach(e => {
+                const row = document.createElement('app-health-row');
+                row.setAttribute('data', JSON.stringify(e));
+                body.appendChild(row);
+            });
+        }
+    </script>
+</body>
+</html>
