@@ -7,6 +7,7 @@ using AndroidX.Core.View;
 using Authi.App.Maui;
 using Microsoft.Maui;
 using Microsoft.Maui.ApplicationModel;
+using System;
 using static Android.Content.Intent;
 
 namespace Authi
@@ -29,7 +30,8 @@ namespace Authi
 
             MauiHandlers.Initialize();
 
-            if (!AuthiApp.Current.IsDarkMode)
+            if (OperatingSystem.IsAndroidVersionAtLeast(30) &&
+                !AuthiApp.Current.IsDarkMode)
             {
                 Window.InsetsController?.SetSystemBarsAppearance(
                     (int)WindowInsetsControllerAppearance.LightStatusBars,

@@ -6,6 +6,7 @@ using Authi.App.Maui;
 using Microsoft.Maui;
 using Microsoft.Maui.Controls.Compatibility.Platform.Android;
 using Microsoft.Maui.Handlers;
+using System;
 using Color = Microsoft.Maui.Graphics.Color;
 
 namespace Authi
@@ -53,7 +54,10 @@ namespace Authi
                     var desiredVerticalPaddingPx = (int)(desiredVerticalPadding * density);
                     handler.PlatformView.SetPadding(desiredHorizontalPaddingPx, desiredVerticalPaddingPx, desiredHorizontalPaddingPx, desiredVerticalPaddingPx);
 
-                    handler.PlatformView.TextCursorDrawable.SetTint(AuthiApp.Current.GetResource<Color>("Primary").ToAndroid());
+                    if (OperatingSystem.IsAndroidVersionAtLeast(29))
+                    {
+                        handler.PlatformView.TextCursorDrawable?.SetTint(AuthiApp.Current.GetResource<Color>("Primary").ToAndroid());
+                    }
 
                     handler.PlatformView.FocusChange += (sender, e) =>
                     {
