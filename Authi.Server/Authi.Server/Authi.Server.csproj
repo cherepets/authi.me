@@ -64,4 +64,14 @@
 		<ProjectReference Include="..\..\Authi.Common\Authi.Common.Dto\Authi.Common.Dto.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Properties\PublishProfiles\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="dbschema.sql">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
 </Project>
