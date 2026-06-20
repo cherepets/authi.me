@@ -63,7 +63,7 @@ namespace Authi.App.Logic.Localization
         public const string GetAppPrefix = "Get ";
         public const string HostingSettingsAuthiCloud = "Authi Cloud (Recommended)";
         public const string HostingSettingsLearnMoreTitle = "Learn More";
-        public const string HostingSettingsLearnMoreUrl = "https://github.com/cherepets/Authi-OSS/wiki/Selfhosting-guide";
+        public const string HostingSettingsLearnMoreUrl = "https://github.com/cherepets/authi.me/wiki/Selfhosting-guide";
         public const string HostingSettingsPlaceholder = "192.168.1.100 or example.com";
         public const string HostingSettingsSelfhosted = "Selfhosted";
         public const string HostingSettingsTitle = "Sync server";

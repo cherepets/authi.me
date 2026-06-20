@@ -53,7 +53,7 @@
   "Settings.HostingSettingsAuthiCloud": "Authi Cloud (Recommended)",
   "Settings.HostingSettingsSelfhosted": "Selfhosted",
   "Settings.HostingSettingsPlaceholder": "192.168.1.100 or example.com",
-  "Settings.HostingSettingsLearnMoreUrl": "https://github.com/cherepets/Authi-OSS/wiki/Selfhosting-guide",
+  "Settings.HostingSettingsLearnMoreUrl": "https://github.com/cherepets/authi.me/wiki/Selfhosting-guide",
   "Settings.HostingSettingsLearnMoreTitle": "Learn More",
   "Settings.GetApp": "Get app",
   "Settings.GetAppPrefix": "Get ",
