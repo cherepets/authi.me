@@ -4,7 +4,7 @@
 [![Server Tests](https://github.com/cherepets/Authi-OSS/actions/workflows/test-server.yml/badge.svg)](https://github.com/cherepets/Authi-OSS/actions/workflows/test-server.yml)
 [![Common Tests](https://github.com/cherepets/Authi-OSS/actions/workflows/test-common.yml/badge.svg)](https://github.com/cherepets/Authi-OSS/actions/workflows/test-common.yml)
 
-authi.me is a modern selfhostable open source two-factor authentication (2FA) application that generates secure TOTP (Time-based One-Time Password) codes and syncs them across your devices through the cloud – no accounts required.
+**authi.me** is a modern selfhostable open source two-factor authentication (2FA) application that generates secure TOTP (Time-based One-Time Password) codes and syncs them across your devices through the cloud – no accounts required.
 
 <img width="1399" height="892" alt="image" src="https://cherepets.me/images/authi_screenshot.webp" />
 
