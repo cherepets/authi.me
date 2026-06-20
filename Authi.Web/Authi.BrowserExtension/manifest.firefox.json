@@ -1,7 +1,7 @@
 ﻿{
   "id": "authi@cherepets.me",
-  "name": "Authi",
-  "version": "1.4.0.0",
+  "name": "authi.me: 2fa totp with sync",
+  "version": "1.4.0.1",
   "manifest_version": 3,
   "description": "authi.me is a modern 2FA app that generates TOTP codes and syncs them across your devices through the cloud – no accounts required",
   "icons": {
