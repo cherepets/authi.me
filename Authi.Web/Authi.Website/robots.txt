@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+Disallow: /js/
+Disallow: /styles/
+
+Sitemap: https://authi.me/sitemap.xml

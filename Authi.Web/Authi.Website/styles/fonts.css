@@ -1,0 +1,17 @@
+﻿@font-face {
+    font-family: "Kantumruy Pro";
+    src: url(../fonts/KantumruyPro.woff2);
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Open Sans";
+    src: url(../fonts/OpenSans.woff2);
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Poiret One";
+    src: url(../fonts/PoiretOne.woff2);
+    font-display: swap;
+}

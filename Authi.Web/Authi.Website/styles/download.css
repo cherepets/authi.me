@@ -1,0 +1,33 @@
+﻿.store-link {
+    height: 78px;
+}
+
+    .store-link:hover {
+        filter: saturate(1.5);
+    }
+
+.extensions-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 1rem;
+}
+
+.extension-item {
+    width: 117px;
+    aspect-ratio: 1 / 1;
+    background: var(--secondary-foreground);
+    border-radius: 64px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s ease, border-radius 0.2s ease;
+}
+
+    .extension-item:hover {
+        background: var(--primary-foreground);
+        border-radius: 32px;
+        filter: saturate(1.5);
+    }

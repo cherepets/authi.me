@@ -1,0 +1,13 @@
+﻿:root {
+    /* Background */
+    --main-background: #efe9ff;
+    --card-background: #483d8b;
+    --header-background: #d7ccff;
+    --button-background: #ff5a70;
+    --button-background-hover: #ff324e;
+    /* Foreground */
+    --primary-foreground: #ffffff;
+    --secondary-foreground: #faf8ff;
+    --tertiary-foreground: #efe9ff;
+    --header-foreground: linear-gradient(145deg, #7551c2, #5a36a4);
+}
