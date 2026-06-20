@@ -1,13 +1,15 @@
 ﻿using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Data;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 
 namespace Authi.App.WinUI.Converters
 {
-    public class ConvertersDictionary : ResourceDictionary
+    public partial class ConvertersDictionary : ResourceDictionary
     {
+        [RequiresUnreferencedCode("Uses Assembly.DefinedTypes to find all converters.")]
         public ConvertersDictionary()
         {
             var assembly = typeof(ConvertersDictionary).GetTypeInfo().Assembly;

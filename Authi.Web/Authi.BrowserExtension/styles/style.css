@@ -339,6 +339,13 @@ dialog p {
     padding: 8px 24px;
 }
 
+#settingsPageCloudSyncServerUrl {
+    margin-top: -16px;
+}
+
+    #settingsPageCloudSyncServerUrl:empty {
+        display: none;
+    }
 
 #settingsPageGetAppContent {
     margin: 0px;

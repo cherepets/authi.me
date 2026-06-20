@@ -11,6 +11,7 @@ namespace Authi.App.Test.Mocks
         public IAsyncSetting<byte[]> SyncPrivateKey { get; } = new MockAsyncSetting<byte[]>();
         public IAsyncSetting<byte[]> SyncPublicKey { get; } = new MockAsyncSetting<byte[]>();
         public IAsyncSetting<byte[]> DataKey { get; } = new MockAsyncSetting<byte[]>();
+        public IAsyncSetting<string> ServerUrl { get; } = new MockAsyncSetting<string>();
 
         public class MockAsyncSetting<T> : IAsyncSetting<T> where T : class
         {

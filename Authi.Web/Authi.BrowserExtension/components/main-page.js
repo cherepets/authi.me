@@ -70,6 +70,7 @@ export class MainPage extends HTMLElement {
             try {
                 var wasm = await Wasm.initAsync();
                 const resultJson = await wasm.apiClient.read(
+                    settings.serverUrl,
                     settings.clientId,
                     settings.version ?? '00000000-0000-0000-0000-000000000000',
                     settings.dataKey,

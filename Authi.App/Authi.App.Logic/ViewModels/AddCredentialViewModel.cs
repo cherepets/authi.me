@@ -19,6 +19,7 @@ namespace Authi.App.Logic.ViewModels
 
         public async override void Save()
         {
+            Secret = Secret.Replace(" ", string.Empty);
             this.MapPropertiesTo(Model);
             Model.Timestamp = Services.Clock.Timestamp;
 

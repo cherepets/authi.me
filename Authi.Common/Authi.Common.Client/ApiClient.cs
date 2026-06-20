@@ -10,30 +10,29 @@ using System.Threading.Tasks;
 
 namespace Authi.Common.Client
 {
-    public class ApiClient
+    public class ApiClient(string? serverUrl, IClock clock, ICrypto crypto) : IDisposable
     {
+        public const string DefaultServerUrl = "authi.runasp.net";
+
+        public string ServerUrl => serverUrl ?? DefaultServerUrl;
+
         private readonly TimeSpan ResponseValidFor = TimeSpan.FromSeconds(30);
 
-        private IClock Clock { get; }
-        private ICrypto Crypto { get; }
-
-        private readonly Api _api = new();
-
-        public ApiClient(IClock clock, ICrypto crypto)
-        {
-            Clock = clock;
-            Crypto = crypto;
-        }
+        private readonly Api _api = new(serverUrl ?? DefaultServerUrl);
 
         public async Task<ConsumeResult> ConsumeAsync(SyncCode syncCode)
         {
-            var clientKeyPair = Crypto.GenerateX25519KeyPair();
+            // Use temp instance of Api, not an existing one
+            // to make sure ServerUrl is coming from syncCode
+            using var api = new Api(syncCode.ServerUrl ?? DefaultServerUrl);
+
+            var clientKeyPair = crypto.GenerateX25519KeyPair();
             var requestPayload = new ConsumeRequest.Payload
             {
                 ClientPublicKey = clientKeyPair.Public,
-                Timestamp = Clock.Timestamp
+                Timestamp = clock.Timestamp
             };
-            var requestBody = Crypto.Encrypt(
+            var requestBody = crypto.Encrypt(
                 requestPayload.ToJson().ToUtfBytes(),
                 syncCode.OneTimeKey);
             var request = new ConsumeRequest
@@ -42,9 +41,9 @@ namespace Authi.Common.Client
                 Body = requestBody
             };
 
-            var response = await _api.ConsumeAsync(request);
+            var response = await api.ConsumeAsync(request);
 
-            var responseJson = Crypto.Decrypt(response.Body, syncCode.OneTimeKey).ToUtfString();
+            var responseJson = crypto.Decrypt(response.Body, syncCode.OneTimeKey).ToUtfString();
             var responsePayload = responseJson.FromJson<ConsumeResponse.Payload>();
             VerifyPayload(responsePayload);
 
@@ -55,18 +54,19 @@ namespace Authi.Common.Client
                 DataKey = syncCode.DataKey,
                 SyncKeyPair = new X25519KeyPair(
                     clientKeyPair.Private,
-                    serverPublicKey)
+                    serverPublicKey),
+                ServerUrl = syncCode.ServerUrl
             };
         }
 
         public async Task<InitResult> InitAsync()
         {
-            var clientKeyPair = Crypto.GenerateX25519KeyPair();
+            var clientKeyPair = crypto.GenerateX25519KeyPair();
             var requestPayload = new InitRequest.Payload
             {
-                Timestamp = Clock.Timestamp
+                Timestamp = clock.Timestamp
             };
-            var requestBody = Crypto.Encrypt(
+            var requestBody = crypto.Encrypt(
                 requestPayload.ToJson().ToUtfBytes(),
                 new AesKey(clientKeyPair.Public));
             var request = new InitRequest
@@ -81,12 +81,12 @@ namespace Authi.Common.Client
                 new X25519PrivateKey(clientKeyPair.Private),
                 new X25519PublicKey(response.ServerPublicKey));
 
-            var responseJson = Crypto.Decrypt(response.Body, syncKeyPair).ToUtfString();
+            var responseJson = crypto.Decrypt(response.Body, syncKeyPair).ToUtfString();
             var responsePayload = responseJson.FromJson<InitResponse.Payload>();
             VerifyPayload(responsePayload);
 
             var serverPublicKey = new X25519PublicKey(response.ServerPublicKey);
-            var dataKey = Crypto.GenerateAesKey();
+            var dataKey = crypto.GenerateAesKey();
             return new InitResult
             {
                 ClientId = responsePayload.ClientId,
@@ -99,13 +99,13 @@ namespace Authi.Common.Client
 
         public async Task<PublishResult> PublishAsync(Guid clientId, X25519KeyPair syncKeyPair)
         {
-            var oneTimeKey = Crypto.GenerateX25519KeyPair();
+            var oneTimeKey = crypto.GenerateX25519KeyPair();
             var requestPayload = new PublishRequest.Payload
             {
                 OneTimeClientPublicKey = oneTimeKey.Public,
-                Timestamp = Clock.Timestamp
+                Timestamp = clock.Timestamp
             };
-            var requestBody = Crypto.Encrypt(
+            var requestBody = crypto.Encrypt(
                 requestPayload.ToJson().ToUtfBytes(),
                 syncKeyPair);
             var request = new PublishRequest
@@ -116,7 +116,7 @@ namespace Authi.Common.Client
 
             var response = await _api.PublishAsync(request);
 
-            var responseJson = Crypto.Decrypt(response.Body, syncKeyPair).ToUtfString();
+            var responseJson = crypto.Decrypt(response.Body, syncKeyPair).ToUtfString();
             var responsePayload = responseJson.FromJson<PublishResponse.Payload>();
             VerifyPayload(responsePayload);
 
@@ -131,10 +131,10 @@ namespace Authi.Common.Client
         {
             var requestPayload = new ReadRequest.Payload
             {
-                Timestamp = Clock.Timestamp,
+                Timestamp = clock.Timestamp,
                 Version = version
             };
-            var requestBody = Crypto.Encrypt(
+            var requestBody = crypto.Encrypt(
                 requestPayload.ToJson().ToUtfBytes(),
                 syncKeyPair);
             var request = new ReadRequest
@@ -145,12 +145,12 @@ namespace Authi.Common.Client
 
             var response = await _api.ReadAsync(request);
 
-            var responseJson = Crypto.Decrypt(response.Body, syncKeyPair).ToUtfString();
+            var responseJson = crypto.Decrypt(response.Body, syncKeyPair).ToUtfString();
             var responsePayload = responseJson.FromJson<ReadResponse.Payload>();
             VerifyPayload(responsePayload);
 
             var credentials = responsePayload.Binary.Length > 0
-                ? Crypto
+                ? crypto
                     .Decrypt(responsePayload.Binary, dataKey)
                     .ToUtfString()
                     .FromJson<CredentialDto[]>()
@@ -170,10 +170,10 @@ namespace Authi.Common.Client
             var dataBinary = credentialsJson.ToUtfBytes();
             var requestPayload = new WriteRequest.Payload
             {
-                Binary = Crypto.Encrypt(dataBinary, dataKey),
-                Timestamp = Clock.Timestamp
+                Binary = crypto.Encrypt(dataBinary, dataKey),
+                Timestamp = clock.Timestamp
             };
-            var requestBody = Crypto.Encrypt(
+            var requestBody = crypto.Encrypt(
                 requestPayload.ToJson().ToUtfBytes(),
                 syncKeyPair);
             var request = new WriteRequest
@@ -183,7 +183,7 @@ namespace Authi.Common.Client
             };
             var response = await _api.WriteAsync(request);
 
-            var responseJson = Crypto.Decrypt(response.Body, syncKeyPair).ToUtfString();
+            var responseJson = crypto.Decrypt(response.Body, syncKeyPair).ToUtfString();
             var responsePayload = responseJson.FromJson<WriteResponse.Payload>();
             VerifyPayload(responsePayload);
 
@@ -201,10 +201,15 @@ namespace Authi.Common.Client
                 throw new ApiException("Can't parse payload.");
             }
 
-            if (!Clock.IsRecent(payload.Timestamp, ResponseValidFor))
+            if (!clock.IsRecent(payload.Timestamp, ResponseValidFor))
             {
                 throw new ApiException("Can't verify clock.");
             }
+        }
+
+        public void Dispose()
+        {
+            _api.Dispose();
         }
     }
 }

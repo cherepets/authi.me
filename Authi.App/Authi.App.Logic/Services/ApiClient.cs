@@ -21,28 +21,47 @@ namespace Authi.App.Logic.Services
 
     internal class ApiClient : ServiceBase, IApiClient
     {
-        private readonly Lazy<Client> _client;
-
-        public ApiClient()
-        {
-            _client = new Lazy<Client>(() => new Client(
-                Services.Clock,
-                Services.Crypto));
-        }
+        private Client? _client;
 
         public Task<ConsumeResult> ConsumeAsync(SyncCode syncCode)
-            => _client.Value.ConsumeAsync(syncCode);
+            => Execute(client 
+                => client.ConsumeAsync(syncCode));
 
         public Task<InitResult> InitAsync()
-            => _client.Value.InitAsync();
+            => Execute(client
+                => client.InitAsync());
 
         public Task<PublishResult> PublishAsync(Guid clientId, X25519KeyPair syncKeyPair)
-            => _client.Value.PublishAsync(clientId, syncKeyPair);
+            => Execute(client
+                => client.PublishAsync(clientId, syncKeyPair));
 
         public Task<ReadResult> ReadAsync(Guid clientId, Guid version, AesKey dataKey, X25519KeyPair syncKeyPair)
-            => _client.Value.ReadAsync(clientId, version, dataKey, syncKeyPair);
+            => Execute(client
+                => client.ReadAsync(clientId, version, dataKey, syncKeyPair));
 
         public Task<WriteResult> WriteAsync(IReadOnlyCollection<CredentialDto> credentials, Guid clientId, AesKey dataKey, X25519KeyPair syncKeyPair)
-            => _client.Value.WriteAsync(credentials, clientId, dataKey, syncKeyPair);
+            => Execute(client
+                => client.WriteAsync(credentials, clientId, dataKey, syncKeyPair));
+
+        private async Task<T> Execute<T>(Func<Client, Task<T>> predicate)
+        {
+            var client = await GetClientAsync();
+            return await predicate(client);
+        }
+
+        private async ValueTask<Client> GetClientAsync()
+        {
+            var serverUrl = await Services.Settings.ServerUrl.GetAsync() ?? Client.DefaultServerUrl;
+            if (_client != null)
+            {
+                if (_client.ServerUrl == serverUrl)
+                {
+                    return _client;
+                }
+                _client.Dispose();
+            }
+            _client = new Client(serverUrl, Services.Clock, Services.Crypto);
+            return _client;
+        }
     }
 }

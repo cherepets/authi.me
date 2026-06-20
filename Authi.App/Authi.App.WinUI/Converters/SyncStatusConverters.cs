@@ -4,7 +4,7 @@ using System;
 
 namespace Authi.App.WinUI.Converters
 {
-    public class SyncStatusToColorConverter : IValueConverter
+    public partial class SyncStatusToColorConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
@@ -26,7 +26,7 @@ namespace Authi.App.WinUI.Converters
         }
     }
 
-    public class SyncStatusToTitleConverter : IValueConverter
+    public partial class SyncStatusToTitleConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {

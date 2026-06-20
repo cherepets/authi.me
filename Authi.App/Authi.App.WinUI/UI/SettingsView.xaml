@@ -16,7 +16,10 @@
             VerticalAlignment="Top"
             CloseRequested="OnCloseRequested" />
 
-        <ScrollView Grid.Row="1" IsEnabled="{x:Bind ViewModel.IsLoading, Converter={StaticResource Inverse}, Mode=OneWay}">
+        <ScrollView
+            Grid.Row="1"
+            IsEnabled="{x:Bind ViewModel.IsLoading, Converter={StaticResource Inverse}, Mode=OneWay}"
+            VerticalScrollBarVisibility="Visible">
             <StackPanel Padding="26,8,26,26" Spacing="24">
                 <!--  Backup  -->
                 <StackPanel Spacing="8">
@@ -52,6 +55,10 @@
                                 <ColumnDefinition />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
                             <FontIcon Glyph="&#xE895;" />
                             <TextBlock
                                 Grid.Column="1"
@@ -70,6 +77,15 @@
                                 OffContent=""
                                 OnContent=""
                                 Toggled="OnUISyncEnabledSwitchToggled" />
+                            <TextBlock
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Grid.ColumnSpan="2"
+                                Margin="16,0,16,1"
+                                VerticalAlignment="Center"
+                                Style="{ThemeResource BodyStrongTextBlockStyle}"
+                                Text="{x:Bind ViewModel.ServerUrl, Mode=OneWay}"
+                                Visibility="{x:Bind ViewModel.IsSelfhosted, Mode=OneWay}" />
                         </Grid>
 
                         <!--  CloudSync On  -->
@@ -94,13 +110,13 @@
                             <controls:SettingsSectionButton
                                 Title="{x:Bind l10n:Settings.CloudSyncDownloadButtonTitle}"
                                 Caption="{x:Bind l10n:Settings.CloudSyncDownloadButtonCaption}"
-                                Click="{x:Bind ViewModel.Download}"
+                                Click="OnDownload"
                                 Icon="&#xEBD3;" />
                             <NavigationViewItemSeparator />
                             <controls:SettingsSectionButton
                                 Title="{x:Bind l10n:Settings.CloudSyncUploadButtonTitle}"
                                 Caption="{x:Bind l10n:Settings.CloudSyncUploadButtonCaption}"
-                                Click="{x:Bind ViewModel.Upload}"
+                                Click="OnUpload"
                                 Icon="&#xE898;" />
                         </StackPanel>
 

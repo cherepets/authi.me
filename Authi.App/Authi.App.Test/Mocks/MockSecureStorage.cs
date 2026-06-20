@@ -14,9 +14,6 @@ namespace Authi.App.Test.Mocks
         public void Remove(string key)
             => _storage.Remove(key);
 
-        public void RemoveAll()
-            => _storage.Clear();
-
         public Task SetAsync(string key, string value)
         {
             _storage[key] = value;

@@ -1,4 +1,5 @@
-﻿using Authi.Common.Services;
+﻿using Authi.Common.Extensions;
+using Authi.Common.Services;
 using System;
 
 namespace Authi.Common.Client
@@ -8,10 +9,17 @@ namespace Authi.Common.Client
         public required Guid SyncId { get; init; }
         public required AesKey DataKey { get; init; }
         public required AesKey OneTimeKey { get; init; }
+        public string? ServerUrl { get; init; }
 
         public byte[] Serialize()
         {
-            return [.. SyncId.ToByteArray(), .. DataKey.Bytes.ToArray(), .. OneTimeKey.Bytes.ToArray()];
+            return
+                [
+                .. SyncId.ToByteArray(),
+                .. DataKey.Bytes.ToArray(),
+                .. OneTimeKey.Bytes.ToArray(),
+                .. ServerUrl?.ToUtfBytes() ?? []
+                ];
         }
 
         public static SyncCode Deserialize(byte[] bytes)
@@ -20,16 +28,26 @@ namespace Authi.Common.Client
 
             var syncId = new Guid(bytes[..guidLength]);
 
-            var keys = bytes.AsMemory()[guidLength..];
-            int keySize = keys.Length / 2;
-            var dataKeyBytes = keys[..keySize];
-            var oneTimeKeyBytes = keys[keySize..];
+            var offset = guidLength;
+            var keySize = Crypto.AesKeySize;
+
+            var dataKeyBytes = bytes[offset..(offset + keySize)];
+            offset += keySize;
+            var oneTimeKeyBytes = bytes[offset..(offset + keySize)];
+            offset += keySize;
+
+            string? serverUrl = null;
+            if (offset < bytes.Length)
+            {
+                serverUrl = bytes[offset..].ToUtfString();
+            }
 
             return new SyncCode
             {
                 SyncId = syncId,
                 DataKey = new AesKey(dataKeyBytes),
-                OneTimeKey = new AesKey(oneTimeKeyBytes)
+                OneTimeKey = new AesKey(oneTimeKeyBytes),
+                ServerUrl = serverUrl
             };
         }
     }

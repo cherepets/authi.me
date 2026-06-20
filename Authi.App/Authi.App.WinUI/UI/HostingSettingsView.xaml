@@ -1,0 +1,20 @@
+<UserControl
+    x:Class="Authi.App.WinUI.UI.HostingSettingsView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:l10n="using:Authi.App.Logic.Localization">
+    <StackPanel MinWidth="360" Spacing="8">
+        <RadioButtons ItemsSource="{x:Bind ViewModel.SyncServerOptions}" SelectedItem="{x:Bind ViewModel.SelectedSyncServer, Mode=TwoWay}" />
+        <Grid ColumnSpacing="16" Visibility="{x:Bind ViewModel.IsSelfhosted, Mode=OneWay}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <TextBox PlaceholderText="{x:Bind l10n:Settings.HostingSettingsPlaceholder}" Text="{x:Bind ViewModel.ServerUrl, Mode=TwoWay}" />
+            <HyperlinkButton
+                Grid.Column="1"
+                Click="{x:Bind ViewModel.LearnMore}"
+                Content="{x:Bind l10n:Settings.HostingSettingsLearnMoreTitle}" />
+        </Grid>
+    </StackPanel>
+</UserControl>

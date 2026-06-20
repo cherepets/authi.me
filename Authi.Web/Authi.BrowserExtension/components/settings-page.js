@@ -81,14 +81,17 @@ export class SettingsPage extends HTMLElement {
     async updateVisualState() {
         const settings = await Settings.getAsync();
         const syncToggle = this.querySelector('#settingsPageCloudSyncToggle');
+        const cloudSyncServerUrl = this.querySelector('#settingsPageCloudSyncServerUrl');
         const cloudSyncCopyButton = this.querySelector('#settingsPageCloudSyncPasteButton');
         const cloudSyncCopyButtonLabel = this.querySelector('#settingsPageCloudSyncPasteButtonLabel');
         const backupHeader = this.querySelector('#settingsPageBackupHeader');
         const backupImportButton = this.querySelector('#settingsPageBackupImportButton');
         const backupImportButtonLabel = this.querySelector('#settingsPageBackupImportButtonLabel');
+
         if (!settings || !settings.clientId || !settings.dataKey || !settings.syncPrivateKey || !settings.syncPublicKey) {
             syncToggle.checked = false;
             syncToggle.disabled = true;
+            cloudSyncServerUrl.innerText = '';
             cloudSyncCopyButton.style.display = 'block';
             cloudSyncCopyButtonLabel.style.display = 'block';
             backupHeader.style.display = 'block';
@@ -97,6 +100,7 @@ export class SettingsPage extends HTMLElement {
         } else {
             syncToggle.checked = true;
             syncToggle.disabled = false;
+            cloudSyncServerUrl.innerText = settings.serverUrl ?? '';
             cloudSyncCopyButton.style.display = 'none';
             cloudSyncCopyButtonLabel.style.display = 'none';
             backupHeader.style.display = 'none';
@@ -142,6 +146,8 @@ export class SettingsPage extends HTMLElement {
 
                 const syncCode = await navigator.clipboard.readText();
 
+                const settings = await Settings.getAsync();
+
                 const wasm = await Wasm.initAsync();
                 const resultJson = await wasm.apiClient.consume(syncCode);
                 const result = resultJson.fromJson();
@@ -153,6 +159,7 @@ export class SettingsPage extends HTMLElement {
                     dataKey: result.dataKey.bytes,
                     syncPrivateKey: result.syncKeyPair.private.bytes,
                     syncPublicKey: result.syncKeyPair.public.bytes,
+                    serverUrl: result.serverUrl
                 });
 
                 DialogManager.showDialog({

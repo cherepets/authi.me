@@ -3,6 +3,7 @@ using Authi.Common.Client;
 using Authi.Common.Extensions;
 using Authi.Common.Services;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,6 +21,26 @@ namespace Authi.App.Logic.ViewModels
 
     public class SettingsViewModel : ViewModelBase, IClosableViewModel
     {
+        public class SyncServerOption
+        {
+            public static SyncServerOption AuthiCloud { get; } = new SyncServerOption(L10n.Settings.HostingSettingsAuthiCloud);
+            public static SyncServerOption Selfhosted { get; } = new SyncServerOption(L10n.Settings.HostingSettingsSelfhosted);
+
+            public string Title { get; }
+
+            private SyncServerOption(string title)
+            {
+                Title = title;
+            }
+
+            public override string ToString()
+            {
+                return Title;
+            }
+        }
+
+        public bool IsSelfhosted => SelectedSyncServer == SyncServerOption.Selfhosted;
+
         public bool IsLoading
         {
             get => Get<bool>();
@@ -44,6 +65,32 @@ namespace Authi.App.Logic.ViewModels
             set => Set(value);
         }
 
+        public List<SyncServerOption> SyncServerOptions { get; } =
+        [
+            SyncServerOption.AuthiCloud,
+            SyncServerOption.Selfhosted
+        ];
+
+        public SyncServerOption SelectedSyncServer
+        {
+            get => Get<SyncServerOption>() ?? SyncServerOption.AuthiCloud;
+            set
+            {
+                Set(value);
+                OnSelectedSyncServerChanged(value);
+            }
+        }
+
+        public string ServerUrl
+        {
+            get => Get<string>() ?? string.Empty;
+            set
+            {
+                Set(value);
+                OnServerUrlChanged();
+            }
+        }
+
         public SettingsViewModel()
         {
             IsLoading = true;
@@ -53,9 +100,14 @@ namespace Authi.App.Logic.ViewModels
         private async void InitAsync()
         {
             var clientId = await Services.Settings.ClientId.GetAsync();
+            var serverUrl = await Services.Settings.ServerUrl.GetAsync() ?? string.Empty;
             IsLoading = false;
             IsUISyncEnabled = IsSynced = clientId.HasValue;
             SyncState = IsSynced ? CloudSyncState.On : CloudSyncState.Off;
+
+            ServerUrl = serverUrl;
+            SelectedSyncServer = string.IsNullOrEmpty(ServerUrl) ? SyncServerOption.AuthiCloud : SyncServerOption.Selfhosted;
+
             Services.Messenger.BackupExportComplete.Subscribe += OnExportCompleted;
             Services.Messenger.BackupImportComplete.Subscribe += OnImportCompleted;
         }
@@ -89,6 +141,10 @@ namespace Authi.App.Logic.ViewModels
         public async void Upload()
         {
             IsLoading = true;
+            if (string.IsNullOrEmpty(ServerUrl))
+            {
+                SelectedSyncServer = SyncServerOption.AuthiCloud;
+            }
             try
             {
                 var result = await Services.ApiClient.InitAsync();
@@ -123,6 +179,10 @@ namespace Authi.App.Logic.ViewModels
 
         public void Download()
         {
+            if (string.IsNullOrEmpty(ServerUrl))
+            {
+                SelectedSyncServer = SyncServerOption.AuthiCloud;
+            }
             SyncState = CloudSyncState.Download;
         }
 
@@ -146,6 +206,7 @@ namespace Authi.App.Logic.ViewModels
                 var dataEncryptionKey = await Services.Settings.DataKey.GetAsync();
                 var syncPrivateKey = await Services.Settings.SyncPrivateKey.GetAsync();
                 var syncPublicKey = await Services.Settings.SyncPublicKey.GetAsync();
+                var serverUrl = await Services.Settings.ServerUrl.GetAsync();
 
                 if (!clientId.HasValue || dataEncryptionKey == null || syncPrivateKey == null || syncPublicKey == null)
                 {
@@ -162,7 +223,8 @@ namespace Authi.App.Logic.ViewModels
                 {
                     SyncId = result.SyncId,
                     DataKey = new AesKey(await Services.Settings.DataKey.GetAsync()),
-                    OneTimeKey = result.OneTimeKey
+                    OneTimeKey = result.OneTimeKey,
+                    ServerUrl = serverUrl
                 }.Serialize();
                 return code;
             }
@@ -198,6 +260,11 @@ namespace Authi.App.Logic.ViewModels
         public Task QrScanned(byte[] bytes)
         {
             return ConsumeAsync(bytes);
+        }
+
+        public async Task LearnMore()
+        {
+            await Services.LinkOpener.OpenUriAsync(L10n.Settings.HostingSettingsLearnMoreUrl);
         }
 
         public void Close()
@@ -260,6 +327,22 @@ namespace Authi.App.Logic.ViewModels
             await Services.LinkOpener.OpenUriAsync(L10n.Settings.GetAppLinkUrl);
         }
 
+        private void OnSelectedSyncServerChanged(SyncServerOption value)
+        {
+            if (IsLoading) return;
+            if (value == SyncServerOption.AuthiCloud)
+            {
+                ServerUrl = string.Empty;
+            }
+            base.OnPropertyChanged(nameof(IsSelfhosted));
+        }
+
+        private async void OnServerUrlChanged()
+        {
+            if (IsLoading) return;
+            await Services.Settings.ServerUrl.SetAsync(ServerUrl);
+        }
+
         private async void OnExportCompleted(object? sender, string data)
         {
             using var stream = new MemoryStream(Encoding.Default.GetBytes(data));
@@ -306,6 +389,11 @@ namespace Authi.App.Logic.ViewModels
                 await Services.Settings.DataKey.SetAsync(result.DataKey);
                 await Services.Settings.SyncPrivateKey.SetAsync(result.SyncKeyPair.Private);
                 await Services.Settings.SyncPublicKey.SetAsync(result.SyncKeyPair.Public);
+
+                SelectedSyncServer = string.IsNullOrEmpty(result.ServerUrl)
+                    ? SyncServerOption.AuthiCloud
+                    : SyncServerOption.Selfhosted;
+                ServerUrl = result.ServerUrl ?? string.Empty;
 
                 SyncState = CloudSyncState.On;
                 IsSynced = true;

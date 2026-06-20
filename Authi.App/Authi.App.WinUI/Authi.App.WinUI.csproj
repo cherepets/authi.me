@@ -29,6 +29,7 @@
 		<None Remove="UI\CopyNotification.xaml" />
 		<None Remove="UI\CredentialsCollectionView.xaml" />
 		<None Remove="UI\CredentialItemView.xaml" />
+		<None Remove="UI\HostingSettingsView.xaml" />
 		<None Remove="UI\MainPage.xaml" />
 		<None Remove="UI\MenuBarView.xaml" />
 		<None Remove="UI\SettingsView.xaml" />
@@ -214,6 +215,11 @@
 		<Content Update="Assets\Wide310x150Logo.scale-400.png">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
+	</ItemGroup>
+	<ItemGroup>
+	  <Page Update="UI\HostingSettingsView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </Page>
 	</ItemGroup>
 	<ItemGroup>
 	  <Page Update="Controls\QrScanner.xaml">

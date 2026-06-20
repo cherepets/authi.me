@@ -20,6 +20,7 @@ namespace Authi
                 AddButton();
                 AddEntry();
                 AddSwitch();
+                AddRadioButton();
             }
 
             private static void AddButton()
@@ -38,50 +39,36 @@ namespace Authi
             {
                 EntryHandler.Mapper.AppendToMapping(nameof(IView.Background), (handler, view) =>
                 {
-                    var desiredHorizontalPadding = 12;
-                    var desiredVerticalPadding = 8;
-                    var entryCornerRadius = 8f;
-                    float[] EntryRoundRectShape = [entryCornerRadius, entryCornerRadius, entryCornerRadius, entryCornerRadius, entryCornerRadius, entryCornerRadius, entryCornerRadius, entryCornerRadius];
-
-                    var roundRectShape = new RoundRectShape(EntryRoundRectShape, null, null);
-                    var shape = new ShapeDrawable(roundRectShape);
-                    shape.Paint.SetStyle(Paint.Style.Stroke);
-                    OnUnfocus();
-                    handler.PlatformView.Background = shape;
-
                     var density = handler.PlatformView.Context.Resources.DisplayMetrics.Density;
-                    var desiredHorizontalPaddingPx = (int)(desiredHorizontalPadding * density);
-                    var desiredVerticalPaddingPx = (int)(desiredVerticalPadding * density);
-                    handler.PlatformView.SetPadding(desiredHorizontalPaddingPx, desiredVerticalPaddingPx, desiredHorizontalPaddingPx, desiredVerticalPaddingPx);
+                    var radiusPx = 8f * density;
+
+                    var focusedColor = AuthiApp.Current.GetResource<Color>("Primary").ToAndroid();
+                    var focusedShape = new GradientDrawable();
+                    focusedShape.SetShape(ShapeType.Rectangle);
+                    focusedShape.SetCornerRadius(radiusPx);
+                    focusedShape.SetColor(Android.Graphics.Color.Transparent);
+                    focusedShape.SetStroke((int)(2.5f * density), focusedColor);
+
+                    var unfocusedColor = AuthiApp.Current.GetResource<Color>("OnSurface").ToAndroid();
+                    var unfocusedShape = new GradientDrawable();
+                    unfocusedShape.SetShape(ShapeType.Rectangle);
+                    unfocusedShape.SetCornerRadius(radiusPx);
+                    unfocusedShape.SetColor(Android.Graphics.Color.Transparent);
+                    unfocusedShape.SetStroke((int)(1f * density), unfocusedColor);
+
+                    var stateListDrawable = new StateListDrawable();
+                    stateListDrawable.AddState([Android.Resource.Attribute.StateFocused], focusedShape);
+                    stateListDrawable.AddState([], unfocusedShape);
+
+                    handler.PlatformView.Background = stateListDrawable;
+
+                    var hPaddingPx = (int)(12 * density);
+                    var vPaddingPx = (int)(8 * density);
+                    handler.PlatformView.SetPadding(hPaddingPx, vPaddingPx, hPaddingPx, vPaddingPx);
 
                     if (OperatingSystem.IsAndroidVersionAtLeast(29))
                     {
-                        handler.PlatformView.TextCursorDrawable?.SetTint(AuthiApp.Current.GetResource<Color>("Primary").ToAndroid());
-                    }
-
-                    handler.PlatformView.FocusChange += (sender, e) =>
-                    {
-                        if (e.HasFocus)
-                        {
-                            OnFocus();
-                        }
-                        else
-                        {
-                            OnUnfocus();
-                        }
-                        handler.PlatformView.Invalidate();
-                    };
-
-                    void OnFocus()
-                    {
-                        shape.Paint.Color = AuthiApp.Current.GetResource<Color>("Primary").ToAndroid();
-                        shape.Paint.StrokeWidth = 8;
-                    }
-
-                    void OnUnfocus()
-                    {
-                        shape.Paint.Color = AuthiApp.Current.GetResource<Color>("OnSurface").ToAndroid();
-                        shape.Paint.StrokeWidth = 2;
+                        handler.PlatformView.TextCursorDrawable?.SetTint(focusedColor);
                     }
                 });
             }
@@ -143,6 +130,26 @@ namespace Authi
 
                     handler.PlatformView.SetMinimumWidth(trackWidthPx);
                     handler.PlatformView.SetMinimumHeight(trackHeightPx);
+                });
+            }
+
+            private static void AddRadioButton()
+            {
+                RadioButtonHandler.Mapper.AppendToMapping(nameof(RadioButtonHandler), (handler, view) =>
+                {
+                    if (handler.PlatformView is AndroidX.AppCompat.Widget.AppCompatRadioButton androidRadioButton)
+                    {
+                        androidRadioButton.ButtonTintList = new ColorStateList(
+                            [
+                                [Android.Resource.Attribute.StateChecked],
+                                [-Android.Resource.Attribute.StateChecked]
+                            ],
+                            [
+                                AuthiApp.Current.GetResource<Color>("Primary").ToAndroid(),
+                                AuthiApp.Current.GetResource<Color>("Outline").ToAndroid()
+                            ]
+                        );
+                    }
                 });
             }
         }

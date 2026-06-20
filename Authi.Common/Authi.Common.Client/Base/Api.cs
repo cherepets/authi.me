@@ -8,13 +8,17 @@ using System.Threading.Tasks;
 
 namespace Authi.Common.Client
 {
-    internal class Api
+    internal class Api : IDisposable
     {
-        private readonly HttpClient _httpClient = new()
+        private readonly HttpClient _httpClient;
+
+        public Api(string serverUrl) 
         {
-            /* OMITTED IN OSS BUILD */
-            BaseAddress = new Uri("")
-        };
+            _httpClient = new()
+            {
+                BaseAddress = new Uri($"https://{serverUrl}/api/v1/")
+            };
+        }
 
         public Task<ConsumeResponse> ConsumeAsync(ConsumeRequest request)
         {
@@ -79,6 +83,11 @@ namespace Authi.Common.Client
             {
                 throw new ApiException($"Api call failed: {exception.Message}");
             }
+        }
+
+        public void Dispose()
+        {
+            _httpClient.Dispose();
         }
     }
 }

@@ -1,0 +1,31 @@
+<ContentView
+    x:Class="Authi.App.Maui.UI.HostingSettingsView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="using:Authi.App.Maui.Controls"
+    xmlns:l10n="clr-namespace:Authi.App.Logic.Localization;assembly=Authi.App.Logic"
+    xmlns:viewModels="clr-namespace:Authi.App.Logic.ViewModels;assembly=Authi.App.Logic"
+    x:DataType="viewModels:SettingsViewModel">
+    <VerticalStackLayout MinimumWidthRequest="320">
+        <controls:RadioButtons ItemsSource="{Binding SyncServerOptions, Mode=OneTime}" SelectedItem="{Binding SelectedSyncServer, Mode=TwoWay}" />
+        <controls:AniGrid
+            FromDirection="Top"
+            IsVisible="{Binding IsSelfhosted, Mode=OneWay}"
+            RowSpacing="8">
+            <controls:AniGrid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </controls:AniGrid.RowDefinitions>
+            <Entry
+                Grid.Row="0"
+                Placeholder="{x:Static l10n:Settings.HostingSettingsPlaceholder}"
+                Style="{StaticResource BodyLargeLabelStyle}"
+                Text="{Binding ServerUrl, Mode=TwoWay}" />
+            <Button
+                Grid.Row="1"
+                Clicked="OnLearnMore"
+                Style="{StaticResource DialogButtonButtonStyle}"
+                Text="{x:Static l10n:Settings.HostingSettingsLearnMoreTitle}" />
+        </controls:AniGrid>
+    </VerticalStackLayout>
+</ContentView>

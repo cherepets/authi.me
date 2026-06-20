@@ -26,14 +26,29 @@ public partial class SettingsView : IAdaptiveView
         ViewModel?.UISyncToggled(e.Value);
     }
 
-    private void OnDownload(object sender, EventArgs e)
+    private async void OnDownload(object sender, EventArgs e)
     {
         ViewModel?.Download();
     }
 
-    private void OnUpload(object sender, EventArgs e)
+    private async void OnUpload(object sender, EventArgs e)
     {
-        ViewModel?.Upload();
+        if (ViewModel == null) return;
+
+        await DialogPresenter.Current.ShowDialogAsync(
+            title: L10n.Settings.HostingSettingsTitle,
+            content: new HostingSettingsView
+            {
+                BindingContext = ViewModel
+            },
+            L10n.Generic.Confirm,
+            L10n.Generic.Cancel,
+            () => ViewModel?.Upload(),
+            () =>
+            {
+                if (ViewModel == null) return;
+                ViewModel.SelectedSyncServer = SettingsViewModel.SyncServerOption.AuthiCloud;
+            });
     }
 
     private async void OnShowQR(object sender, EventArgs e)

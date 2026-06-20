@@ -4,7 +4,7 @@ using System;
 
 namespace Authi.App.WinUI.Converters
 {
-    public class StringIsNotNullOrEmptyToVisibilityConverter : IValueConverter
+    public partial class StringIsNotNullOrEmptyToVisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {

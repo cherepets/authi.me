@@ -1,4 +1,6 @@
 ﻿#pragma warning disable CS8981 // The type name only contains lower-cased ascii characters. Such names may become reserved for the language.
+#pragma warning disable CA1050 // Declare types in namespaces
+#pragma warning disable IDE1006 // Naming Styles
 
 using Authi.Common.Client;
 using Authi.Common.Extensions;
@@ -30,4 +32,6 @@ public partial class backup
     }
 }
 
-#pragma warning restore CS8981
+#pragma warning restore CS8981 // The type name only contains lower-cased ascii characters. Such names may become reserved for the language.
+#pragma warning restore IDE1006 // Naming Styles
+#pragma warning restore CA1050 // Declare types in namespaces

@@ -1,13 +1,16 @@
-# Authi - modern 2FA with cloud sync.
+# authi.me: 2fa totp with sync
 
 [![App Tests](https://github.com/cherepets/Authi-OSS/actions/workflows/test-app.yml/badge.svg)](https://github.com/cherepets/Authi-OSS/actions/workflows/test-app.yml)
 [![Server Tests](https://github.com/cherepets/Authi-OSS/actions/workflows/test-server.yml/badge.svg)](https://github.com/cherepets/Authi-OSS/actions/workflows/test-server.yml)
 [![Common Tests](https://github.com/cherepets/Authi-OSS/actions/workflows/test-common.yml/badge.svg)](https://github.com/cherepets/Authi-OSS/actions/workflows/test-common.yml)
 
-Authi is a modern two-factor authentication (2FA) app that generates secure TOTP (Time-based One-Time Password) codes and syncs them across your devices through the cloud – no accounts required.
-
+authi.me is a modern selfhostable open source two-factor authentication (2FA) application that generates secure TOTP (Time-based One-Time Password) codes and syncs them across your devices through the cloud – no accounts required.
 
 <img width="1399" height="892" alt="image" src="https://cherepets.me/images/authi_screenshot.webp" />
+
+## Guides
+
+* [Selfhosting guide](https://github.com/cherepets/Authi-OSS/wiki/Selfhosting-guide)
 
 ## Sync design
 
@@ -70,6 +73,7 @@ The server again generates a key pair and the exchange keys similar to how it ha
 | **Authi.Localizer** | Creates a .NET wrapper for a JS based localization file. |
 
 ## Built with
+
 * [BouncyCastle.Cryptography](https://github.com/bcgit/bc-csharp) - The Bouncy Castle Cryptography Library For .NET.
 * [Camera.MAUI](https://github.com/hjam40/Camera.MAUI) - A Camera View control and a Barcode Endode/Decode control for .NET MAUI.
 * [CommunityToolkit.Maui](https://github.com/CommunityToolkit/Maui) - .NET MAUI Community Toolkit.

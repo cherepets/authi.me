@@ -61,6 +61,12 @@ namespace Authi.App.Logic.Localization
         public const string GetAppLinkUrl = " https://authi.me/download";
         public const string GetAppPostfix = " on other devices: ";
         public const string GetAppPrefix = "Get ";
+        public const string HostingSettingsAuthiCloud = "Authi Cloud (Recommended)";
+        public const string HostingSettingsLearnMoreTitle = "Learn More";
+        public const string HostingSettingsLearnMoreUrl = "https://github.com/cherepets/Authi-OSS/wiki/Selfhosting-guide";
+        public const string HostingSettingsPlaceholder = "192.168.1.100 or example.com";
+        public const string HostingSettingsSelfhosted = "Selfhosted";
+        public const string HostingSettingsTitle = "Sync server";
         public const string OfflineBackup = "Offline backup";
         public const string PageTitle = "Settings";
         public const string UnsavedChanges = "There are unsaved changes. Do you want to leave without saving?";

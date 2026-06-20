@@ -3,10 +3,13 @@ using Android.Content;
 using Android.Content.PM;
 using Android.OS;
 using Android.Views;
+using AndroidX.Activity;
 using AndroidX.Core.View;
 using Authi.App.Maui;
+using Authi.App.Maui.Controls;
 using Microsoft.Maui;
 using Microsoft.Maui.ApplicationModel;
+using Microsoft.Maui.Controls;
 using System;
 using static Android.Content.Intent;
 
@@ -24,11 +27,15 @@ namespace Authi
         DataPathPrefix = "/")]
     public partial class MainActivity : MauiAppCompatActivity
     {
+        private OnBackPressedCallback _backPressedCallback;
+
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
 
             MauiHandlers.Initialize();
+            _backPressedCallback = new AppBackPressedCallback(this);
+            OnBackPressedDispatcher.AddCallback(this, _backPressedCallback);
 
             if (OperatingSystem.IsAndroidVersionAtLeast(30) &&
                 !AuthiApp.Current.IsDarkMode)
@@ -60,6 +67,35 @@ namespace Authi
             if (intent?.DataString is string deeplink)
             {
                 AuthiApp.Current.HandleDeeplink(deeplink);
+            }
+        }
+
+        private sealed class AppBackPressedCallback(MainActivity activity) : OnBackPressedCallback(true)
+        {
+            private readonly MainActivity _activity = activity;
+
+            public override void HandleOnBackPressed()
+            {
+                var application = Microsoft.Maui.Controls.Application.Current;
+                var window = application?.Windows.Count > 0
+                    ? application.Windows[0]
+                    : null;
+                if (window?.Page is Shell shell && 
+                    shell.CurrentPage is Page page &&
+                    page.SendBackButtonPressed() == true)
+                {
+                    return;
+                }
+
+                Enabled = false;
+                try
+                {
+                    _activity.OnBackPressedDispatcher.OnBackPressed();
+                }
+                finally
+                {
+                    Enabled = true;
+                }
             }
         }
     }

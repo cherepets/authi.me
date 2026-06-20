@@ -73,6 +73,10 @@
                         <ColumnDefinition />
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
                     <Label
                         Grid.Column="0"
                         Style="{StaticResource BodyLargeLabelStyle}"
@@ -84,10 +88,18 @@
                         IsToggled="{Binding IsUISyncEnabled, Mode=TwoWay}"
                         Toggled="OnUISyncEnabledSwitchToggled"
                         VerticalOptions="Center" />
+                    <Label
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="1"
+                        IsVisible="{Binding IsSelfhosted, Mode=OneWay}"
+                        Style="{StaticResource BodyStrongLabelStyle}"
+                        Text="{Binding ServerUrl, Mode=OneWay}" />
                 </Grid>
 
-                <!--  On  -->
+                <!--  CloudSync On  -->
                 <controls:AniGrid
+                    Margin="0,0,0,8"
                     ColumnSpacing="16"
                     FromDirection="Top"
                     IsVisible="{Binding SyncState, Converter={StaticResource EnumToBool}, Mode=OneWay, ConverterParameter='On'}"
@@ -122,8 +134,9 @@
                         Text="{x:Static l10n:Settings.CloudSyncCopyButtonCaption}" />
                 </controls:AniGrid>
 
-                <!--  SetUp  -->
+                <!--  CloudSync SetUp  -->
                 <controls:AniGrid
+                    Margin="0,0,0,8"
                     ColumnSpacing="16"
                     FromDirection="Top"
                     IsVisible="{Binding SyncState, Converter={StaticResource EnumToBool}, Mode=OneWay, ConverterParameter='SetUp'}"
@@ -160,8 +173,9 @@
                         Text="{x:Static l10n:Settings.CloudSyncUploadButtonCaption}" />
                 </controls:AniGrid>
 
-                <!--  Download  -->
+                <!--  CloudSync Download  -->
                 <controls:AniGrid
+                    Margin="0,0,0,8"
                     ColumnSpacing="16"
                     FromDirection="Top"
                     IsVisible="{Binding SyncState, Converter={StaticResource EnumToBool}, Mode=OneWay, ConverterParameter='Download'}"

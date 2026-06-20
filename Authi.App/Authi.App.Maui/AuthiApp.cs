@@ -9,7 +9,6 @@ using MaterialColorUtilities.Maui;
 using Microsoft.Maui;
 using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls;
-using System.Threading.Tasks;
 
 namespace Authi.App.Maui
 {

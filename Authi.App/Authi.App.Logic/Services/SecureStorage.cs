@@ -9,6 +9,5 @@ namespace Authi.App.Logic.Services
         Task<string?> GetAsync(string key);
         Task SetAsync(string key, string value);
         void Remove(string key);
-        void RemoveAll();
     }
 }

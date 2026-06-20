@@ -10,12 +10,12 @@
   <Identity
     Name="5864cherepets.Authi"
     Publisher="CN=3D126052-B82F-49A4-9FBC-A221882D2A9E"
-    Version="1.3.3.0" />
+    Version="1.4.0.0" />
 
   <mp:PhoneIdentity PhoneProductId="21fa5505-4253-4944-8ef2-d75baa19dd1e" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
 	<Properties>
-		<DisplayName>Authi</DisplayName>
+		<DisplayName>authi.me: 2fa totp with sync</DisplayName>
 		<PublisherDisplayName>cherepets</PublisherDisplayName>
 		<Logo>Assets\StoreLogo.png</Logo>
 	</Properties>
@@ -35,7 +35,7 @@
 		  EntryPoint="$targetentrypoint$">
 			<uap:VisualElements
 			  DisplayName="Authi"
-			  Description="Authi is a modern two-factor authentication (2FA) app that generates secure TOTP (Time-based One-Time Password) codes and syncs them across your devices through the cloud – no accounts required."
+			  Description="Modern two-factor authentication (2FA) app that generates secure TOTP (Time-based One-Time Password) codes and syncs them across your devices through the cloud – no accounts required."
 			  BackgroundColor="transparent"
 			  Square150x150Logo="Assets\Square150x150Logo.png"
 			  Square44x44Logo="Assets\Square44x44Logo.png">
@@ -45,7 +45,7 @@
 			<Extensions>
 				<uap:Extension Category="windows.protocol">
 					<uap:Protocol Name="otpauth">
-						<uap:DisplayName>Authi add new code</uap:DisplayName>
+						<uap:DisplayName>Add new code to Authi</uap:DisplayName>
 					</uap:Protocol>
 				</uap:Extension>
 			</Extensions>

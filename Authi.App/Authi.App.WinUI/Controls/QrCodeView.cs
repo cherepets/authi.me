@@ -11,7 +11,7 @@ using Image = Microsoft.UI.Xaml.Controls.Image;
 
 namespace Authi.App.WinUI.Controls
 {
-    public class QrCodeView : UserControl
+    public partial class QrCodeView : UserControl
     {
         private string? _barcode;
 

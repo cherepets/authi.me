@@ -12,10 +12,16 @@ namespace Authi.App.Maui.Services
         public void Remove(string key)
             => MauiSecureStorage.Remove(key);
 
-        public void RemoveAll()
-            => MauiSecureStorage.RemoveAll();
-
-        public Task SetAsync(string key, string value)
-            => MauiSecureStorage.SetAsync(key, value);
+        public async Task SetAsync(string key, string value)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                Remove(key);
+            }
+            else
+            {
+                await MauiSecureStorage.SetAsync(key, value);
+            }
+        }
     }
 }

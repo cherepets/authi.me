@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Authi.App.WinUI.Controls
 {
-    public class DialogPresenter : FrameworkElement
+    public partial class DialogPresenter : FrameworkElement
     {
         public static DialogPresenter Current => _current!;
         private static DialogPresenter? _current;

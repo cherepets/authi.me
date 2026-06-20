@@ -3,7 +3,7 @@ using System;
 
 namespace Authi.App.WinUI.Converters
 {
-    public class InverseConverter : IValueConverter
+    public partial class InverseConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {

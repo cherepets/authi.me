@@ -1,4 +1,4 @@
-﻿import { dotnet } from '/wasm/dotnet.js'
+﻿import { dotnet } from '../wasm/dotnet.js?runtime=net10'
 
 export class Wasm {
     static #assemblyExportsPromise = null;
@@ -9,7 +9,11 @@ export class Wasm {
         }
         this.#assemblyExportsPromise = (async () => {
             const { getAssemblyExports, getConfig } = await dotnet
-                .withDiagnosticTracing(false)
+                .withResourceLoader((_, __, defaultUri) => {
+                    const uri = new URL(defaultUri);
+                    uri.searchParams.set('runtime', 'net10');
+                    return uri.href;
+                })
                 .create();
 
             const config = getConfig();

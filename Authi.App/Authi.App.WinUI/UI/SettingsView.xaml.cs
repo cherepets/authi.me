@@ -30,6 +30,31 @@ namespace Authi.App.WinUI.UI
             ViewModel?.Close();
         }
 
+        private async void OnDownload()
+        {
+            ViewModel?.Download();
+        }
+
+        private async void OnUpload()
+        {
+            if (ViewModel == null) return;
+
+            await DialogPresenter.Current.ShowDialogAsync(
+                title: L10n.Settings.HostingSettingsTitle,
+                content: new HostingSettingsView
+                {
+                    ViewModel = ViewModel
+                },
+                L10n.Generic.Confirm,
+                L10n.Generic.Cancel,
+                () => ViewModel?.Upload(),
+                () =>
+                {
+                    if (ViewModel == null) return;
+                    ViewModel.SelectedSyncServer = SettingsViewModel.SyncServerOption.AuthiCloud;
+                });
+        }
+
         private async void OnShowQR()
         {
             if (ViewModel == null) return;
