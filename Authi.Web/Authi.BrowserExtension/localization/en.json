@@ -57,8 +57,8 @@
   "Settings.HostingSettingsLearnMoreTitle": "Learn More",
   "Settings.GetApp": "Get app",
   "Settings.GetAppPrefix": "Get ",
-  "Settings.GetAppPostfix": " on other devices: ",
-  "Settings.GetAppLinkUrl": " https://authi.me/download",
+  "Settings.GetAppPostfix": " on other devices",
+  "Settings.GetAppLinkUrl": "https://authi.me/download",
   "Settings.GetAppLinkTitle": "authi.me",
   "Settings.GetAppLinkCaption": "Get Authi on other devices",
 

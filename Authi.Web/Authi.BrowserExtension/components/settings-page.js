@@ -64,11 +64,8 @@ export class SettingsPage extends HTMLElement {
         const getAppContent = this.querySelector('#settingsPageGetAppContent');
         getAppContent.innerHTML = `
             ${Localization.get('Settings.GetAppPrefix')}
-            <b>${Localization.get('Generic.AppName')}</b>
-            ${Localization.get('Settings.GetAppPostfix')}
-            <a href="${Localization.get('Settings.GetAppLinkUrl')}" target="_blank">
-                ${Localization.get('Settings.GetAppLinkTitle')}
-            </a>`;
+            <a href="${Localization.get('Settings.GetAppLinkUrl')}" target="_blank">${Localization.get('Settings.GetAppLinkTitle')}</a>
+            ${Localization.get('Settings.GetAppPostfix')}`;
 
         await this.updateVisualState();
     }
