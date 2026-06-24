@@ -8,11 +8,11 @@
 		<UseMaui>true</UseMaui>
 		<SingleProject>true</SingleProject>
 		<ImplicitUsings>disable</ImplicitUsings>
-		<Nullable>disable</Nullable>
-		<ApplicationTitle>Authi</ApplicationTitle>
+		<Nullable>enable</Nullable>
+		<ApplicationTitle>Authi.me</ApplicationTitle>
 		<ApplicationId>me.cherepets.authi.app</ApplicationId>
-		<ApplicationDisplayVersion>1.4.0</ApplicationDisplayVersion>
-		<ApplicationVersion>15</ApplicationVersion>
+		<ApplicationDisplayVersion>1.4.1</ApplicationDisplayVersion>
+		<ApplicationVersion>16</ApplicationVersion>
 		<WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
 		<WindowsPackageType>MSIX</WindowsPackageType>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">15.0</SupportedOSPlatformVersion>

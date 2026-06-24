@@ -25,13 +25,13 @@ namespace Authi.App.Maui
 
     public partial class AuthiApp : Application, IAuthiApp
     {
-        public static new IAuthiApp Current => (AuthiApp)Application.Current;
+        public static new IAuthiApp Current => (AuthiApp)Application.Current!;
 
         public bool IsDarkMode => UserAppTheme == AppTheme.Dark;
 
         public Thickness SystemInsets { get; set; }
 
-        private readonly Shell _shell;
+        private Shell? _shell;
 
         public AuthiApp()
         {
@@ -55,9 +55,6 @@ namespace Authi.App.Maui
                 .Merge<SwitchStyles>()
                 // Converters
                 .Merge<ConvertersDictionary>();
-
-            MainPage = _shell = new Shell { FlyoutBehavior = FlyoutBehavior.Disabled };
-            OpenMainPage();
         }
 
         public T GetResource<T>(string key) => (T)GetResource(key);
@@ -70,8 +67,22 @@ namespace Authi.App.Maui
 
         public void OpenMainPage()
         {
+            if (_shell == null)
+            {
+                return;
+            }
+
             _shell.Items.Clear();
             _shell.Items.Add(new MainPage());
+        }
+
+        protected override Window CreateWindow(IActivationState? activationState)
+        {
+            var shell = new Shell { FlyoutBehavior = FlyoutBehavior.Disabled };
+            var window = new Window(shell);
+            _shell = shell;
+            OpenMainPage();
+            return window;
         }
 
         protected override void OnResume()

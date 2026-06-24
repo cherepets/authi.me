@@ -16,7 +16,7 @@ namespace Authi.App.Logic.Localization
     }
     public static class Generic
     {
-        public const string AppName = "Authi";
+        public const string AppName = "Authi.me";
         public const string Cancel = "Cancel";
         public const string Close = "Close";
         public const string Confirm = "Confirm";
@@ -56,10 +56,10 @@ namespace Authi.App.Logic.Localization
         public const string CloudSyncUploadButtonCaption = "This is your first device and you want to upload data from it to the cloud";
         public const string CloudSyncUploadButtonTitle = "Upload";
         public const string GetApp = "Get app";
-        public const string GetAppLinkCaption = "Get Authi on other devices";
+        public const string GetAppLinkCaption = "Get on other devices";
         public const string GetAppLinkTitle = "authi.me";
-        public const string GetAppLinkUrl = " https://authi.me/download";
-        public const string GetAppPostfix = " on other devices: ";
+        public const string GetAppLinkUrl = "https://authi.me/download";
+        public const string GetAppPostfix = " on other devices";
         public const string GetAppPrefix = "Get ";
         public const string HostingSettingsAuthiCloud = "Authi Cloud (Recommended)";
         public const string HostingSettingsLearnMoreTitle = "Learn More";

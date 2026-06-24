@@ -9,7 +9,7 @@
   "Credential.Subtitle": "Username",
   "Credential.SubtitlePlaceholder": "(optional)",
 
-  "Generic.AppName": "Authi",
+  "Generic.AppName": "Authi.me",
   "Generic.Cancel": "Cancel",
   "Generic.Close": "Close",
   "Generic.Confirm": "Confirm",
@@ -60,7 +60,7 @@
   "Settings.GetAppPostfix": " on other devices",
   "Settings.GetAppLinkUrl": "https://authi.me/download",
   "Settings.GetAppLinkTitle": "authi.me",
-  "Settings.GetAppLinkCaption": "Get Authi on other devices",
+  "Settings.GetAppLinkCaption": "Get on other devices",
 
   "SyncStatus.NotSynced": "not synced",
   "SyncStatus.Offline": "offline",
