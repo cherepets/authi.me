@@ -53,7 +53,7 @@ namespace Authi.App.Maui.Controls
             });
         }
 
-        private void OnPaintSurface(object sender, SKPaintSurfaceEventArgs e)
+        private void OnPaintSurface(object? sender, SKPaintSurfaceEventArgs e)
         {
             var elapsed = _stopwatch.Elapsed;
             _stopwatch.Restart();
@@ -61,13 +61,13 @@ namespace Authi.App.Maui.Controls
             Paint(e, elapsed);
         }
 
-        private void OnLoaded(object sender, EventArgs e)
+        private void OnLoaded(object? sender, EventArgs e)
         {
             Loaded -= OnLoaded;
             StartRendering();
         }
 
-        private void OnUnloaded(object sender, EventArgs e)
+        private void OnUnloaded(object? sender, EventArgs e)
         {
             Unloaded -= OnUnloaded;
             _isDisposed = true;

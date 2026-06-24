@@ -1,4 +1,3 @@
-using MaterialColorUtilities.Maui;
 using Microsoft.Maui.Graphics;
 using System.Collections.Generic;
 
@@ -10,8 +9,8 @@ public partial class DemoPage
 
     public DemoPage()
     {
-        Colors = new List<DemoColor>
-        {
+        Colors =
+        [
             new("Primary"),
             new("PrimaryContainer"),
             new("Secondary"),
@@ -44,7 +43,7 @@ public partial class DemoPage
             new("Surface3"),
             new("Surface4"),
             new("Surface5")
-        };
+        ];
         BindingContext = this;
         InitializeComponent();
     }

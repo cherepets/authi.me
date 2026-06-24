@@ -1,7 +1,5 @@
 ﻿using Android.Content.Res;
-using Android.Graphics;
 using Android.Graphics.Drawables;
-using Android.Graphics.Drawables.Shapes;
 using Authi.App.Maui;
 using Microsoft.Maui;
 using Microsoft.Maui.Controls.Compatibility.Platform.Android;
@@ -39,8 +37,13 @@ namespace Authi
             {
                 EntryHandler.Mapper.AppendToMapping(nameof(IView.Background), (handler, view) =>
                 {
-                    var density = handler.PlatformView.Context.Resources.DisplayMetrics.Density;
-                    var radiusPx = 8f * density;
+                    var density = handler.PlatformView.Context?.Resources?.DisplayMetrics?.Density;
+                    if (!density.HasValue)
+                    {
+                        return;
+                    }
+
+                    var radiusPx = 8f * density.Value;
 
                     var focusedColor = AuthiApp.Current.GetResource<Color>("Primary").ToAndroid();
                     var focusedShape = new GradientDrawable();
@@ -77,12 +80,17 @@ namespace Authi
             {
                 SwitchHandler.Mapper.AppendToMapping(nameof(ISwitch.IsOn), (handler, view) =>
                 {
+                    var density = handler.PlatformView.Context?.Resources?.DisplayMetrics?.Density;
+                    if (!density.HasValue)
+                    {
+                        return;
+                    }
+
                     var trackHeightDp = 28;
                     var trackWidthDp = 48;
                     var thumbSizeDp = view.IsOn ? 20 : 16;
                     var outlineDp = 2;
 
-                    var density = handler.PlatformView.Context.Resources.DisplayMetrics.Density;
                     var trackHeightPx = (int)(trackHeightDp * density);
                     var trackWidthPx = (int)(trackWidthDp * density);
                     var thumbSizePx = (int)(thumbSizeDp * density);

@@ -12,9 +12,9 @@ namespace Authi.App.Maui.Controls;
 
 public partial class QrScanner
 {
-    protected CameraView CameraView => CameraPlaceholder.Content as CameraView;
+    protected CameraView? CameraView => CameraPlaceholder.Content as CameraView;
 
-    public event Action<string> CodeDetected;
+    public event Action<string>? CodeDetected;
 
     private bool _isLoaded;
 
@@ -25,13 +25,13 @@ public partial class QrScanner
         Unloaded += OnUnloaded;
     }
 
-    private async void OnLoaded(object sender, EventArgs e)
+    private async void OnLoaded(object? sender, EventArgs e)
     {
         _isLoaded = true;
         await OnStateChanged(null);
     }
 
-    private async void OnUnloaded(object sender, EventArgs e)
+    private async void OnUnloaded(object? sender, EventArgs e)
     {
         _isLoaded = false;
         await OnStateChanged(null);
@@ -143,7 +143,7 @@ public partial class QrScanner
         }
     }
 
-    private void OnCamerasLoaded(object sender, EventArgs e)
+    private void OnCamerasLoaded(object? sender, EventArgs e)
     {
         var cameraView = CameraView;
         if (cameraView == null)

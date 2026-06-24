@@ -2,7 +2,8 @@
     x:Class="Authi.App.Maui.UI.DemoPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:ui="using:Authi.App.Maui.UI">
+    xmlns:ui="using:Authi.App.Maui.UI"
+    x:DataType="ui:DemoPage">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />

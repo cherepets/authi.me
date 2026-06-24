@@ -7,7 +7,8 @@ namespace Authi.App.Maui.Controls;
 
 public partial class DialogPresenter
 {
-    public static DialogPresenter Current { get; private set; }
+    public static DialogPresenter Current => _current!;
+    private static DialogPresenter? _current;
 
     public bool IsPresenting
     {
@@ -19,20 +20,20 @@ public partial class DialogPresenter
         }
     }
 
-    public event EventHandler<bool> IsPresentingChanged;
+    public event EventHandler<bool>? IsPresentingChanged;
 
-    private TaskCompletionSource _hideDialogRequested;
-    private Action _primaryHandler;
-    private Action _cancelHandler;
+    private TaskCompletionSource? _hideDialogRequested;
+    private Action? _primaryHandler;
+    private Action? _cancelHandler;
     private bool _isPresenting;
 
     public DialogPresenter()
     {
         InitializeComponent();
-        Current = this;
+        _current = this;
     }
 
-    public async Task ShowDialogAsync(string title, object content, string primaryButtonText = null, string cancelButtonText = null, Action onPrimary = null, Action onCancel = null)
+    public async Task ShowDialogAsync(string? title, object content, string? primaryButtonText = null, string? cancelButtonText = null, Action? onPrimary = null, Action? onCancel = null)
     {
         TitleLabel.IsVisible = false;
         MessageLabel.IsVisible = false;

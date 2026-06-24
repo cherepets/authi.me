@@ -5,7 +5,7 @@ namespace Authi.App.Maui.UI;
 
 public partial class HostingSettingsView
 {
-    private SettingsViewModel ViewModel => BindingContext as SettingsViewModel;
+    private SettingsViewModel? ViewModel => BindingContext as SettingsViewModel;
 
     public HostingSettingsView()
 	{

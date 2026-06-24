@@ -8,7 +8,7 @@ namespace Authi.App.Maui.UI;
 
 public partial class MenuBarView
 {
-    public IMenuBarViewModel ViewModel
+    public IMenuBarViewModel? ViewModel
     {
         get => _viewModel;
         set
@@ -18,7 +18,7 @@ public partial class MenuBarView
         }
     }
 
-    private IMenuBarViewModel _viewModel;
+    private IMenuBarViewModel? _viewModel;
 
     public MenuBarView()
     {
@@ -31,7 +31,7 @@ public partial class MenuBarView
         await ProgressBar.FadeToAsync(1, AnimationLength.DefaultUnsigned, Easing.CubicOut);
     }
 
-    private void OnViewModelChanged(IMenuBarViewModel _, IMenuBarViewModel newViewModel)
+    private void OnViewModelChanged(IMenuBarViewModel? _, IMenuBarViewModel? newViewModel)
     {
         BindingContext = newViewModel;
     }

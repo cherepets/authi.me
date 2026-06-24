@@ -15,7 +15,7 @@ public partial class ContentViewHeader : IAdaptiveView
         set => SetValue(TitleProperty, value);
     }
 
-    public event EventHandler Close;
+    public event EventHandler? Close;
 
     public ContentViewHeader()
     {

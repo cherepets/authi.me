@@ -10,7 +10,7 @@ namespace Authi.App.Maui.UI;
 
 public partial class CredentialEditorView : IAdaptiveView
 {
-    private ICredentialEditorViewModel ViewModel => BindingContext as ICredentialEditorViewModel;
+    private ICredentialEditorViewModel? ViewModel => BindingContext as ICredentialEditorViewModel;
 
     private readonly IReadOnlyCollection<Label> _entryLabels;
     private readonly IDictionary<object, Label> _labelForEntry;

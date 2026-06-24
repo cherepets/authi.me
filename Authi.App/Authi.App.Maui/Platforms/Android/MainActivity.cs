@@ -4,9 +4,7 @@ using Android.Content.PM;
 using Android.OS;
 using Android.Views;
 using AndroidX.Activity;
-using AndroidX.Core.View;
 using Authi.App.Maui;
-using Authi.App.Maui.Controls;
 using Microsoft.Maui;
 using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls;
@@ -27,9 +25,9 @@ namespace Authi
         DataPathPrefix = "/")]
     public partial class MainActivity : MauiAppCompatActivity
     {
-        private OnBackPressedCallback _backPressedCallback;
+        private OnBackPressedCallback? _backPressedCallback;
 
-        protected override void OnCreate(Bundle savedInstanceState)
+        protected override void OnCreate(Bundle? savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
 
@@ -37,18 +35,18 @@ namespace Authi
             _backPressedCallback = new AppBackPressedCallback(this);
             OnBackPressedDispatcher.AddCallback(this, _backPressedCallback);
 
-            if (OperatingSystem.IsAndroidVersionAtLeast(30) &&
-                !AuthiApp.Current.IsDarkMode)
+            if (Platform.CurrentActivity?.Window is Android.Views.Window window)
             {
-                Window.InsetsController?.SetSystemBarsAppearance(
-                    (int)WindowInsetsControllerAppearance.LightStatusBars,
-                    (int)WindowInsetsControllerAppearance.LightStatusBars);
+                EdgeToEdge.Enable(this);
+
+                if (OperatingSystem.IsAndroidVersionAtLeast(30) &&
+                    !AuthiApp.Current.IsDarkMode)
+                {
+                    window.InsetsController?.SetSystemBarsAppearance(
+                        (int)WindowInsetsControllerAppearance.LightStatusBars,
+                        (int)WindowInsetsControllerAppearance.LightStatusBars);
+                }
             }
-
-            WindowCompat.SetDecorFitsSystemWindows(Window, false);
-
-            Platform.CurrentActivity.Window.AddFlags(WindowManagerFlags.LayoutNoLimits);
-            Platform.CurrentActivity.Window.AddFlags(WindowManagerFlags.TranslucentStatus);
 
             if (Intent is Intent intent)
             {
@@ -56,13 +54,13 @@ namespace Authi
             }
         }
 
-        protected override void OnNewIntent(Intent intent)
+        protected override void OnNewIntent(Intent? intent)
         {
             base.OnNewIntent(intent);
             OnIntent(intent);
         }
 
-        private static void OnIntent(Intent intent)
+        private static void OnIntent(Intent? intent)
         {
             if (intent?.DataString is string deeplink)
             {

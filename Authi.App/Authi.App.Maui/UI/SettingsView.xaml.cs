@@ -9,7 +9,7 @@ namespace Authi.App.Maui.UI;
 
 public partial class SettingsView : IAdaptiveView
 {
-    private SettingsViewModel ViewModel => BindingContext as SettingsViewModel;
+    private SettingsViewModel? ViewModel => BindingContext as SettingsViewModel;
 
     public SettingsView()
     {

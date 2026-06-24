@@ -55,7 +55,7 @@ namespace Authi.App.Maui.Controls
             control.RebuildUI();
         }
 
-        private void OnItemsSourceCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void OnItemsSourceCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
             RebuildUI();
         }
@@ -101,7 +101,7 @@ namespace Authi.App.Maui.Controls
             UpdateCheckedStates();
         }
 
-        private void OnRadioButtonCheckedChanged(object sender, CheckedChangedEventArgs e)
+        private void OnRadioButtonCheckedChanged(object? sender, CheckedChangedEventArgs e)
         {
             if (_isUpdatingSelection || !e.Value) return;
 

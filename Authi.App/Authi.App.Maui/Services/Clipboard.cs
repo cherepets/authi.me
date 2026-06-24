@@ -6,10 +6,10 @@ namespace Authi.App.Maui.Services
 {
     internal class Clipboard : IClipboard
     {
-        public Task<string> GetTextAsync()
+        public Task<string?> GetTextAsync()
             => MauiClipboard.GetTextAsync();
 
-        public Task SetTextAsync(string text)
+        public Task SetTextAsync(string? text)
             => MauiClipboard.SetTextAsync(text);
     }
 }

@@ -7,13 +7,13 @@ using Microsoft.Maui.Graphics;
 
 namespace Authi.App.Maui.Controls
 {
-    public class QrCodeView : Border
+    public partial class QrCodeView : Border
     {
-        private string _barcode;
+        private string? _barcode;
 
         public string Barcode
         {
-            get => _barcode;
+            get => _barcode ?? string.Empty;
             set => Content = CreateImage(_barcode = value);
         }
 

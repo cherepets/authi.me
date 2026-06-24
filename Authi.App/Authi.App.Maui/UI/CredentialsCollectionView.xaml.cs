@@ -6,7 +6,7 @@ namespace Authi.App.Maui.UI;
 
 public partial class CredentialsCollectionView
 {
-    public ICredentialsCollectionViewModel ViewModel
+    public ICredentialsCollectionViewModel? ViewModel
     {
         get => _viewModel;
         set
@@ -16,7 +16,7 @@ public partial class CredentialsCollectionView
         }
     }
 
-    private ICredentialsCollectionViewModel _viewModel;
+    private ICredentialsCollectionViewModel? _viewModel;
 
     public CredentialsCollectionView()
     {
@@ -27,10 +27,10 @@ public partial class CredentialsCollectionView
 
     private void OnAddCredentialsClicked(object sender, EventArgs e)
     {
-        _viewModel.ShowAddCredentials();
+        _viewModel?.ShowAddCredentials();
     }
 
-    private void OnViewModelChanged(ICredentialsCollectionViewModel oldViewModel, ICredentialsCollectionViewModel newViewModel)
+    private void OnViewModelChanged(ICredentialsCollectionViewModel? oldViewModel, ICredentialsCollectionViewModel? newViewModel)
     {
         BindingContext = newViewModel;
     }

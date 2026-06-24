@@ -8,9 +8,9 @@ namespace Authi.App.Maui.Converters
 {
     public class SyncStatusToColorConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
-            var status = (SyncStatus)value;
+            var status = (SyncStatus?)value;
             return status switch
             {
                 SyncStatus.NotSynced => AuthiApp.Current.GetThemedResource("ColorNeutral"),
@@ -22,7 +22,7 @@ namespace Authi.App.Maui.Converters
             };
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }
@@ -30,9 +30,9 @@ namespace Authi.App.Maui.Converters
 
     public class SyncStatusToTitleConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
-            var status = (SyncStatus)value;
+            var status = (SyncStatus?)value;
             return status switch
             {
                 SyncStatus.NotSynced => L10n.SyncStatus.NotSynced,
@@ -44,7 +44,7 @@ namespace Authi.App.Maui.Converters
             };
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }

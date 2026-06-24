@@ -5,7 +5,7 @@ namespace Authi.App.Maui.UI;
 
 public partial class CredentialItemView
 {
-    private CredentialViewModel _viewModel;
+    private CredentialViewModel? _viewModel;
 
     public CredentialItemView()
     {

@@ -14,7 +14,7 @@ namespace Authi.App.Maui.Extensions
             {
                 var tcs = new TaskCompletionSource<bool>();
 
-                void FinishedLayouting(object sender, EventArgs args)
+                void FinishedLayouting(object? sender, EventArgs args)
                 {
                     element.SizeChanged -= FinishedLayouting;
                     tcs.TrySetResult(true);

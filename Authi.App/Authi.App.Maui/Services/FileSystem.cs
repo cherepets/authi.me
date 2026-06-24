@@ -11,7 +11,7 @@ namespace Authi.App.Maui.Services
     {
         public string AppDataDirectory => MauiFileSystem.AppDataDirectory;
 
-        public async Task<Stream> ReadFromPickerAsync()
+        public async Task<Stream?> ReadFromPickerAsync()
         {
             var file = await FilePicker.Default.PickAsync();
             if (file == null)
@@ -21,10 +21,10 @@ namespace Authi.App.Maui.Services
             return await file.OpenReadAsync();
         }
 
-        public async Task<bool> WriteToPickerAsync(Stream stream, string suggestedFileName = null)
+        public async Task<bool> WriteToPickerAsync(Stream stream, string? suggestedFileName = null)
         {
             var result = await FileSaver.Default.SaveAsync(
-                fileName: suggestedFileName,
+                fileName: suggestedFileName ?? string.Empty,
                 stream: stream);
             return result.IsSuccessful;
         }

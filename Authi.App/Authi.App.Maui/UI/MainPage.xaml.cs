@@ -14,9 +14,8 @@ namespace Authi.App.Maui.UI
 
         public MainPageViewModel ViewModel { get; }
 
-        private View _currentView;
-
-        private Task _navigating;
+        private View? _currentView;
+        private Task? _navigating;
 
         private bool? _isCompact;
         private bool _isLoaded;
@@ -64,7 +63,7 @@ namespace Authi.App.Maui.UI
             }
         }
 
-        public async Task ShowDialogAsync(string title, string message, string primaryButtonText = null, string cancelButtonText = null, Action onPrimary = null, Action onCancel = null)
+        public async Task ShowDialogAsync(string title, string message, string? primaryButtonText = null, string? cancelButtonText = null, Action? onPrimary = null, Action? onCancel = null)
         {
             await DialogPresenter.ShowDialogAsync(title, message, primaryButtonText, cancelButtonText, onPrimary, onCancel);
         }
@@ -84,7 +83,7 @@ namespace Authi.App.Maui.UI
             return base.OnBackButtonPressed();
         }
 
-        private async void OnContentChanged(ViewModelBase viewModel)
+        private async void OnContentChanged(ViewModelBase? viewModel)
         {
             switch (viewModel)
             {

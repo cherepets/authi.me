@@ -6,7 +6,7 @@ namespace Authi.App.Maui.Services
 {
     internal class SecureStorage : ISecureStorage
     {
-        public Task<string> GetAsync(string key)
+        public Task<string?> GetAsync(string key)
             => MauiSecureStorage.GetAsync(key);
 
         public void Remove(string key)
