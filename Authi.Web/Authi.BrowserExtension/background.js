@@ -1,11 +1,23 @@
-﻿import { Theme } from '/helpers/theme.js';
+const extensionApi = globalThis.browser ?? globalThis.chrome;
 
-chrome.runtime.onStartup.addListener(() => {
-    Theme.applySystemTheme();
-});
+function getSystemTheme() {
+    return globalThis.matchMedia?.('(prefers-color-scheme: dark)').matches
+        ? 'dark'
+        : 'light';
+}
 
-chrome.runtime.onInstalled.addListener(() => {
-    Theme.applySystemTheme();
-});
+function applySystemTheme() {
+    const action = extensionApi?.action;
+    if (!action) {
+        return;
+    }
 
-Theme.applySystemTheme();
+    const theme = getSystemTheme();
+    const result = action.setIcon({ path: "icons/icon_" + theme + ".png" });
+    result?.catch?.(() => { });
+}
+
+extensionApi?.runtime?.onStartup?.addListener(applySystemTheme);
+extensionApi?.runtime?.onInstalled?.addListener(applySystemTheme);
+
+applySystemTheme();
