@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Authi.App.Logic.ViewModels
@@ -36,6 +37,8 @@ namespace Authi.App.Logic.ViewModels
         public OnboardingViewModel OnboardingViewModel { get; } = new();
         public SyncViewModel SyncViewModel { get; } = new();
 
+        private CancellationTokenSource? _calcDelayCancellation;
+        private ViewModelBase? _contentViewModel;
         private bool _isDisposed;
 
         public MainPageViewModel()
@@ -43,10 +46,11 @@ namespace Authi.App.Logic.ViewModels
             Credentials = SyncViewModel.GetCredentials();
 
             Services.Messenger.Copied.Subscribe += OnCopyRequested;
-            Services.Messenger.NavigationPush.Subscribe += OnNavigationPushed;
+            Services.Messenger.CalcNow.Subscribe += OnCalcNowRequested;
             Services.Messenger.NavigationPop.Subscribe += OnNavigationPopped;
-            Services.Messenger.DeleteCredential.Subscribe += OnDeleteCredentialRequested;
+            Services.Messenger.NavigationPush.Subscribe += OnNavigationPushed;
             Services.Messenger.DeeplinkActivated.Subscribe += OnDeeplinkActivated;
+            Services.Messenger.DeleteCredential.Subscribe += OnDeleteCredentialRequested;
         }
 
         public async Task InitializeAsync()
@@ -76,16 +80,30 @@ namespace Authi.App.Logic.ViewModels
             ShowContent(new SettingsViewModel());
         }
 
+        public void HideContent()
+        {
+            ShowContent(null);
+        }
+
         private async void UpdateLoop()
         {
-            var validFor = Services.TotpGenerator.GetRemainingMs();
             while (!_isDisposed)
             {
+                var validFor = Services.TotpGenerator.GetRemainingMs();
+
                 TotpRefreshed?.Invoke(validFor);
-                await Task.Delay(validFor);
-                var task = OnTick();
-                validFor = Config.UpdateMs;
-                await task;
+
+                try
+                {
+                    _calcDelayCancellation = new CancellationTokenSource();
+                    await Task.Delay(validFor, _calcDelayCancellation.Token);
+                }
+                catch (OperationCanceledException)
+                {
+                    _calcDelayCancellation = null;
+                }
+
+                await OnTick();
             }
         }
 
@@ -126,6 +144,11 @@ namespace Authi.App.Logic.ViewModels
             TotpCopied?.Invoke();
         }
 
+        private void OnCalcNowRequested(object? sender, EventArgs e)
+        {
+            _calcDelayCancellation?.Cancel(true);
+        }
+
         private void OnNavigationPushed(object? sender, ViewModelBase viewModel)
         {
             ShowContent(viewModel);
@@ -133,7 +156,7 @@ namespace Authi.App.Logic.ViewModels
 
         private void OnNavigationPopped(object? sender, EventArgs e)
         {
-            HideContent();
+            ShowContent(null);
         }
 
         private async void OnDeleteCredentialRequested(object? sender, CredentialViewModel credentialViewModel)
@@ -154,14 +177,11 @@ namespace Authi.App.Logic.ViewModels
             }
         }
 
-        private void ShowContent(ViewModelBase viewModel)
+        private void ShowContent(ViewModelBase? viewModel)
         {
+            (_contentViewModel as IDisposable)?.Dispose();
+            _contentViewModel = viewModel;
             ContentChanged?.Invoke(viewModel);
-        }
-
-        private void HideContent()
-        {
-            ContentChanged?.Invoke(null);
         }
 
         public void Dispose()
@@ -169,9 +189,12 @@ namespace Authi.App.Logic.ViewModels
             _isDisposed = true;
 
             SyncViewModel.Dispose();
+            (_contentViewModel as IDisposable)?.Dispose();
             Services.Messenger.Copied.Subscribe -= OnCopyRequested;
-            Services.Messenger.NavigationPush.Subscribe -= OnNavigationPushed;
+            Services.Messenger.CalcNow.Subscribe -= OnCalcNowRequested;
             Services.Messenger.NavigationPop.Subscribe -= OnNavigationPopped;
+            Services.Messenger.NavigationPush.Subscribe -= OnNavigationPushed;
+            Services.Messenger.DeeplinkActivated.Subscribe -= OnDeeplinkActivated;
             Services.Messenger.DeleteCredential.Subscribe -= OnDeleteCredentialRequested;
         }
     }

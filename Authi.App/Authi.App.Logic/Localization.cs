@@ -61,6 +61,8 @@ namespace Authi.App.Logic.Localization
         public const string CloudSyncSwitchCaption = "Sync across devices";
         public const string CloudSyncUploadButtonCaption = "This is your first device and you want to upload data from it to the cloud";
         public const string CloudSyncUploadButtonTitle = "Upload";
+        public const string General = "General";
+        public const string GeneralHideCodes = "Hide codes";
         public const string GetApp = "Get app";
         public const string GetAppLinkCaption = "Get on other devices";
         public const string GetAppLinkTitle = "authi.me";

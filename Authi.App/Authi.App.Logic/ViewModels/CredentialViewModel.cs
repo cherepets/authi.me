@@ -30,13 +30,31 @@ namespace Authi.App.Logic.ViewModels
             internal set
             {
                 Set(value);
-                OnPropertyChanged(nameof(DisplayTotp));
+                UpdateDisplayTotp();
             }
         }
 
-        public string DisplayTotp => !string.IsNullOrEmpty(Totp)
-            ? string.Concat(Totp.AsSpan(0, 3), " ", Totp.AsSpan(3))
-            : "!";
+        private async void UpdateDisplayTotp()
+        {
+            if (string.IsNullOrEmpty(Totp))
+            {
+                DisplayTotp = "!";
+            }
+            else if (await Services.Settings.IsHideCodesEnabled.GetAsync() ?? false)
+            {
+                DisplayTotp = string.Empty;
+            }
+            else
+            {
+                DisplayTotp = string.Concat(Totp.AsSpan(0, 3), " ", Totp.AsSpan(3));
+            }
+        }
+
+        public string DisplayTotp
+        {
+            get => Get<string>() ?? string.Empty;
+            private set => Set(value);
+        }
 
         public bool IsEditing
         {

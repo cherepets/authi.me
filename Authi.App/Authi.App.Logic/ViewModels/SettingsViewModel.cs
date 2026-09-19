@@ -19,7 +19,7 @@ namespace Authi.App.Logic.ViewModels
         Download
     }
 
-    public class SettingsViewModel : ViewModelBase, IClosableViewModel
+    public class SettingsViewModel : ViewModelBase, IClosableViewModel, IDisposable
     {
         public class SyncServerOption
         {
@@ -65,6 +65,16 @@ namespace Authi.App.Logic.ViewModels
             set => Set(value);
         }
 
+        public bool IsHideCodesEnabled
+        {
+            get => Get<bool>();
+            set
+            {
+                Set(value);
+                OnIsHideCodesToggled();
+            }
+        }
+
         public List<SyncServerOption> SyncServerOptions { get; } =
         [
             SyncServerOption.AuthiCloud,
@@ -94,6 +104,8 @@ namespace Authi.App.Logic.ViewModels
         public SettingsViewModel()
         {
             IsLoading = true;
+            Services.Messenger.BackupExportComplete.Subscribe += OnExportCompleted;
+            Services.Messenger.BackupImportComplete.Subscribe += OnImportCompleted;
             InitAsync();
         }
 
@@ -101,15 +113,14 @@ namespace Authi.App.Logic.ViewModels
         {
             var clientId = await Services.Settings.ClientId.GetAsync();
             var serverUrl = await Services.Settings.ServerUrl.GetAsync() ?? string.Empty;
+            IsHideCodesEnabled = await Services.Settings.IsHideCodesEnabled.GetAsync() ?? false;
+
             IsLoading = false;
             IsUISyncEnabled = IsSynced = clientId.HasValue;
             SyncState = IsSynced ? CloudSyncState.On : CloudSyncState.Off;
 
             ServerUrl = serverUrl;
             SelectedSyncServer = string.IsNullOrEmpty(ServerUrl) ? SyncServerOption.AuthiCloud : SyncServerOption.Selfhosted;
-
-            Services.Messenger.BackupExportComplete.Subscribe += OnExportCompleted;
-            Services.Messenger.BackupImportComplete.Subscribe += OnImportCompleted;
         }
 
         public void UISyncToggled(bool value)
@@ -284,6 +295,12 @@ namespace Authi.App.Logic.ViewModels
             }
         }
 
+        public void Dispose()
+        {
+            Services.Messenger.BackupExportComplete.Subscribe -= OnExportCompleted;
+            Services.Messenger.BackupImportComplete.Subscribe -= OnImportCompleted;
+        }
+
         public void Export()
         {
             IsLoading = true;
@@ -325,6 +342,13 @@ namespace Authi.App.Logic.ViewModels
         public async Task GetApp()
         {
             await Services.LinkOpener.OpenUriAsync(L10n.Settings.GetAppLinkUrl);
+        }
+
+        private void OnIsHideCodesToggled()
+        {
+            if (IsLoading) return;
+            Services.Settings.IsHideCodesEnabled.SetAsync(IsHideCodesEnabled);
+            Services.Messenger.CalcNow.Publish(this);
         }
 
         private void OnSelectedSyncServerChanged(SyncServerOption value)

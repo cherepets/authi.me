@@ -210,6 +210,29 @@
                         Text="{x:Static l10n:Settings.CloudSyncPasteButtonCaption}" />
                 </controls:AniGrid>
 
+                <!--  General  -->
+                <Label
+                    Margin="0,8"
+                    Style="{StaticResource SubtitleLabelStyle}"
+                    Text="{x:Static l10n:Settings.General}"
+                    VerticalOptions="Center" />
+                <Grid ColumnSpacing="16" RowSpacing="8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <Label
+                        Grid.Column="0"
+                        Style="{StaticResource BodyLargeLabelStyle}"
+                        Text="{x:Static l10n:Settings.GeneralHideCodes}"
+                        VerticalOptions="Center" />
+                    <Switch
+                        Grid.Column="1"
+                        HorizontalOptions="End"
+                        IsToggled="{Binding IsHideCodesEnabled, Mode=TwoWay}"
+                        VerticalOptions="Center" />
+                </Grid>
+
                 <!--  Get app  -->
                 <Label
                     Margin="0,8"

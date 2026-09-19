@@ -8,6 +8,7 @@ namespace Authi.App.Logic.Services
     public interface IMessenger
     {
         Channel Copied { get; }
+        Channel CalcNow { get; }
         Channel SyncNow { get; }
         Channel NavigationPop { get; }
         Channel<ViewModelBase> NavigationPush { get; }
@@ -22,6 +23,7 @@ namespace Authi.App.Logic.Services
     public class Messenger : ServiceBase, IMessenger
     {
         public Channel Copied { get; } = new();
+        public Channel CalcNow { get; } = new();
         public Channel SyncNow { get; } = new();
         public Channel NavigationPop { get; } = new();
         public Channel<ViewModelBase> NavigationPush { get; } = new();

@@ -138,6 +138,39 @@
                     </StackPanel>
                 </StackPanel>
 
+                <!--  General  -->
+                <StackPanel Spacing="8">
+                    <TextBlock Style="{ThemeResource BodyStrongTextBlockStyle}" Text="{x:Bind l10n:Settings.General}" />
+                    <StackPanel
+                        Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                        BorderBrush="{ThemeResource ControlElevationBorderBrush}"
+                        CornerRadius="{ThemeResource ControlCornerRadius}">
+                        <Grid Padding="16">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <FontIcon Glyph="&#xED1A;" />
+                            <TextBlock
+                                Grid.Column="1"
+                                Margin="16,0,16,1"
+                                VerticalAlignment="Center"
+                                Style="{ThemeResource BodyTextBlockStyle}"
+                                Text="{x:Bind l10n:Settings.GeneralHideCodes}" />
+                            <ToggleSwitch
+                                Grid.Column="2"
+                                Height="32"
+                                MinWidth="0"
+                                MinHeight="0"
+                                MaxWidth="40"
+                                IsOn="{x:Bind ViewModel.IsHideCodesEnabled, Mode=TwoWay}"
+                                OffContent=""
+                                OnContent="" />
+                        </Grid>
+                    </StackPanel>
+                </StackPanel>
+
                 <!--  Get app  -->
                 <StackPanel Spacing="8">
                     <TextBlock Style="{ThemeResource BodyStrongTextBlockStyle}" Text="{x:Bind l10n:Settings.GetApp}" />

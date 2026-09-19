@@ -57,6 +57,12 @@ export class SettingsPage extends HTMLElement {
         const backupImportButtonLabel = this.querySelector('#settingsPageBackupImportButtonLabel');
         backupImportButtonLabel.innerText = Localization.get('Settings.BackupImportButtonCaption');
 
+        const hideCodesLabel = this.querySelector('#settingsPageHideCodesLabel');
+        hideCodesLabel.innerText = Localization.get('Settings.GeneralHideCodes');
+
+        const hideCodesToggle = this.querySelector('#settingsPageHideCodesToggle');
+        hideCodesToggle.addEventListener('click', e => this.onHideCodesToggled(e.target.checked));
+
         const closeLink = this.querySelector('#settingsPageCloseLink');
         closeLink.title = Localization.get('Generic.Close');
         closeLink.addEventListener('click', () => this.onCloseClicked());
@@ -84,6 +90,7 @@ export class SettingsPage extends HTMLElement {
         const backupHeader = this.querySelector('#settingsPageBackupHeader');
         const backupImportButton = this.querySelector('#settingsPageBackupImportButton');
         const backupImportButtonLabel = this.querySelector('#settingsPageBackupImportButtonLabel');
+        const hideCodesToggle = this.querySelector('#settingsPageHideCodesToggle');
 
         if (!settings || !settings.clientId || !settings.dataKey || !settings.syncPrivateKey || !settings.syncPublicKey) {
             syncToggle.checked = false;
@@ -104,6 +111,8 @@ export class SettingsPage extends HTMLElement {
             backupImportButton.style.display = 'none';
             backupImportButtonLabel.style.display = 'none';
         }
+
+        hideCodesToggle.checked = settings?.isHideCodesEnabled ?? false;
     }
 
     onSyncToggled(isOn) {
@@ -122,6 +131,11 @@ export class SettingsPage extends HTMLElement {
                 }
             });
         }
+    }
+
+    async onHideCodesToggled(isOn) {
+        const settings = await Settings.getAsync();
+        await Settings.setAsync({ ...(settings ?? {}), isHideCodesEnabled: isOn });
     }
 
     async onCloseClicked() {
@@ -151,12 +165,15 @@ export class SettingsPage extends HTMLElement {
 
                 await Cache.setAsync([]);
 
+                const isHideCodesEnabled = settings?.isHideCodesEnabled ?? false;
+
                 await Settings.setAsync({
                     clientId: result.clientId,
                     dataKey: result.dataKey.bytes,
                     syncPrivateKey: result.syncKeyPair.private.bytes,
                     syncPublicKey: result.syncKeyPair.public.bytes,
-                    serverUrl: result.serverUrl
+                    serverUrl: result.serverUrl,
+                    isHideCodesEnabled: isHideCodesEnabled
                 });
 
                 DialogManager.showDialog({
@@ -197,9 +214,12 @@ export class SettingsPage extends HTMLElement {
                     const resultJson = await wasm.backup.parse(text);
                     const result = resultJson.fromJson();
 
+                    const settings = await Settings.getAsync();
+                    const isHideCodesEnabled = settings?.isHideCodesEnabled ?? false;
+
                     await Cache.setAsync(result);
 
-                    await Settings.setAsync({ isOffline: true });
+                    await Settings.setAsync({ isOffline: true, isHideCodesEnabled: isHideCodesEnabled });
 
                     DialogManager.showDialog({
                         title: Localization.get('Generic.Success'),

@@ -18,6 +18,7 @@ namespace Authi.App.Logic.Services
         IAsyncSetting<byte[]> DataKey { get; }
         IAsyncSetting<string> ServerUrl { get; }
         IAsyncValueSetting<bool> DidCompleteOnboarding { get; }
+        IAsyncValueSetting<bool> IsHideCodesEnabled { get; }
     }
 
     internal class Settings : ServiceBase, ISettings
@@ -29,6 +30,7 @@ namespace Authi.App.Logic.Services
         public IAsyncSetting<byte[]> DataKey { get; } = new AsyncSetting<byte[]>(_inMemoryStorage);
         public IAsyncSetting<string> ServerUrl { get; } = new AsyncSetting<string>(_inMemoryStorage);
         public IAsyncValueSetting<bool> DidCompleteOnboarding { get; } = new AsyncValueSetting<bool>(_inMemoryStorage);
+        public IAsyncValueSetting<bool> IsHideCodesEnabled { get; } = new AsyncValueSetting<bool>(_inMemoryStorage);
 
         private readonly static Dictionary<string, byte[]?> _inMemoryStorage = [];
     }

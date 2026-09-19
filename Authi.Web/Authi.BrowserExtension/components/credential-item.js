@@ -1,5 +1,6 @@
 ﻿import { Animator } from '/helpers/animator.js';
 import { Loader } from '/helpers/loader.js';
+import { Settings } from '/helpers/settings.js';
 import { Task, CancellationToken } from '/helpers/task.js';
 import { TotpGenerator } from '/helpers/totp-generator.js';
 
@@ -57,11 +58,20 @@ export class CredentialItem extends HTMLElement {
     }
 
     async refreshTotpAsync() {
-        let totpSpan = this.querySelector('#credentialItemTotp');
+        const totpSpan = this.querySelector('#credentialItemTotp');
         this.#totp = await TotpGenerator.calculateTotpAsync(this.#secret);
-        totpSpan.innerText = this.#totp
-            ? this.#totp.slice(0, 3) + ' ' + this.#totp.slice(3)
-            : '!';
+
+        if (!this.#totp) {
+            totpSpan.innerText = '!';
+            return;
+        }
+
+        const settings = await Settings.getAsync();
+        const isHideCodesEnabled = settings?.isHideCodesEnabled ?? false;
+
+        totpSpan.innerText = isHideCodesEnabled
+            ? ''
+            : this.#totp.slice(0, 3) + ' ' + this.#totp.slice(3);
     }
 
     onPointerDown(event) {

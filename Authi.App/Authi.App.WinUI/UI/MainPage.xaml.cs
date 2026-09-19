@@ -70,7 +70,7 @@ namespace Authi.App.WinUI.UI
 
             if (ContentFrameGrid.Visibility == Visibility.Visible)
             {
-                await HideContent();
+                ViewModel.HideContent();
             }
         }
 
