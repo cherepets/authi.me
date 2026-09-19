@@ -14,6 +14,10 @@ namespace Authi.App.Test.Mocks
 {
     internal class MockCredentialStorage(IEnumerable<Credential>? credentials, ThrowsOn throwsOn = ThrowsOn.None) : ILocalCredentialStorage, ICloudCredentialStorage
     {
+        public MockCredentialStorage() : this(null)
+        {
+        }
+
         [Flags]
         internal enum ThrowsOn
         {
