@@ -26,7 +26,7 @@ public partial class SettingsView : IAdaptiveView
         ViewModel?.UISyncToggled(e.Value);
     }
 
-    private async void OnDownload(object sender, EventArgs e)
+    private void OnDownload(object sender, EventArgs e)
     {
         ViewModel?.Download();
     }

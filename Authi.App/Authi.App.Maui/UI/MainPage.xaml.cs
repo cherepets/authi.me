@@ -29,6 +29,7 @@ namespace Authi.App.Maui.UI
 
             MenuBar.ViewModel = ViewModel;
             CredentialsCollection.ViewModel = ViewModel;
+            Onboarding.ViewModel = ViewModel.OnboardingViewModel;
 
             UpdateLeftColumnVisibility();
             UpdateRightColumnVisibility();
@@ -201,6 +202,7 @@ namespace Authi.App.Maui.UI
         {
             var isLeftColumnVisibile = _isCompact != true || _currentView == null;
             CredentialsCollection.IsVisible = MenuBar.IsVisible = isLeftColumnVisibile;
+            AddCredentialsContainer.IsVisible = isLeftColumnVisibile;
         }
 
         private void UpdateRightColumnVisibility()
@@ -222,6 +224,11 @@ namespace Authi.App.Maui.UI
                 ViewModel.Dispose();
                 AuthiApp.Current.OpenMainPage();
             }
+        }
+
+        private async void OnAddCredentialsClicked(object sender, EventArgs e)
+        {
+            await ViewModel.ShowAddCredentialsAsync();
         }
     }
 }

@@ -46,6 +46,7 @@
 		<MauiIcon Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'" Include="Resources\AppIcon\appicon_monochrome.svg" />
 		<MauiIcon Include="Resources\AppIcon\appicon_unplated.svg" />
 		<MauiFont Include="Resources\Fonts\MajorMonoDisplay.ttf" Alias="MajorMonoDisplay" />
+		<MauiFont Include="Resources\Fonts\ShadowsIntoLight.ttf" Alias="ShadowsIntoLight" />
 		<MauiFont Include="Resources\Fonts\MaterialSymbols.ttf" Alias="IconFont" />
 		<MauiFont Include="Resources\Fonts\NotoSans.ttf" Alias="DefaultFont" />
 	</ItemGroup>
@@ -62,6 +63,9 @@
 	</ItemGroup>
 	<ItemGroup>
 		<MauiXaml Update="Controls\ContentViewHeader.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Controls\TeachingArrow.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Controls\DialogPresenter.xaml">
@@ -104,6 +108,9 @@
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="UI\HostingSettingsView.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="UI\OnboardingView.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="UI\SettingsView.xaml">

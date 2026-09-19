@@ -35,6 +35,20 @@
                 StrokeThickness="0">
                 <Grid x:Name="ContentFrameGrid" SafeAreaEdges="None" />
             </Border>
+            <ui:OnboardingView x:Name="Onboarding" Grid.RowSpan="2" />
+            <Grid
+                x:Name="AddCredentialsContainer"
+                Grid.Row="1">
+                <Button
+                    x:Name="AddCredentialsButton"
+                    Margin="24"
+                    Clicked="OnAddCredentialsClicked"
+                    HorizontalOptions="End"
+                    IsVisible="{Binding ViewModel.OnboardingViewModel.OnboardingPage, Converter={StaticResource InverseEnumToBool}, ConverterParameter=Page2}"
+                    Style="{StaticResource FloatingActionButtonStyle}"
+                    Text="{StaticResource AddIcon}"
+                    VerticalOptions="End" />
+            </Grid>
         </Grid>
         <controls:DialogPresenter
             x:Name="DialogPresenter"

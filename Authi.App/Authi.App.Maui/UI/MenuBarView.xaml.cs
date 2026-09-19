@@ -38,6 +38,6 @@ public partial class MenuBarView
 
     private void OnSettingsClicked(object sender, EventArgs e)
     {
-        _viewModel?.ShowSettings();
+        _viewModel?.ShowSettingsAsync();
     }
 }

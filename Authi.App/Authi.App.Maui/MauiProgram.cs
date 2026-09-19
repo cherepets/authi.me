@@ -22,6 +22,7 @@ namespace Authi.App.Maui
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("MajorMonoDisplay.ttf", "MajorMonoDisplay");
+                    fonts.AddFont("ShadowsIntoLight.ttf", "ShadowsIntoLight");
                     fonts.AddFont("MaterialSymbols.ttf", "IconFont");
                     fonts.AddFont("NotoSans.ttf", "DefaultFont");
                 })

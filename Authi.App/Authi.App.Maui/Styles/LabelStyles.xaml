@@ -75,4 +75,12 @@
         <Setter Property="FontFamily" Value="MajorMonoDisplay" />
         <Setter Property="FontSize" Value="32" />
     </Style>
+
+    <!--  Onboarding  -->
+    <Style x:Key="OnboardingLabelStyle" TargetType="Label">
+        <Setter Property="FontFamily" Value="ShadowsIntoLight" />
+        <Setter Property="FontSize" Value="40" />
+        <Setter Property="LineBreakMode" Value="WordWrap" />
+        <Setter Property="LineHeight" Value="0.8" />
+    </Style>
 </ResourceDictionary>

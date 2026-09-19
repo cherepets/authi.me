@@ -1,0 +1,69 @@
+<ContentView
+    x:Class="Authi.App.Maui.UI.OnboardingView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:Authi.App.Maui.Controls"
+    xmlns:l10n="clr-namespace:Authi.App.Logic.Localization;assembly=Authi.App.Logic"
+    xmlns:viewModels="clr-namespace:Authi.App.Logic.ViewModels;assembly=Authi.App.Logic"
+    x:DataType="viewModels:OnboardingViewModel">
+    <Grid
+        CascadeInputTransparent="False"
+        InputTransparent="True"
+        IsVisible="{Binding OnboardingPage, Converter={StaticResource InverseEnumToBool}, ConverterParameter=None}">
+        <Grid
+            CascadeInputTransparent="False"
+            InputTransparent="True"
+            IsVisible="{Binding OnboardingPage, Converter={StaticResource EnumToBool}, ConverterParameter=Page1}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="92" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="24" />
+            </Grid.RowDefinitions>
+            <Label
+                Grid.Row="2"
+                Margin="24,12,24,0"
+                HorizontalTextAlignment="End"
+                Style="{StaticResource OnboardingLabelStyle}"
+                Text="{x:Static l10n:Onboarding.Step1}" />
+            <controls:TeachingArrow
+                Grid.Row="3"
+                Margin="0,0,24,96"
+                HorizontalOptions="End"
+                Rotation="180"
+                ScaleX="-1"
+                VerticalOptions="Start" />
+            <!--  No continue button, user should press ADD  -->
+        </Grid>
+        <Grid
+            CascadeInputTransparent="False"
+            InputTransparent="True"
+            IsVisible="{Binding OnboardingPage, Converter={StaticResource EnumToBool}, ConverterParameter=Page2}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="84" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="24" />
+            </Grid.RowDefinitions>
+            <controls:TeachingArrow
+                Grid.Row="1"
+                HorizontalOptions="End"
+                VerticalOptions="Start" />
+            <Label
+                Grid.Row="2"
+                Margin="24,12,24,0"
+                HorizontalTextAlignment="End"
+                Style="{StaticResource OnboardingLabelStyle}"
+                Text="{x:Static l10n:Onboarding.Step2}" />
+            <Button
+                Grid.Row="4"
+                Clicked="OnContinueClicked"
+                HorizontalOptions="Center"
+                Text="{x:Static l10n:Generic.Continue}" />
+        </Grid>
+    </Grid>
+</ContentView>
