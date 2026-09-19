@@ -11,7 +11,7 @@
 		<Nullable>enable</Nullable>
 		<ApplicationTitle>Authi.me</ApplicationTitle>
 		<ApplicationId>me.cherepets.authi.app</ApplicationId>
-		<ApplicationDisplayVersion>1.4.1</ApplicationDisplayVersion>
+		<ApplicationDisplayVersion>1.4.2</ApplicationDisplayVersion>
 		<ApplicationVersion>16</ApplicationVersion>
 		<WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
 		<WindowsPackageType>MSIX</WindowsPackageType>
