@@ -56,11 +56,11 @@ public sealed partial class MenuBarView : IAdaptiveView
 
     private void OnSettingsClicked(object sender, RoutedEventArgs e)
     {
-        ViewModel?.ShowSettings();
+        ViewModel?.ShowSettingsAsync();
     }
 
     private void OnAddNewClicked(object sender, RoutedEventArgs e)
     {
-        ViewModel?.ShowAddCredentials();
+        ViewModel?.ShowAddCredentialsAsync();
     }
 }

@@ -14,6 +14,11 @@
                         <Setter Property="FontFamily" Value="/Fonts/MajorMonoDisplay.ttf#Major Mono Display" />
                         <Setter Property="FontSize" Value="24" />
                     </Style>
+                    <Style x:Key="OnboardingTextBlockStyle" TargetType="TextBlock">
+                        <Setter Property="FontFamily" Value="/Fonts/ShadowsIntoLight.ttf#Shadows Into Light" />
+                        <Setter Property="FontSize" Value="40" />
+                        <Setter Property="TextWrapping" Value="WrapWholeWords" />
+                    </Style>
                     <Style
                         x:Key="BodyLargeTextBlockStyle"
                         BasedOn="{StaticResource BodyTextBlockStyle}"

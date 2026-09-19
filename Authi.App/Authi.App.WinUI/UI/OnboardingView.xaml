@@ -1,0 +1,67 @@
+<UserControl
+    x:Class="Authi.App.WinUI.UI.OnboardingView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:Authi.App.WinUI.Controls"
+    xmlns:l10n="using:Authi.App.Logic.Localization">
+    <Grid>
+        <Grid x:Name="Page1Grid" x:Load="{x:Bind ViewModel.OnboardingPage, ConverterParameter='Page1', Converter={StaticResource EnumToBool}, Mode=OneWay}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="92" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="24" />
+            </Grid.RowDefinitions>
+            <controls:TeachingArrow
+                Grid.Row="1"
+                Margin="0,0,84,0"
+                HorizontalAlignment="Right" />
+            <TextBlock
+                Grid.Row="2"
+                Margin="24,12,24,0"
+                HorizontalTextAlignment="Right"
+                Style="{StaticResource OnboardingTextBlockStyle}"
+                Text="{x:Bind l10n:Onboarding.Step1}" />
+            <Button
+                Grid.Row="4"
+                Height="40"
+                Padding="16,0"
+                HorizontalAlignment="Center"
+                Click="{x:Bind ViewModel.ContinueOnboardingAsync}"
+                Content="{x:Bind l10n:Generic.Continue}"
+                Loaded="OnButtonLoaded"
+                Style="{ThemeResource AccentButtonStyle}" />
+        </Grid>
+        <Grid x:Name="Page2Grid" x:Load="{x:Bind ViewModel.OnboardingPage, ConverterParameter='Page2', Converter={StaticResource EnumToBool}, Mode=OneWay}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="92" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="24" />
+            </Grid.RowDefinitions>
+            <controls:TeachingArrow
+                Grid.Row="1"
+                Margin="0,0,0,0"
+                HorizontalAlignment="Right" />
+            <TextBlock
+                Grid.Row="2"
+                Margin="24,12,24,0"
+                HorizontalTextAlignment="Right"
+                Style="{StaticResource OnboardingTextBlockStyle}"
+                Text="{x:Bind l10n:Onboarding.Step2}" />
+            <Button
+                Grid.Row="4"
+                Height="40"
+                Padding="16,0"
+                HorizontalAlignment="Center"
+                Click="{x:Bind ViewModel.ContinueOnboardingAsync}"
+                Content="{x:Bind l10n:Generic.Continue}"
+                Loaded="OnButtonLoaded"
+                Style="{ThemeResource AccentButtonStyle}" />
+        </Grid>
+    </Grid>
+</UserControl>

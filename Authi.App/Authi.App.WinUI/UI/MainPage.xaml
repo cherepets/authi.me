@@ -58,5 +58,6 @@
                 Text="{x:Bind l10n:Generic.AppName}" />
         </StackPanel>
         <controls:DialogPresenter x:Name="DialogPresenter" />
+        <ui:OnboardingView ViewModel="{x:Bind ViewModel.OnboardingViewModel}" />
     </Grid>
 </Page>

@@ -25,6 +25,7 @@
 		<None Remove="Controls\CloseButton.xaml" />
 		<None Remove="Controls\ProgressBar.xaml" />
 		<None Remove="Controls\QrScanner.xaml" />
+		<None Remove="Controls\TeachingArrow.xaml" />
 		<None Remove="Fonts\MajorMonoDisplay.ttf" />
 		<None Remove="UI\CopyNotification.xaml" />
 		<None Remove="UI\CredentialsCollectionView.xaml" />
@@ -32,6 +33,7 @@
 		<None Remove="UI\HostingSettingsView.xaml" />
 		<None Remove="UI\MainPage.xaml" />
 		<None Remove="UI\MenuBarView.xaml" />
+		<None Remove="UI\OnboardingView.xaml" />
 		<None Remove="UI\SettingsView.xaml" />
 	</ItemGroup>
 
@@ -53,6 +55,9 @@
 		</Content>
 		<Content Include="Fonts\MajorMonoDisplay.ttf">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Fonts\ShadowsIntoLight.ttf">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
 	</ItemGroup>
 
@@ -215,6 +220,16 @@
 		<Content Update="Assets\Wide310x150Logo.scale-400.png">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
+	</ItemGroup>
+	<ItemGroup>
+	  <Page Update="UI\OnboardingView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </Page>
+	</ItemGroup>
+	<ItemGroup>
+	  <Page Update="Controls\TeachingArrow.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </Page>
 	</ItemGroup>
 	<ItemGroup>
 	  <Page Update="UI\HostingSettingsView.xaml">
