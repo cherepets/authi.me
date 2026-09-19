@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Authi.App.Logic.ViewModels
@@ -11,8 +12,8 @@ namespace Authi.App.Logic.ViewModels
         event Action<int> TotpRefreshed;
 
         SyncViewModel SyncViewModel { get; }
-        void ShowAddCredentials();
-        void ShowSettings();
+        Task ShowAddCredentialsAsync();
+        Task ShowSettingsAsync();
     }
 
     public interface ICopyNotificationViewModel
@@ -23,7 +24,6 @@ namespace Authi.App.Logic.ViewModels
     public interface ICredentialsCollectionViewModel : ICopyNotificationViewModel
     {
         ObservableCollection<CredentialViewModel> Credentials { get; }
-        void ShowAddCredentials();
     }
 
     public class MainPageViewModel : ViewModelBase, IMenuBarViewModel, ICredentialsCollectionViewModel, ICopyNotificationViewModel, IDisposable
@@ -31,8 +31,12 @@ namespace Authi.App.Logic.ViewModels
         public event Action<int>? TotpRefreshed;
         public event Action? TotpCopied;
         public event Action<ViewModelBase?>? ContentChanged;
+
         public ObservableCollection<CredentialViewModel> Credentials { get; }
+        public OnboardingViewModel OnboardingViewModel { get; } = new();
         public SyncViewModel SyncViewModel { get; } = new();
+
+        private bool _isDisposed;
 
         public MainPageViewModel()
         {
@@ -48,23 +52,34 @@ namespace Authi.App.Logic.ViewModels
         public async Task InitializeAsync()
         {
             await SyncViewModel.InitializeAsync();
+            await OnboardingViewModel.InitializeAsync(Credentials.Any());
             UpdateLoop();
         }
 
-        public void ShowAddCredentials()
+        public async Task ShowAddCredentialsAsync()
         {
+            if (OnboardingViewModel.OnboardingPage != OnboardingPage.None)
+            {
+                await OnboardingViewModel.ContinueOnboardingAsync();
+                return;
+            }
             ShowContent(new AddCredentialViewModel(Credentials));
         }
 
-        public void ShowSettings()
+        public async Task ShowSettingsAsync()
         {
+            if (OnboardingViewModel.OnboardingPage != OnboardingPage.None)
+            {
+                await OnboardingViewModel.ContinueOnboardingAsync();
+                return;
+            }
             ShowContent(new SettingsViewModel());
         }
 
         private async void UpdateLoop()
         {
             var validFor = Services.TotpGenerator.GetRemainingMs();
-            while (true)
+            while (!_isDisposed)
             {
                 TotpRefreshed?.Invoke(validFor);
                 await Task.Delay(validFor);
@@ -151,6 +166,8 @@ namespace Authi.App.Logic.ViewModels
 
         public void Dispose()
         {
+            _isDisposed = true;
+
             SyncViewModel.Dispose();
             Services.Messenger.Copied.Subscribe -= OnCopyRequested;
             Services.Messenger.NavigationPush.Subscribe -= OnNavigationPushed;

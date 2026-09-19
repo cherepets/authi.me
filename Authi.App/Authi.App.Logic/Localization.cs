@@ -20,12 +20,18 @@ namespace Authi.App.Logic.Localization
         public const string Cancel = "Cancel";
         public const string Close = "Close";
         public const string Confirm = "Confirm";
+        public const string Continue = "Continue";
         public const string Copied = "Copied to clipboard";
         public const string Error = "Error";
         public const string No = "No";
         public const string Save = "Save";
         public const string Success = "Success";
         public const string Yes = "Yes";
+    }
+    public static class Onboarding
+    {
+        public const string Step1 = "Scan a QR code or paste a secret key to get started";
+        public const string Step2 = "Enable cloud sync or import from a backup file";
     }
     public static class Settings
     {

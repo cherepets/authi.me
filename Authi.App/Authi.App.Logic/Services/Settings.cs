@@ -17,6 +17,7 @@ namespace Authi.App.Logic.Services
         IAsyncSetting<byte[]> SyncPublicKey { get; }
         IAsyncSetting<byte[]> DataKey { get; }
         IAsyncSetting<string> ServerUrl { get; }
+        IAsyncValueSetting<bool> DidCompleteOnboarding { get; }
     }
 
     internal class Settings : ServiceBase, ISettings
@@ -27,6 +28,7 @@ namespace Authi.App.Logic.Services
         public IAsyncSetting<byte[]> SyncPublicKey { get; } = new AsyncSetting<byte[]>(_inMemoryStorage);
         public IAsyncSetting<byte[]> DataKey { get; } = new AsyncSetting<byte[]>(_inMemoryStorage);
         public IAsyncSetting<string> ServerUrl { get; } = new AsyncSetting<string>(_inMemoryStorage);
+        public IAsyncValueSetting<bool> DidCompleteOnboarding { get; } = new AsyncValueSetting<bool>(_inMemoryStorage);
 
         private readonly static Dictionary<string, byte[]?> _inMemoryStorage = [];
     }
