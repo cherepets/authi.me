@@ -65,11 +65,23 @@ namespace Authi.App.Logic.ViewModels
             set => Set(value);
         }
 
+        public bool IsBiometricsEnabled
+        {
+            get => Get<bool>();
+            set
+            {
+                if (value == IsBiometricsEnabled) return;
+                Set(value);
+                OnIsBiometricsEnabledToggled();
+            }
+        }
+
         public bool IsHideCodesEnabled
         {
             get => Get<bool>();
             set
             {
+                if (value == IsHideCodesEnabled) return;
                 Set(value);
                 OnIsHideCodesToggled();
             }
@@ -86,6 +98,7 @@ namespace Authi.App.Logic.ViewModels
             get => Get<SyncServerOption>() ?? SyncServerOption.AuthiCloud;
             set
             {
+                if (value == SelectedSyncServer) return;
                 Set(value);
                 OnSelectedSyncServerChanged(value);
             }
@@ -96,6 +109,7 @@ namespace Authi.App.Logic.ViewModels
             get => Get<string>() ?? string.Empty;
             set
             {
+                if (value == ServerUrl) return;
                 Set(value);
                 OnServerUrlChanged();
             }
@@ -113,6 +127,7 @@ namespace Authi.App.Logic.ViewModels
         {
             var clientId = await Services.Settings.ClientId.GetAsync();
             var serverUrl = await Services.Settings.ServerUrl.GetAsync() ?? string.Empty;
+            IsBiometricsEnabled = await Services.Settings.IsBiometricsEnabled.GetAsync() ?? false;
             IsHideCodesEnabled = await Services.Settings.IsHideCodesEnabled.GetAsync() ?? false;
 
             IsLoading = false;
@@ -344,6 +359,28 @@ namespace Authi.App.Logic.ViewModels
             await Services.LinkOpener.OpenUriAsync(L10n.Settings.GetAppLinkUrl);
         }
 
+        private async void OnIsBiometricsEnabledToggled()
+        {
+            if (IsLoading) return;
+            if (IsBiometricsEnabled)
+            {
+                IsLoading = true;
+                if (await Services.Biometrics.VerifyAsync())
+                {
+                    await Services.Settings.IsBiometricsEnabled.SetAsync(true);
+                }
+                else
+                {
+                    IsBiometricsEnabled = false;
+                }
+                IsLoading = false;
+            }
+            else
+            {
+                await Services.Settings.IsBiometricsEnabled.SetAsync(false);
+            }
+        }
+
         private void OnIsHideCodesToggled()
         {
             if (IsLoading) return;
@@ -443,8 +480,30 @@ namespace Authi.App.Logic.ViewModels
             IsLoading = true;
             try
             {
-                // TODO: Delete from server
-                //Services.CloudCredentialStorage.DisableAsync();
+                var clientId = await Services.Settings.ClientId.GetAsync();
+                var syncPrivateKey = await Services.Settings.SyncPrivateKey.GetAsync();
+                var syncPublicKey = await Services.Settings.SyncPublicKey.GetAsync();
+
+                if (!clientId.HasValue || syncPrivateKey == null || syncPublicKey == null)
+                {
+                    Services.Logger.Write("Can't disable sync: settings are missing.");
+                    return;
+                }
+
+                var syncKeyPair = new X25519KeyPair(
+                    new X25519PrivateKey(syncPrivateKey),
+                    new X25519PublicKey(syncPublicKey));
+
+                try
+                {
+                    await Services.ApiClient.DeleteAsync(clientId.Value, syncKeyPair);
+                }
+                catch (Exception exception)
+                {
+                    Services.Logger.Write(exception);
+                    // Still disconnecting locally
+                }
+
                 await Services.Settings.ClientId.SetAsync(null);
                 IsSynced = false;
                 Services.Messenger.SyncNow.Publish(this);

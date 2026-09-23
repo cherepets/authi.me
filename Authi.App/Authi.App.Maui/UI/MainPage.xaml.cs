@@ -216,6 +216,11 @@ namespace Authi.App.Maui.UI
             if (!_isLoaded)
             {
                 _isLoaded = true;
+                if (!await AuthiApp.Current.TryUnlockAsync())
+                {
+                    Application.Current?.Quit();
+                    return;
+                }
                 await ViewModel.InitializeAsync();
                 await this.FadeToAsync(1, AnimationLength.ShortUnsigned, Easing.CubicIn);
             }

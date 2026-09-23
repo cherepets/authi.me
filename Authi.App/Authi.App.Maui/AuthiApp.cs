@@ -9,6 +9,7 @@ using MaterialColorUtilities.Maui;
 using Microsoft.Maui;
 using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls;
+using System.Threading.Tasks;
 
 namespace Authi.App.Maui
 {
@@ -21,6 +22,7 @@ namespace Authi.App.Maui
         object GetThemedResource(string key);
         void HandleDeeplink(string deeplink);
         void OpenMainPage();
+        Task<bool> TryUnlockAsync();
     }
 
     public partial class AuthiApp : Application, IAuthiApp
@@ -32,6 +34,8 @@ namespace Authi.App.Maui
         public Thickness SystemInsets { get; set; }
 
         private Shell? _shell;
+        private bool _isUnlocked;
+        private long? _deactivatedTimestamp;
 
         public AuthiApp()
         {
@@ -76,17 +80,47 @@ namespace Authi.App.Maui
             _shell.Items.Add(new MainPage());
         }
 
+        public async Task<bool> TryUnlockAsync()
+        {
+            if (_isUnlocked)
+            {
+                return true;
+            }
+
+            var isBiometricsEnabled = await ServiceProvider.Current.Get<ISettings>().IsBiometricsEnabled.GetAsync() ?? false;
+            _isUnlocked = !isBiometricsEnabled || await ServiceProvider.Current.Get<IBiometrics>().VerifyAsync();
+            return _isUnlocked;
+        }
+
         protected override Window CreateWindow(IActivationState? activationState)
         {
             var shell = new Shell { FlyoutBehavior = FlyoutBehavior.Disabled };
+            shell.SetDynamicResource(VisualElement.BackgroundProperty, "SurfaceBrush");
             var window = new Window(shell);
             _shell = shell;
             OpenMainPage();
             return window;
         }
 
+        protected override void OnSleep()
+        {
+            _deactivatedTimestamp = ServiceProvider.Current.Get<IClock>().Timestamp;
+        }
+
         protected override void OnResume()
         {
+            var deactivatedTimestamp = _deactivatedTimestamp;
+            _deactivatedTimestamp = null;
+
+            if (_isUnlocked && deactivatedTimestamp is long timestamp &&
+                !ServiceProvider.Current.Get<IClock>().IsRecent(timestamp, Config.LockTimeoutMs))
+            {
+                _isUnlocked = false;
+                (_shell?.CurrentPage as MainPage)?.ViewModel.Dispose();
+                OpenMainPage();
+                return;
+            }
+
             ServiceProvider.Current.Get<IMessenger>().SyncNow.Publish(this);
         }
 

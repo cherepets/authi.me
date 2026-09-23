@@ -8,6 +8,7 @@ namespace Authi.App.Logic.Services
 
         public IApiClient ApiClient => ServiceProvider.Get<IApiClient>();
         public IBinarySerializer BinarySerializer => ServiceProvider.Get<IBinarySerializer>();
+        public IBiometrics Biometrics => ServiceProvider.Get<IBiometrics>();
         public IClipboard Clipboard => ServiceProvider.Get<IClipboard>();
         public IClock Clock => ServiceProvider.Get<IClock>();
         public ICloudCredentialStorage CloudCredentialStorage => ServiceProvider.Get<ICloudCredentialStorage>();

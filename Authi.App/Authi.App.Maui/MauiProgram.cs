@@ -1,5 +1,6 @@
 ﻿using Camera.MAUI;
 using CommunityToolkit.Maui;
+using Maui.Biometric;
 using MaterialColorUtilities.Maui;
 using Microsoft.Maui.Controls.Hosting;
 using Microsoft.Maui.Hosting;
@@ -19,6 +20,7 @@ namespace Authi.App.Maui
                 .UseMauiCommunityToolkit()
                 .UseSkiaSharp()
                 .UseMauiCameraView()
+                .UseBiometricAuthentication()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("MajorMonoDisplay.ttf", "MajorMonoDisplay");

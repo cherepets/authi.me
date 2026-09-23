@@ -12,7 +12,7 @@
 		<ApplicationTitle>Authi.me</ApplicationTitle>
 		<ApplicationId>me.cherepets.authi.app</ApplicationId>
 		<ApplicationDisplayVersion>1.4.2</ApplicationDisplayVersion>
-		<ApplicationVersion>16</ApplicationVersion>
+		<ApplicationVersion>17</ApplicationVersion>
 		<WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
 		<WindowsPackageType>MSIX</WindowsPackageType>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">15.0</SupportedOSPlatformVersion>
@@ -56,6 +56,7 @@
 		<PackageReference Include="MaterialColorUtilities.Maui" Version="0.3.0" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="10.0.70" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="10.0.70" />
+		<PackageReference Include="Oscore.Maui.Biometric" Version="2.5.1" />
 		<PackageReference Include="SkiaSharp.Views.Maui.Controls" Version="3.119.4" />
 	</ItemGroup>
 	<ItemGroup>

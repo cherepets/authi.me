@@ -23,6 +23,8 @@ namespace Authi.App.WinUI
 
         private readonly TaskCompletionSource _launchTcs;
 
+        private long? _deactivatedTimestamp;
+
         public App()
         {
             ServiceLocator.Init(
@@ -59,30 +61,72 @@ namespace Authi.App.WinUI
             }
         }
 
-        protected override void OnLaunched(LaunchActivatedEventArgs args)
+        protected override async void OnLaunched(LaunchActivatedEventArgs args)
         {
-            _mainWindow = new WindowEx
+            if (!await TryUnlockAsync())
+            {
+                Exit();
+                return;
+            }
+            ShowMainWindow();
+            _launchTcs.SetResult();
+        }
+
+        private static async Task<bool> TryUnlockAsync()
+        {
+            var isBiometricsEnabled = await ServiceProvider.Current.Get<ISettings>().IsBiometricsEnabled.GetAsync() ?? false;
+            return !isBiometricsEnabled || await ServiceProvider.Current.Get<IBiometrics>().VerifyAsync();
+        }
+
+        private void ShowMainWindow(WindowEx? previous = null)
+        {
+            var window = new WindowEx
             {
                 WindowContent = new MainPage(),
-                Width = 520,
-                Height = 640,
+                Width = previous?.Width ?? 520,
+                Height = previous?.Height ?? 640,
                 MinWidth = 340,
                 MinHeight = 340,
                 ExtendsContentIntoTitleBar = true,
                 SystemBackdrop = new MicaBackdrop(),
                 Title = L10n.Generic.AppName
             }.WithIcon("ms-appx:///Assets/AppIcon.ico");
-            _mainWindow.Activated += OnWindowActivated;
-            _mainWindow.Activate();
-            _launchTcs.SetResult();
+            _mainWindow = window;
+            window.Activated += OnWindowActivated;
+            window.Activate();
+            if (previous != null)
+            {
+                window.AppWindow.Move(previous.AppWindow.Position);
+            }
         }
 
-        private void OnWindowActivated(object sender, WindowActivatedEventArgs args)
+        private async void OnWindowActivated(object sender, WindowActivatedEventArgs args)
         {
-            if (args.WindowActivationState != WindowActivationState.Deactivated)
+            if (args.WindowActivationState == WindowActivationState.Deactivated)
             {
-                ServiceProvider.Current.Get<IMessenger>().SyncNow.Publish(this);
+                _deactivatedTimestamp = ServiceProvider.Current.Get<IClock>().Timestamp;
+                return;
             }
+
+            var deactivatedTimestamp = _deactivatedTimestamp;
+            _deactivatedTimestamp = null;
+
+            if (deactivatedTimestamp is long timestamp &&
+                !ServiceProvider.Current.Get<IClock>().IsRecent(timestamp, Config.LockTimeoutMs))
+            {
+                var lockedWindow = _mainWindow!;
+                lockedWindow.Activated -= OnWindowActivated;
+                lockedWindow.Hide();
+                if (!await TryUnlockAsync())
+                {
+                    Exit();
+                    return;
+                }
+                ShowMainWindow(lockedWindow);
+                lockedWindow.Close();
+            }
+
+            ServiceProvider.Current.Get<IMessenger>().SyncNow.Publish(this);
         }
     }
 }

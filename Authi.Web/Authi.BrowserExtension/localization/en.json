@@ -60,6 +60,7 @@
   "Settings.HostingSettingsLearnMoreUrl": "https://github.com/cherepets/authi.me/wiki/Selfhosting-guide",
   "Settings.HostingSettingsLearnMoreTitle": "Learn More",
   "Settings.General": "General",
+  "Settings.GeneralBiometrics": "Biometric unlock",
   "Settings.GeneralHideCodes": "Hide codes",
   "Settings.GetApp": "Get app",
   "Settings.GetAppPrefix": "Get ",
