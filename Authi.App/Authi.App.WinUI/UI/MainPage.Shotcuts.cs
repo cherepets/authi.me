@@ -1,25 +1,32 @@
-﻿using Microsoft.UI.Dispatching;
+﻿#if !DEBUG
+using Microsoft.UI.Dispatching;
 using SharpHook;
 using SharpHook.Data;
+#endif
 
 namespace Authi.App.WinUI.UI
 {
     public partial class MainPage
     {
+#if !DEBUG
         private SimpleGlobalHook? _hook;
         private bool _isMetaPressed;
+#endif
 
         private void ShortcutsEnable()
         {
+#if !DEBUG
             _hook = new SimpleGlobalHook();
             _hook.MousePressed += OnMousePressed;
             _hook.KeyPressed += OnKeyPressed;
             _hook.KeyReleased += OnKeyReleased;
             _hook.RunAsync();
+#endif
         }
 
         private void ShortcutsDisable()
         {
+#if !DEBUG
             if (_hook != null)
             {
                 _hook.MousePressed -= OnMousePressed;
@@ -28,8 +35,10 @@ namespace Authi.App.WinUI.UI
                 _hook.Dispose();
                 _hook = null;
             }
+#endif
         }
 
+#if !DEBUG
         private void OnMousePressed(object? sender, MouseHookEventArgs e)
         {
             if (e.Data.Button == MouseButton.Button4)
@@ -58,5 +67,6 @@ namespace Authi.App.WinUI.UI
                 _isMetaPressed = false;
             }
         }
+#endif
     }
 }
