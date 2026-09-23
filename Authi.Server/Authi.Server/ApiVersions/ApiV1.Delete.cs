@@ -34,12 +34,6 @@ namespace Authi.Server.ApiVersions
                 return error;
             }
 
-            var data = await db.Data.ReadAsync(client.DataId);
-            if (data == null)
-            {
-                return new ErrorResponse<DeleteResponse>(ErrorMessages.CantFindData);
-            }
-
             var responsePayload = new DeleteResponse.Payload
             {
                 Timestamp = Services.Clock.Timestamp
@@ -49,7 +43,6 @@ namespace Authi.Server.ApiVersions
                 keyPair);
 
             await db.Client.DeleteAsync(client);
-            await db.Data.DeleteAsync(data);
             return new DeleteResponse
             {
                 Body = responseBody

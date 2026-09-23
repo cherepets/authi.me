@@ -5,7 +5,7 @@ using System.Diagnostics;
 namespace Authi.App.Logic.Services
 {
     [Service]
-    internal interface ILogger
+    public interface ILogger
     {
         void Write(string message);
         void Write(Exception exception) => Write(exception.ToString());

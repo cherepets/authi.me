@@ -25,6 +25,18 @@ public partial class apiClient
     }
 
     [JSExport]
+    public static async Task<string> delete(string? serverUrl, string clientIdString, string syncPrivateKeyBase64, string syncPublicKeyBase64)
+    {
+        using var client = new Client(serverUrl, clock, crypto);
+        var clientId = Guid.Parse(clientIdString);
+        var syncKeyPair = new X25519KeyPair(
+            new X25519PrivateKey(syncPrivateKeyBase64.ToBase64Bytes()),
+            new X25519PublicKey(syncPublicKeyBase64.ToBase64Bytes()));
+        var result = await client.DeleteAsync(clientId, syncKeyPair);
+        return result.ToJson();
+    }
+
+    [JSExport]
     public static async Task<string> read(string? serverUrl, string clientIdString, string versionString, string dataKeyBase64, string syncPrivateKeyBase64, string syncPublicKeyBase64)
     {
         using var client = new Client(serverUrl, clock, crypto);

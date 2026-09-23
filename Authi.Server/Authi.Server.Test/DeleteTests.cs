@@ -80,7 +80,8 @@ namespace Authi.Server.Test
             Assert.AreEqual(255, responsePayload.Timestamp);
 
             Assert.IsEmpty(ClientRepository.AsDictionary());
-            Assert.IsEmpty(DataRepository.AsDictionary());
+            Assert.HasCount(1, DataRepository.AsDictionary());
+            Assert.IsNotNull(await DataRepository.ReadAsync(dataId));
         }
 
         [TestMethod]

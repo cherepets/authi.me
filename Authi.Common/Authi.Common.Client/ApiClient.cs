@@ -193,6 +193,30 @@ namespace Authi.Common.Client
             };
         }
 
+        public async Task<DeleteResult> DeleteAsync(Guid clientId, X25519KeyPair syncKeyPair)
+        {
+            var requestPayload = new DeleteRequest.Payload
+            {
+                Timestamp = clock.Timestamp
+            };
+            var requestBody = crypto.Encrypt(
+                requestPayload.ToJson().ToUtfBytes(),
+                syncKeyPair);
+            var request = new DeleteRequest
+            {
+                ClientId = clientId,
+                Body = requestBody
+            };
+
+            var response = await _api.DeleteAsync(request);
+
+            var responseJson = crypto.Decrypt(response.Body, syncKeyPair).ToUtfString();
+            var responsePayload = responseJson.FromJson<DeleteResponse.Payload>();
+            VerifyPayload(responsePayload);
+
+            return new DeleteResult();
+        }
+
         private void VerifyPayload([NotNull] PayloadBase? payload)
         {
             if (payload == null)

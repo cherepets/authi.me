@@ -17,6 +17,7 @@ namespace Authi.App.Logic.Services
         Task<PublishResult> PublishAsync(Guid clientId, X25519KeyPair syncKeyPair);
         Task<ReadResult> ReadAsync(Guid clientId, Guid version, AesKey dataKey, X25519KeyPair syncKeyPair);
         Task<WriteResult> WriteAsync(IReadOnlyCollection<CredentialDto> credentials, Guid clientId, AesKey dataKey, X25519KeyPair syncKeyPair);
+        Task<DeleteResult> DeleteAsync(Guid clientId, X25519KeyPair syncKeyPair);
     }
 
     internal class ApiClient : ServiceBase, IApiClient
@@ -43,6 +44,10 @@ namespace Authi.App.Logic.Services
             => Execute(client
                 => client.WriteAsync(credentials, clientId, dataKey, syncKeyPair));
 
+        public Task<DeleteResult> DeleteAsync(Guid clientId, X25519KeyPair syncKeyPair)
+            => Execute(client
+                => client.DeleteAsync(clientId, syncKeyPair));
+
         private async Task<T> Execute<T>(Func<Client, Task<T>> predicate)
         {
             var client = await GetClientAsync();
@@ -51,7 +56,11 @@ namespace Authi.App.Logic.Services
 
         private async ValueTask<Client> GetClientAsync()
         {
-            var serverUrl = await Services.Settings.ServerUrl.GetAsync() ?? Client.DefaultServerUrl;
+            var serverUrl = await Services.Settings.ServerUrl.GetAsync();
+            if (string.IsNullOrWhiteSpace(serverUrl))
+            {
+                serverUrl = Client.DefaultServerUrl;
+            }
             if (_client != null)
             {
                 if (_client.ServerUrl == serverUrl)

@@ -123,7 +123,22 @@ export class SettingsPage extends HTMLElement {
                 primaryButtonText: Localization.get('Generic.Yes'),
                 cancelButtonText: Localization.get('Generic.No'),
                 onPrimary: async () => {
-                    await Settings.setAsync(null);
+                    const settings = await Settings.getAsync();
+                    try {
+                        if (settings?.clientId && settings?.syncPrivateKey && settings?.syncPublicKey) {
+                            const wasm = await Wasm.initAsync();
+                            await wasm.apiClient.delete(
+                                settings.serverUrl,
+                                settings.clientId,
+                                settings.syncPrivateKey,
+                                settings.syncPublicKey);
+                        }
+                    }
+                    catch (error) {
+                        console.error('Failed to delete sync client from server:', error);
+                    }
+                    const { clientId, dataKey, syncPrivateKey, syncPublicKey, serverUrl, version, ...preferences } = settings ?? {};
+                    await Settings.setAsync(preferences);
                     await this.updateVisualState();
                 },
                 onCancel: () => {

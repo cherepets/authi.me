@@ -25,7 +25,6 @@ namespace Authi.Common.Client
             return Execute<ConsumeRequest, ConsumeResponse>("consume", request);
         }
 
-        // TODO: Why is it not used?
         public Task<DeleteResponse> DeleteAsync(DeleteRequest request)
         {
             return Execute<DeleteRequest, DeleteResponse>("delete", request);
