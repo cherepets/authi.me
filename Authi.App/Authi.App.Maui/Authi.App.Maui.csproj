@@ -11,8 +11,8 @@
 		<Nullable>enable</Nullable>
 		<ApplicationTitle>Authi.me</ApplicationTitle>
 		<ApplicationId>me.cherepets.authi.app</ApplicationId>
-		<ApplicationDisplayVersion>1.4.2</ApplicationDisplayVersion>
-		<ApplicationVersion>17</ApplicationVersion>
+		<ApplicationDisplayVersion>1.5.0</ApplicationDisplayVersion>
+		<ApplicationVersion>19</ApplicationVersion>
 		<WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
 		<WindowsPackageType>MSIX</WindowsPackageType>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">15.0</SupportedOSPlatformVersion>
@@ -28,6 +28,9 @@
 		<RunAOTCompilation>false</RunAOTCompilation>
 		<PublishTrimmed>false</PublishTrimmed>
 		<AndroidLinkMode>None</AndroidLinkMode>
+		<AndroidEnableProguard>true</AndroidEnableProguard>
+		<AndroidLinkTool>r8</AndroidLinkTool>
+		<AndroidCreateProguardMappingFile>true</AndroidCreateProguardMappingFile>
 		<AndroidKeyStore>true</AndroidKeyStore>
 		<AndroidSigningKeyStore>authi.keystore</AndroidSigningKeyStore>
 		<AndroidSigningKeyAlias>authi.alias</AndroidSigningKeyAlias>
@@ -35,9 +38,20 @@
 		<AndroidSigningStorePass>authi.pass</AndroidSigningStorePass>
 		<AndroidPackageFormat>aab</AndroidPackageFormat>
 	</PropertyGroup>
-	<ItemGroup>
-	  <None Remove="Linker.xml" />
-	</ItemGroup>
+<ItemGroup>
+    <None Remove="Linker.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProguardConfiguration Include="Proguard.txt" />
+  </ItemGroup>
+  <Target Name="EnableProguardObfuscation" BeforeTargets="_CalculateProguardConfigurationFiles">
+    <PropertyGroup>
+      <ProguardConfigFiles>$(IntermediateOutputPath)proguard\proguard_project_primary.cfg;$(IntermediateOutputPath)aapt_rules.txt</ProguardConfigFiles>
+    </PropertyGroup>
+    <ItemGroup>
+      <_ProguardConfiguration Include="$(MSBuildProjectDirectory)\Proguard.txt" />
+    </ItemGroup>
+  </Target>
 	<ItemGroup>
 	  <LinkDescription Include="Linker.xml" />
 	</ItemGroup>

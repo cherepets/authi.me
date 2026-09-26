@@ -1,0 +1,118 @@
+-dontoptimize
+
+-keepattributes AnnotationDefault,
+                EnclosingMethod,
+                InnerClasses,
+                RuntimeVisibleAnnotations,
+                RuntimeVisibleParameterAnnotations,
+                RuntimeVisibleTypeAnnotations,
+                Signature
+
+-keep public class com.google.vending.licensing.ILicensingService
+-keep public class com.android.vending.licensing.ILicensingService
+-keep public class com.google.android.vending.licensing.ILicensingService
+-dontnote com.android.vending.licensing.ILicensingService
+-dontnote com.google.vending.licensing.ILicensingService
+-dontnote com.google.android.vending.licensing.ILicensingService
+
+-keepclasseswithmembernames,includedescriptorclasses class * {
+    native <methods>;
+}
+
+-keepclassmembers public class * extends android.view.View {
+    void set*(***);
+    *** get*();
+}
+
+-keepclassmembers class * extends android.app.Activity {
+    public void *(android.view.View);
+}
+
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
+
+-keepclassmembers class * implements android.os.Parcelable {
+    public static final ** CREATOR;
+}
+
+-keepclassmembers class * {
+    @android.webkit.JavascriptInterface <methods>;
+}
+
+-dontnote android.support.**
+-dontnote androidx.**
+-dontwarn android.support.**
+-dontwarn androidx.**
+
+-keep class android.support.annotation.Keep
+
+-keep @android.support.annotation.Keep class * {*;}
+
+-keepclasseswithmembers class * {
+    @android.support.annotation.Keep <methods>;
+}
+
+-keepclasseswithmembers class * {
+    @android.support.annotation.Keep <fields>;
+}
+
+-keepclasseswithmembers class * {
+    @android.support.annotation.Keep <init>(...);
+}
+
+-dontnote org.apache.http.**
+-dontnote android.net.http.**
+
+-dontnote java.lang.invoke.**
+
+-keep class android.support.multidex.MultiDexApplication { <init>(); }
+-keep class net.dot.jni.** { *; <init>(); }
+-keep class mono.MonoRuntimeProvider* { *; <init>(...); }
+-keep class mono.MonoPackageManager { *; <init>(...); }
+-keep class mono.MonoPackageManager_Resources { *; <init>(...); }
+-keep class mono.android.** { *; <init>(...); }
+-keep class mono.java.** { *; <init>(...); }
+-keep class mono.javax.** { *; <init>(...); }
+-keep class net.dot.jni.ManagedPeer { *; <init>(...); }
+-keep class xamarin.android.net.ServerCertificateCustomValidator_TrustManager { *; <init>(...); }
+-keep class xamarin.android.net.ServerCertificateCustomValidator_TrustManager_FakeSSLSession { *; <init>(...); }
+-keep class xamarin.android.net.ServerCertificateCustomValidator_AlwaysAcceptingHostnameVerifier { *; <init>(...); }
+
+-keep class android.runtime.** { <init>(...); }
+-keep class assembly_mono_android.android.runtime.** { <init>(...); }
+-keep class md52ce486a14f4bcd95899665e9d932190b.** { *; <init>(...); }
+-keepclassmembers class md52ce486a14f4bcd95899665e9d932190b.** { *; <init>(...); }
+
+-keep class net.dot.android.crypto.** { *; <init>(...); }
+
+-keepclassmembers class * extends android.view.View {
+   *** set*(...);
+}
+
+-keepclassmembers class * extends android.view.View {
+   <init>(android.content.Context,android.util.AttributeSet);
+   <init>(android.content.Context,android.util.AttributeSet,int);
+}
+-ignorewarnings
+-keepattributes SourceFile
+-keepattributes LineNumberTable
+
+-dontwarn androidx.window.**
+-dontwarn androidx.window.extensions.**
+-dontwarn androidx.window.sidecar.**
+-dontwarn com.google.errorprone.annotations.**
+-dontwarn javax.lang.model.**
+-dontwarn org.checkerframework.**
+-dontwarn org.jetbrains.annotations.**
+
+-keep class androidx.startup.InitializationProvider { *; }
+-keep class * extends androidx.startup.Initializer { *; }
+-keep class crc*.** { *; }
+-keep class com.microsoft.maui.** { *; }
+-keep class net.dot.** { *; }
+-keep class androidx.** { *; }
+-keep class com.google.android.material.** { *; }
+
+-printmapping "D:\Personal\Authi\Authi.App\Authi.App.Maui\bin\Release\net10.0-android\mapping.txt"

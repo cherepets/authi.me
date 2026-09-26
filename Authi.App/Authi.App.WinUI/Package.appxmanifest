@@ -10,7 +10,7 @@
   <Identity
     Name="5864cherepets.Authi"
     Publisher="CN=3D126052-B82F-49A4-9FBC-A221882D2A9E"
-    Version="1.4.2.0" />
+    Version="1.5.0.0" />
 
   <mp:PhoneIdentity PhoneProductId="21fa5505-4253-4944-8ef2-d75baa19dd1e" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
