@@ -6,12 +6,12 @@
   xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
   IgnorableNamespaces="uap rescap">
 
-	<Identity Name="5864cherepets.Authi" Publisher="CN=3D126052-B82F-49A4-9FBC-A221882D2A9E" Version="1.0.9.0" />
+	<Identity Name="5864cherepets.Authi.Maui" Publisher="CN=3D126052-B82F-49A4-9FBC-A221882D2A9E" Version="1.0.9.0" />
 
-	<mp:PhoneIdentity PhoneProductId="385c80da-5320-4ed2-9667-8279a460cfde" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+	<mp:PhoneIdentity PhoneProductId="b7e3c2a1-4f6d-4e8a-9c3b-2d5f7a1e9c40" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
 	<Properties>
-		<DisplayName>Authi</DisplayName>
+		<DisplayName>Authi (MAUI)</DisplayName>
 		<PublisherDisplayName>cherepets</PublisherDisplayName>
 		<Logo>$placeholder$.png</Logo>
 	</Properties>
@@ -28,7 +28,7 @@
 	<Applications>
 		<Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="windows.partialTrustApplication">
 			<uap:VisualElements
-			  DisplayName="Authi"
+			  DisplayName="Authi (MAUI)"
 			  Description="$placeholder$"
 			  Square150x150Logo="$placeholder$.png"
 			  Square44x44Logo="$placeholder$.png"
