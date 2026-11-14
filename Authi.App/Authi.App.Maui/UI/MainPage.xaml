@@ -35,10 +35,16 @@
                 StrokeThickness="0">
                 <Grid x:Name="ContentFrameGrid" SafeAreaEdges="None" />
             </Border>
-            <ui:OnboardingView x:Name="Onboarding" Grid.RowSpan="2" />
+            <ui:OnboardingView
+                x:Name="Onboarding"
+                Grid.RowSpan="2"
+                CascadeInputTransparent="False"
+                InputTransparent="True" />
             <Grid
                 x:Name="AddCredentialsContainer"
-                Grid.Row="1">
+                Grid.Row="1"
+                CascadeInputTransparent="False"
+                InputTransparent="True">
                 <Button
                     x:Name="AddCredentialsButton"
                     Margin="24"
