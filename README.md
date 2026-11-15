@@ -74,6 +74,7 @@ The server again generates a key pair and the exchange keys similar to how it ha
 
 ## Built with
 
+* [AotServiceProvider](https://github.com/cherepets/AotServiceProvider) - Automatically discover and register services at compile time.
 * [BouncyCastle.Cryptography](https://github.com/bcgit/bc-csharp) - The Bouncy Castle Cryptography Library For .NET.
 * [Camera.MAUI](https://github.com/hjam40/Camera.MAUI) - A Camera View control and a Barcode Endode/Decode control for .NET MAUI.
 * [CommunityToolkit.Maui](https://github.com/CommunityToolkit/Maui) - .NET MAUI Community Toolkit.
