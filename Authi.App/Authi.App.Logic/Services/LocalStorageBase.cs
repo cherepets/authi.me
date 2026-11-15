@@ -1,19 +1,18 @@
-﻿using Authi.Common.Services;
-using LiteDB;
+﻿using LiteDB;
 using System;
 using System.IO;
 using System.Threading.Tasks;
 
 namespace Authi.App.Logic.Services
 {
-    internal abstract class LocalStorageBase : ServiceBase
+    public abstract class LocalStorageBase : ServiceBase
     {
         private static readonly object _transactionLock = new();
 
         protected static LiteDatabase Db => _db.Value;
         private static readonly Lazy<LiteDatabase> _db = new(() => new LiteDatabase(
             Path.Combine(
-                ServiceProvider.Current.Get<IFileSystem>().AppDataDirectory,
+                AotServiceProvider.Services.Current.Get<IFileSystem>().AppDataDirectory,
                 nameof(Authi))));
 
         #region Transactions

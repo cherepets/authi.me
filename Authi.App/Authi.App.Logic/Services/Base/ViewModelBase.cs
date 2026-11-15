@@ -1,9 +1,9 @@
-﻿using Authi.App.Logic.Services;
+﻿using AotServiceProvider.Abstractions;
+using Authi.App.Logic.Services;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using Authi.Common.Services;
 
 namespace Authi.App.Logic.ViewModels
 {
@@ -39,7 +39,7 @@ namespace Authi.App.Logic.ViewModels
 
         #region IServiceConsumer
         internal virtual IServiceConsumer Services => this;
-        IServiceProvider IServiceConsumer.ServiceProvider => ServiceProvider.Current;
+        IServices IServiceConsumer.ServiceProvider => AotServiceProvider.Services.Current;
         #endregion
     }
 }

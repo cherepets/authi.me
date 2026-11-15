@@ -1,6 +1,6 @@
-﻿using Authi.App.Logic.Data;
+﻿using AotServiceProvider;
+using Authi.App.Logic.Data;
 using Authi.Common.Extensions;
-using Authi.Common.Services;
 using LiteDB;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -16,7 +16,7 @@ namespace Authi.App.Logic.Services
         Task<IReadOnlyCollection<Preference>> GetAllAsync();
     }
 
-    internal class LocalPreferenceStorage : LocalStorageBase, ILocalPreferenceStorage
+    public class LocalPreferenceStorage : LocalStorageBase, ILocalPreferenceStorage
     {
         private readonly ILiteCollection<Preference> _collection;
 

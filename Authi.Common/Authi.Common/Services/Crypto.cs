@@ -1,4 +1,5 @@
-﻿using Authi.Common.Extensions;
+﻿using AotServiceProvider;
+using Authi.Common.Extensions;
 using Org.BouncyCastle.Crypto.Agreement;
 using Org.BouncyCastle.Crypto.Engines;
 using Org.BouncyCastle.Crypto.Generators;

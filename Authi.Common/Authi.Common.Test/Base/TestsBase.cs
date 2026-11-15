@@ -1,13 +1,19 @@
-﻿using Authi.Common.Services;
-using Authi.Common.Test.Mocks;
+﻿using AotServiceProvider;
+using AotServiceProvider.Abstractions;
+using AotServiceProvider.Testing;
+using Authi.Common.Services;
+
+[assembly: GenerateServiceConfig(
+    typeof(Clock)              // Authi.Common
+)]
 
 namespace Authi.Common.Test
 {
     public class TestsBase
     {
-        private MockServiceProvider? _servicesMock;
+        private MockServices? _servicesMock;
 
-        public MockServiceProvider ServicesMock
+        public MockServices ServicesMock
         {
             get => _servicesMock!;
             protected set => _servicesMock = value;
@@ -16,19 +22,15 @@ namespace Authi.Common.Test
         [TestInitialize]
         public virtual void Initialize()
         {
-            InitServiceProvider();
-            InitServiceLocator();
+            ServicesMock = new MockServices(CreateServiceConfig());
+            AotServiceProvider.Services.Hide(ServicesMock);
+            InitServices();
         }
 
-        protected virtual void InitServiceLocator()
-        {
-            ServiceLocator.Init(
-                typeof(ServiceLocator).Assembly);   // Authi.Common
-        }
+        protected virtual IConfig CreateServiceConfig() => new ServiceConfig();
 
-        protected virtual void InitServiceProvider()
+        protected virtual void InitServices()
         {
-            ServicesMock = new MockServiceProvider();
         }
 
         [TestCleanup]

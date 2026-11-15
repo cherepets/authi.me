@@ -1,4 +1,4 @@
-﻿using Authi.Common.Services;
+﻿using AotServiceProvider;
 using System.Threading.Tasks;
 
 namespace Authi.App.Logic.Services

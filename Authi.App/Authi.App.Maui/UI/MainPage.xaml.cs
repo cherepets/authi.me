@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Authi.App.Maui.UI
 {
-    public partial class MainPage : IAdaptiveView, IDialogManager
+    public partial class MainPage : IAdaptiveView, IDialogManagerView
     {
         private const double SizeTrigger = 640;
 

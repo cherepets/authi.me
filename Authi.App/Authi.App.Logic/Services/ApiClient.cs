@@ -1,4 +1,5 @@
-﻿using Authi.Common.Client;
+﻿using AotServiceProvider;
+using Authi.Common.Client;
 using Authi.Common.Client.Results;
 using Authi.Common.Services;
 using System;
@@ -20,7 +21,7 @@ namespace Authi.App.Logic.Services
         Task<DeleteResult> DeleteAsync(Guid clientId, X25519KeyPair syncKeyPair);
     }
 
-    internal class ApiClient : ServiceBase, IApiClient
+    public class ApiClient : ServiceBase, IApiClient
     {
         private Client? _client;
 

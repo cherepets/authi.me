@@ -1,4 +1,4 @@
-﻿using Authi.Common.Services;
+﻿using AotServiceProvider;
 using System;
 using System.Threading.Tasks;
 
@@ -10,16 +10,21 @@ namespace Authi.App.Logic.Services
         Task ShowDialogAsync(string title, string message, string? primaryButtonText = null, string? cancelButtonText = null, Action? onPrimary = null, Action? onCancel = null);
     }
 
+    public interface IDialogManagerView
+    {
+        Task ShowDialogAsync(string title, string message, string? primaryButtonText = null, string? cancelButtonText = null, Action? onPrimary = null, Action? onCancel = null);
+    }
+
     public class DialogManager : IDialogManager
     {
-        private static IDialogManager? _impl;
+        private static IDialogManagerView? _view;
 
         public Task ShowDialogAsync(string title, string message, string? primaryButtonText = null, string? cancelButtonText = null, Action? onPrimary = null, Action? onCancel = null)
-            => _impl?.ShowDialogAsync(title, message, primaryButtonText, cancelButtonText, onPrimary, onCancel) ?? Task.CompletedTask;
+            => _view?.ShowDialogAsync(title, message, primaryButtonText, cancelButtonText, onPrimary, onCancel) ?? Task.CompletedTask;
 
-        public static void Register(IDialogManager impl)
+        public static void Register(IDialogManagerView view)
         {
-            _impl = impl;
+            _view = view;
         }
     }
 }

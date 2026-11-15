@@ -1,4 +1,4 @@
-﻿using Authi.Common.Services;
+﻿using AotServiceProvider;
 using Authi.Server.Extensions;
 using System;
 using System.Collections.Concurrent;

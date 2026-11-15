@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Authi.App.WinUI.UI
 {
-    public sealed partial class MainPage : IAdaptiveView, IDialogManager
+    public sealed partial class MainPage : IAdaptiveView, IDialogManagerView
     {
         private const double SizeTrigger = 720;
 

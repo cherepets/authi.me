@@ -1,5 +1,4 @@
-﻿using Authi.Common.Services;
-using Authi.Server.Database;
+﻿using Authi.Server.Database;
 using Authi.Server.Database.Models;
 using Authi.Server.Database.Repositories;
 using System;
@@ -14,7 +13,7 @@ namespace Authi.Server.Services
 
         public Task CreateAsync(Client client)
         {
-            if (ServiceProvider.Current.Get<IDatabase>().CreateScope().Data.ReadAsync(client.DataId) is null)
+            if (AotServiceProvider.Services.Current.Get<IDatabase>().CreateScope().Data.ReadAsync(client.DataId) is null)
             {
                 throw new Exception($"Data with id {client.DataId} not found.");
             }

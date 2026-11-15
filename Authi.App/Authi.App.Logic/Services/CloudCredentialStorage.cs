@@ -1,4 +1,5 @@
-﻿using Authi.App.Logic.Data;
+﻿using AotServiceProvider;
+using Authi.App.Logic.Data;
 using Authi.App.Logic.Exceptions;
 using Authi.Common.Client;
 using Authi.Common.Extensions;
@@ -18,7 +19,7 @@ namespace Authi.App.Logic.Services
         Task CommitAsync();
     }
 
-    internal class CloudCredentialStorage : ServiceBase, ICloudCredentialStorage
+    public class CloudCredentialStorage : ServiceBase, ICloudCredentialStorage
     {
         private Dictionary<Guid, Credential> _credentials = [];
         private bool _hasChanges;

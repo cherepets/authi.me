@@ -1,5 +1,5 @@
-﻿using Authi.App.Logic.Extensions;
-using Authi.Common.Services;
+﻿using AotServiceProvider;
+using Authi.App.Logic.Extensions;
 using OtpNet;
 using System;
 
@@ -12,7 +12,7 @@ namespace Authi.App.Logic.Services
         int GetRemainingMs();
     }
 
-    internal class TotpGenerator : ServiceBase, ITotpGenerator
+    public class TotpGenerator : ServiceBase, ITotpGenerator
     {
         public bool TryCalculateTotp(string secret, out string? totp)
         {

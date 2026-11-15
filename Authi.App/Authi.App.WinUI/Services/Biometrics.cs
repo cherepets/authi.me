@@ -1,5 +1,4 @@
 ﻿using Authi.App.Logic.Services;
-using Authi.Common.Services;
 using System;
 using System.Threading.Tasks;
 using Windows.Security.Credentials.UI;
@@ -24,7 +23,7 @@ namespace Authi.App.WinUI.Services
             }
             catch (Exception exception)
             {
-                ServiceProvider.Current.Get<ILogger>().Write(exception);
+                AotServiceProvider.Services.Current.Get<ILogger>().Write(exception);
                 return false;
             }
         }

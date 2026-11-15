@@ -45,7 +45,7 @@ namespace Authi.Server.Database
 
         public async Task CleanUpAsync()
         {
-            var clock = ServiceProvider.Current.Get<IClock>();
+            var clock = AotServiceProvider.Services.Current.Get<IClock>();
             var syncTimeStamp = clock.UniversalTime.AddDays(-1).ToUnixTimeMilliseconds();
             var dataTimeStamp = clock.UniversalTime.AddDays(-365).ToUnixTimeMilliseconds();
 
@@ -66,10 +66,10 @@ namespace Authi.Server.Database
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            var healthMonitor = ServiceProvider.Current.Get<IAppHealthMonitor>();
+            var healthMonitor = AotServiceProvider.Services.Current.Get<IAppHealthMonitor>();
             optionsBuilder
                 .UseMySql(
-                    connectionString: ServiceProvider.Current.Get<IConfiguration>().ConnectionString,
+                    connectionString: AotServiceProvider.Services.Current.Get<IConfiguration>().ConnectionString,
                     serverVersion: new MySqlServerVersion(new Version(10, 0)))
                 .OnError(healthMonitor.ReportEvent);
         }

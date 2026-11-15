@@ -65,6 +65,7 @@
 		<MauiFont Include="Resources\Fonts\NotoSans.ttf" Alias="DefaultFont" />
 	</ItemGroup>
 	<ItemGroup>
+		<PackageReference Include="AotServiceProvider" Version="1.0.0" />
 		<PackageReference Include="Camera.MAUI.ZXing" Version="1.0.0" />
 		<PackageReference Include="CommunityToolkit.Maui" Version="14.2.0" />
 		<PackageReference Include="MaterialColorUtilities.Maui" Version="0.3.0" />

@@ -1,8 +1,8 @@
-﻿using Authi.App.Logic.Data;
+﻿using AotServiceProvider;
+using Authi.App.Logic.Data;
 using Authi.App.Logic.Services;
 using Authi.Common.Client.Exceptions;
 using Authi.Common.Extensions;
-using Authi.Common.Services;
 using LiteDB;
 using System;
 using System.Collections.Generic;
@@ -35,7 +35,7 @@ namespace Authi.App.Test.Mocks
 
         public async Task<bool> IsConnectedAsync()
         {
-            var clientId = await ServiceProvider.Current.Get<ISettings>().ClientId.GetAsync();
+            var clientId = await Services.Current.Get<ISettings>().ClientId.GetAsync();
             return clientId != null;
         }
 

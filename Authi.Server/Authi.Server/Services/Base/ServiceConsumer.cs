@@ -1,11 +1,12 @@
-﻿using Authi.Common.Services;
+﻿using AotServiceProvider.Abstractions;
+using Authi.Common.Services;
 using Authi.Server.Database;
 
 namespace Authi.Server.Services
 {
     internal interface IServiceConsumer
     {
-        IServiceProvider ServiceProvider { get; }
+        IServices ServiceProvider { get; }
 
         public IAppHealthMonitor AppHealthMonitor => ServiceProvider.Get<IAppHealthMonitor>();
         public IConfiguration Configuration => ServiceProvider.Get<IConfiguration>();

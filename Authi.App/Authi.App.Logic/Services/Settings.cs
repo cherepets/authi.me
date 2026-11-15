@@ -1,5 +1,5 @@
-﻿using Authi.Common.Extensions;
-using Authi.Common.Services;
+﻿using AotServiceProvider;
+using Authi.Common.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -22,7 +22,7 @@ namespace Authi.App.Logic.Services
         IAsyncValueSetting<bool> IsHideCodesEnabled { get; }
     }
 
-    internal class Settings : ServiceBase, ISettings
+    public class Settings : ServiceBase, ISettings
     {
         public IAsyncValueSetting<Guid> ClientId { get; } = new AsyncValueSetting<Guid>(_inMemoryStorage);
         public IAsyncValueSetting<Guid> Version { get; } = new AsyncValueSetting<Guid>(_inMemoryStorage);

@@ -1,10 +1,11 @@
-﻿using Authi.Common.Services;
+﻿using AotServiceProvider.Abstractions;
+using Authi.Common.Services;
 
 namespace Authi.App.Logic.Services
 {
     internal interface IServiceConsumer
     {
-        IServiceProvider ServiceProvider { get; }
+        IServices ServiceProvider { get; }
 
         public IApiClient ApiClient => ServiceProvider.Get<IApiClient>();
         public IBinarySerializer BinarySerializer => ServiceProvider.Get<IBinarySerializer>();

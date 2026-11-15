@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AotServiceProvider;
+using System;
 
 namespace Authi.Common.Services
 {

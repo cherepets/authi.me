@@ -10,6 +10,10 @@ namespace Authi.App.Test.Mocks
 {
     internal class MockRemovalStorage(IEnumerable<Removal> _removalItems) : ILocalRemovalStorage
     {
+        public MockRemovalStorage() : this([])
+        {
+        }
+
         private readonly List<Removal> _removalList = [.. _removalItems ?? []];
 
         public Task InsertAsync(Removal removal)

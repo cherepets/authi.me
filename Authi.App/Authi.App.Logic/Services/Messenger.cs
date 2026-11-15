@@ -1,5 +1,5 @@
-﻿using Authi.App.Logic.ViewModels;
-using Authi.Common.Services;
+﻿using AotServiceProvider;
+using Authi.App.Logic.ViewModels;
 using System;
 
 namespace Authi.App.Logic.Services

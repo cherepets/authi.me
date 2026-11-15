@@ -1,5 +1,5 @@
-﻿using Authi.Common.Extensions;
-using Authi.Common.Services;
+﻿using AotServiceProvider;
+using Authi.Common.Extensions;
 using Authi.App.Logic.Data;
 using LiteDB;
 using System.Collections.Generic;
@@ -12,7 +12,7 @@ namespace Authi.App.Logic.Services
     {
     }
 
-    internal class LocalCredentialStorage : LocalStorageBase, ILocalCredentialStorage
+    public class LocalCredentialStorage : LocalStorageBase, ILocalCredentialStorage
     {
         private readonly ILiteCollection<Credential> _collection;
 

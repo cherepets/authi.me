@@ -1,5 +1,4 @@
 ﻿using Authi.App.Logic.Services;
-using Authi.Common.Services;
 using Maui.Biometric;
 using System;
 using System.Threading.Tasks;
@@ -21,7 +20,7 @@ namespace Authi.App.Maui.Services
             }
             catch (Exception exception)
             {
-                ServiceProvider.Current.Get<ILogger>().Write(exception);
+                AotServiceProvider.Services.Current.Get<ILogger>().Write(exception);
                 return false;
             }
         }

@@ -7,6 +7,10 @@ namespace Authi.App.Test.Mocks
 {
     internal class MockCrypto(Dictionary<string, string> encrypt) : ICrypto
     {
+        public MockCrypto() : this([])
+        {
+        }
+
         private readonly Dictionary<string, string> _encrypt = encrypt;
         private readonly Dictionary<string, string> _decrypt = encrypt
             .ToDictionary(

@@ -1,4 +1,4 @@
-﻿using Authi.Common.Services;
+﻿using AotServiceProvider;
 using System;
 using System.Threading.Tasks;
 
@@ -21,7 +21,7 @@ namespace Authi.Server.Database
 
         public async Task<long> GetSizeAsync()
         {
-            var configuration = ServiceProvider.Current.Get<Services.IConfiguration>();
+            var configuration = AotServiceProvider.Services.Current.Get<Services.IConfiguration>();
             await using var connection = new MySqlConnector.MySqlConnection(configuration.ConnectionString);
             await connection.OpenAsync();
 

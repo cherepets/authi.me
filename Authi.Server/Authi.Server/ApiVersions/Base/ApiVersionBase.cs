@@ -1,4 +1,4 @@
-﻿using Authi.Common.Services;
+﻿using AotServiceProvider.Abstractions;
 using Authi.Server.Services;
 using Microsoft.AspNetCore.Routing;
 
@@ -10,7 +10,7 @@ namespace Authi.Server.ApiVersions
 
         #region IServiceConsumer
         internal virtual IServiceConsumer Services => this;
-        IServiceProvider IServiceConsumer.ServiceProvider => ServiceProvider.Current;
+        IServices IServiceConsumer.ServiceProvider => AotServiceProvider.Services.Current;
         #endregion
     }
 }

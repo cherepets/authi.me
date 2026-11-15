@@ -1,5 +1,7 @@
-﻿using Authi.App.Logic;
+﻿using AotServiceProvider;
+using Authi.App.Logic;
 using Authi.App.Logic.Services;
+using Authi.App.Maui;
 using Authi.App.Maui.Converters;
 using Authi.App.Maui.Extensions;
 using Authi.App.Maui.Styles;
@@ -10,6 +12,12 @@ using Microsoft.Maui;
 using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls;
 using System.Threading.Tasks;
+
+[assembly: GenerateServiceConfig(
+    typeof(Clock),             // Authi.Common
+    typeof(Config),            // Authi.App.Logic
+    typeof(AuthiApp)           // Authi.App
+)]
 
 namespace Authi.App.Maui
 {
@@ -41,10 +49,7 @@ namespace Authi.App.Maui
         {
             UserAppTheme = RequestedTheme == AppTheme.Dark ? AppTheme.Dark : AppTheme.Light;
 
-            ServiceLocator.Init(
-                typeof(ServiceLocator).Assembly,    // Authi.Common
-                typeof(Config).Assembly,            // Authi.App.Logic
-                typeof(AuthiApp).Assembly);         // Authi.App
+            AotServiceProvider.Services.Init(new ServiceConfig());
 
             Resources
                 // Colors
@@ -87,8 +92,8 @@ namespace Authi.App.Maui
                 return true;
             }
 
-            var isBiometricsEnabled = await ServiceProvider.Current.Get<ISettings>().IsBiometricsEnabled.GetAsync() ?? false;
-            _isUnlocked = !isBiometricsEnabled || await ServiceProvider.Current.Get<IBiometrics>().VerifyAsync();
+            var isBiometricsEnabled = await AotServiceProvider.Services.Current.Get<ISettings>().IsBiometricsEnabled.GetAsync() ?? false;
+            _isUnlocked = !isBiometricsEnabled || await AotServiceProvider.Services.Current.Get<IBiometrics>().VerifyAsync();
             return _isUnlocked;
         }
 
@@ -104,7 +109,7 @@ namespace Authi.App.Maui
 
         protected override void OnSleep()
         {
-            _deactivatedTimestamp = ServiceProvider.Current.Get<IClock>().Timestamp;
+            _deactivatedTimestamp = AotServiceProvider.Services.Current.Get<IClock>().Timestamp;
         }
 
         protected override void OnResume()
@@ -113,7 +118,7 @@ namespace Authi.App.Maui
             _deactivatedTimestamp = null;
 
             if (_isUnlocked && deactivatedTimestamp is long timestamp &&
-                !ServiceProvider.Current.Get<IClock>().IsRecent(timestamp, Config.LockTimeoutMs))
+                !AotServiceProvider.Services.Current.Get<IClock>().IsRecent(timestamp, Config.LockTimeoutMs))
             {
                 _isUnlocked = false;
                 (_shell?.CurrentPage as MainPage)?.ViewModel.Dispose();
@@ -121,12 +126,12 @@ namespace Authi.App.Maui
                 return;
             }
 
-            ServiceProvider.Current.Get<IMessenger>().SyncNow.Publish(this);
+            AotServiceProvider.Services.Current.Get<IMessenger>().SyncNow.Publish(this);
         }
 
         public void HandleDeeplink(string deeplink)
         {
-            ServiceProvider.Current.Get<IMessenger>().DeeplinkActivated.Publish(this, deeplink);
+            AotServiceProvider.Services.Current.Get<IMessenger>().DeeplinkActivated.Publish(this, deeplink);
         }
     }
 }

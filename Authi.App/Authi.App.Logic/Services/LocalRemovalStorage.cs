@@ -1,5 +1,5 @@
-﻿using Authi.Common.Extensions;
-using Authi.Common.Services;
+﻿using AotServiceProvider;
+using Authi.Common.Extensions;
 using Authi.App.Logic.Data;
 using LiteDB;
 using System.Collections.Generic;
@@ -15,7 +15,7 @@ namespace Authi.App.Logic.Services
         Task<IReadOnlyCollection<Removal>> GetAllAsync();
     }
 
-    internal class LocalRemovalStorage : LocalStorageBase, ILocalRemovalStorage
+    public class LocalRemovalStorage : LocalStorageBase, ILocalRemovalStorage
     {
         private readonly ILiteCollection<Removal> _collection;
 

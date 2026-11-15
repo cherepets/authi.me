@@ -1,4 +1,6 @@
+using AotServiceProvider;
 using Authi.Common.Services;
+using Authi.Server;
 using Authi.Server.ApiVersions;
 using Authi.Server.Database;
 using Authi.Server.Extensions;
@@ -6,7 +8,11 @@ using Authi.Server.Services;
 using Authi.Server.Web;
 using Microsoft.AspNetCore.Builder;
 using System.Threading.Tasks;
-using ServiceProvider = Authi.Common.Services.ServiceProvider;
+
+[assembly: GenerateServiceConfig(
+    typeof(Clock),             // Authi.Common
+    typeof(Program)            // Authi.Server
+)]
 
 namespace Authi.Server
 {
@@ -14,12 +20,10 @@ namespace Authi.Server
     {
         private static async Task Main(string[] args)
         {
-            ServiceLocator.Init(
-                typeof(ServiceLocator).Assembly,    // Authi.Common
-                typeof(Program).Assembly);          // Authi.Server
+            AotServiceProvider.Services.Init(new ServiceConfig());
 
-            var configuration = ServiceProvider.Current.Get<IConfiguration>();
-            var healthMonitor = ServiceProvider.Current.Get<IAppHealthMonitor>();
+            var configuration = AotServiceProvider.Services.Current.Get<IConfiguration>();
+            var healthMonitor = AotServiceProvider.Services.Current.Get<IAppHealthMonitor>();
 
             var builder = WebApplication.CreateBuilder(args);
             builder.Services
@@ -31,7 +35,7 @@ namespace Authi.Server
 
             if (configuration.Exists)
             {
-                using var db = ServiceProvider.Current.Get<IDatabase>().CreateScope();
+                using var db = AotServiceProvider.Services.Current.Get<IDatabase>().CreateScope();
                 await db.CleanUpAsync();
 
                 app.MapApiVersion(new ApiV1());

@@ -1,5 +1,7 @@
-﻿using Authi.App.Logic;
+﻿using AotServiceProvider;
+using Authi.App.Logic;
 using Authi.App.Logic.Services;
+using Authi.App.WinUI;
 using Authi.App.WinUI.Extensions;
 using Authi.App.WinUI.UI;
 using Authi.Common.Services;
@@ -11,6 +13,12 @@ using Windows.ApplicationModel.Activation;
 using WinUIEx;
 using L10n = Authi.App.Logic.Localization;
 using LaunchActivatedEventArgs = Microsoft.UI.Xaml.LaunchActivatedEventArgs;
+
+[assembly: GenerateServiceConfig(
+    typeof(Clock),             // Authi.Common
+    typeof(Config),            // Authi.App.Logic
+    typeof(App)                // Authi.App
+)]
 
 namespace Authi.App.WinUI
 {
@@ -27,10 +35,7 @@ namespace Authi.App.WinUI
 
         public App()
         {
-            ServiceLocator.Init(
-                typeof(ServiceLocator).Assembly,    // Authi.Common
-                typeof(Config).Assembly,            // Authi.App.Logic
-                typeof(App).Assembly);              // Authi.App
+            AotServiceProvider.Services.Init(new ServiceConfig());
             InitializeComponent();
             _launchTcs = new TaskCompletionSource();
             Program.Activated += OnAppActivated;
@@ -56,7 +61,7 @@ namespace Authi.App.WinUI
             if (args.Kind == ExtendedActivationKind.Protocol && args.Data is ProtocolActivatedEventArgs protocolArgs)
             {
                 _mainWindow?.DispatcherQueue.TryEnqueue(() =>
-                    ServiceProvider.Current.Get<IMessenger>().DeeplinkActivated.Publish(this, protocolArgs.Uri.AbsoluteUri));
+                    AotServiceProvider.Services.Current.Get<IMessenger>().DeeplinkActivated.Publish(this, protocolArgs.Uri.AbsoluteUri));
 
             }
         }
@@ -74,8 +79,8 @@ namespace Authi.App.WinUI
 
         private static async Task<bool> TryUnlockAsync()
         {
-            var isBiometricsEnabled = await ServiceProvider.Current.Get<ISettings>().IsBiometricsEnabled.GetAsync() ?? false;
-            return !isBiometricsEnabled || await ServiceProvider.Current.Get<IBiometrics>().VerifyAsync();
+            var isBiometricsEnabled = await AotServiceProvider.Services.Current.Get<ISettings>().IsBiometricsEnabled.GetAsync() ?? false;
+            return !isBiometricsEnabled || await AotServiceProvider.Services.Current.Get<IBiometrics>().VerifyAsync();
         }
 
         private void ShowMainWindow(WindowEx? previous = null)
@@ -104,7 +109,7 @@ namespace Authi.App.WinUI
         {
             if (args.WindowActivationState == WindowActivationState.Deactivated)
             {
-                _deactivatedTimestamp = ServiceProvider.Current.Get<IClock>().Timestamp;
+                _deactivatedTimestamp = AotServiceProvider.Services.Current.Get<IClock>().Timestamp;
                 return;
             }
 
@@ -112,7 +117,7 @@ namespace Authi.App.WinUI
             _deactivatedTimestamp = null;
 
             if (deactivatedTimestamp is long timestamp &&
-                !ServiceProvider.Current.Get<IClock>().IsRecent(timestamp, Config.LockTimeoutMs))
+                !AotServiceProvider.Services.Current.Get<IClock>().IsRecent(timestamp, Config.LockTimeoutMs))
             {
                 var lockedWindow = _mainWindow!;
                 lockedWindow.Activated -= OnWindowActivated;
@@ -126,7 +131,7 @@ namespace Authi.App.WinUI
                 lockedWindow.Close();
             }
 
-            ServiceProvider.Current.Get<IMessenger>().SyncNow.Publish(this);
+            AotServiceProvider.Services.Current.Get<IMessenger>().SyncNow.Publish(this);
         }
     }
 }

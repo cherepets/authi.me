@@ -1,4 +1,4 @@
-﻿using Authi.Common.Services;
+﻿using AotServiceProvider;
 using System;
 using System.Diagnostics;
 
@@ -11,7 +11,7 @@ namespace Authi.App.Logic.Services
         void Write(Exception exception) => Write(exception.ToString());
     }
 
-    internal class Logger : ILogger
+    public class Logger : ILogger
     {
         public void Write(string message)
         {

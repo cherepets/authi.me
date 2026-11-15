@@ -1,8 +1,16 @@
-﻿using Authi.Common.Services;
+﻿using AotServiceProvider;
+using AotServiceProvider.Abstractions;
+using Authi.Common.Services;
 using Authi.Common.Test;
+using Authi.Server;
 using Authi.Server.Database;
 using Authi.Server.Services;
 using Authi.Server.Test.Mocks;
+
+[assembly: GenerateServiceConfig(
+    typeof(Clock),             // Authi.Common
+    typeof(Program)            // Authi.Server
+)]
 
 namespace Authi.Server.Test
 {
@@ -12,12 +20,10 @@ namespace Authi.Server.Test
         protected MockDataRepository DataRepository { get; } = new();
         protected MockSyncRepository SyncRepository { get; } = new();
 
-        protected override void InitServiceLocator()
-        {
-            ServiceLocator.Init(
-                typeof(ServiceLocator).Assembly,    // Authi.Common
-                typeof(Program).Assembly);          // Authi.Server
+        protected override IConfig CreateServiceConfig() => new ServiceConfig();
 
+        protected override void InitServices()
+        {
             ServicesMock.Override<IDatabase>(
                 new MockDatabase(
                     new MockDatabaseScope(
@@ -39,7 +45,7 @@ namespace Authi.Server.Test
 
         #region IServiceConsumer
         internal virtual IServiceConsumer Services => this;
-        IServiceProvider IServiceConsumer.ServiceProvider => ServiceProvider.Current;
+        IServices IServiceConsumer.ServiceProvider => AotServiceProvider.Services.Current;
         #endregion
     }
 }

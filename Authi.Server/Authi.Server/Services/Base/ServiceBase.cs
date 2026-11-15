@@ -1,4 +1,4 @@
-﻿using Authi.Common.Services;
+﻿using AotServiceProvider.Abstractions;
 
 namespace Authi.Server.Services
 {
@@ -6,7 +6,7 @@ namespace Authi.Server.Services
     {
         #region IServiceConsumer
         internal virtual IServiceConsumer Services => this;
-        IServiceProvider IServiceConsumer.ServiceProvider => ServiceProvider.Current;
+        IServices IServiceConsumer.ServiceProvider => AotServiceProvider.Services.Current;
         #endregion
     }
 }
